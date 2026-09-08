@@ -32,9 +32,11 @@ ul{list-style:none}
 /* NAVBAR */
 header.nav{background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:1000}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:.1rem 0.1rem;max-width:100%;margin:0 auto}
-.logo{display:flex;align-items:center;gap:.7rem;font-weight:700;color:var(--primary-dark);font-size:2.3rem}
+.logo{display:flex;align-items:center;gap:.7rem;font-weight:700;color:var(--primary-dark);font-size:2.3rem;min-width:0}
 .logo-mark{width:100px;height:100px;border-radius:50%;background:transparent;display:grid;place-items:center;overflow:hidden;flex-shrink:0}
 .logo-mark img{width:100%;height:100%;object-fit:cover}
+.logo-text{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.logo-text .logo-name{white-space:nowrap}
 .logo small{display:block;font-size:1.4rem;color:var(--gray);font-weight:400;letter-spacing:1px}
 
 nav ul{display:flex;gap:1.6rem;align-items:center}
@@ -53,6 +55,10 @@ nav a.btn::after{display:none}
 .btn-secondary:hover{background:var(--primary-dark);transform:translateY(-2px)}
 
 .menu-toggle{display:none;background:none;border:none;font-size:1.6rem;color:var(--primary-dark);cursor:pointer}
+
+/* Mobile language switcher (shown inside the hamburger menu on small screens,
+   where the topbar — which normally holds the language switcher — is hidden) */
+.nav-lang-mobile{display:none}
 
 /* PAGE HEADER (banner on inner pages) */
 .page-header{
@@ -94,13 +100,25 @@ footer{background:#0a1c2e;color:#bcc6c9;padding:4rem 0 0}
 
 /* RESPONSIVE */
 @media (max-width:880px){
+  .topbar{display:none}
   .menu-toggle{display:block}
-  nav ul{position:absolute;top:100%;right:0;background:#fff;flex-direction:column;width:240px;padding:1.5rem;box-shadow:var(--shadow);border-radius:0 0 0 12px;transform:translateY(-150%);transition:.35s;align-items:flex-start;display:flex}
+  nav ul{position:absolute;top:100%;right:0;background:#fff;flex-direction:column;width:min(280px,88vw);padding:1.2rem 1.5rem;box-shadow:var(--shadow);border-radius:0 0 0 12px;transform:translateY(-150%);transition:.35s;align-items:flex-start;display:flex;gap:1rem}
   nav ul.open{transform:translateY(0)}
+  /* Logo scales down nicely from 100px desktop to a compact tablet/phone size */
+  .nav-inner{gap:.5rem;padding:.45rem .6rem}
+  .logo{gap:.55rem;font-size:clamp(1.2rem,4.6vw,1.55rem);line-height:1.12}
+  .logo-mark{width:52px;height:52px}
+  .logo small{font-size:clamp(.62rem,2.6vw,.78rem);letter-spacing:.5px}
   .grid-2{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr 1fr}
   section{padding:3.5rem 0}
-  .topbar .container{justify-content:center;font-size:.78rem}
+}
+@media (max-width:420px){
+  .nav-inner{gap:.4rem;padding:.35rem .45rem}
+  .logo{gap:.4rem;font-size:1.12rem}
+  .logo-mark{width:44px;height:44px}
+  .logo small{font-size:.6rem;letter-spacing:.4px}
+  nav ul{width:min(250px,86vw);padding:1rem 1.2rem}
 }
 @media (max-width:520px){
   .foot-grid{grid-template-columns:1fr}

@@ -107,14 +107,61 @@ $extra_head = '<style>
 
   @keyframes slideFade{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
   @keyframes dotProgress{from{width:0}to{width:100%}}
+
+  /* ---------- TABLETS / PHONES (<=780px) ---------- */
   @media(max-width:780px){
-    .hero-carousel,.hero-slides{min-height:70vh}
-    .hero-content{padding:2rem 0}
-    .hero-nav{width:42px;height:42px;font-size:1.2rem}
-    .hero-nav.prev{left:.5rem}.hero-nav.next{right:.5rem}
-    .hero-counter{top:4.5rem;right:1rem;font-size:.75rem}
-    .hero-dot{width:30px}
-    .hero-dot.active{width:42px}
+    .hero-slide .container{flex:1 1 100%;max-width:100%}
+    .hero-slide .hero-content{width:100%;max-width:none}
+    .hero-content{padding:1.25rem 0 1rem}
+    .hero .tag{font-size:.68rem;letter-spacing:.8px;padding:.32rem .85rem;margin-bottom:.6rem}
+    .hero h1{font-size:clamp(1.5rem,6.8vw,2.15rem);line-height:1.2;margin-bottom:.55rem}
+    .hero .subtitle{font-size:.95rem;margin-bottom:.45rem}
+    .hero p{font-size:.93rem;line-height:1.55;margin-bottom:1.05rem}
+    .hero-cta{gap:.6rem}
+    .hero-cta .btn{font-size:.86rem;padding:.6rem 1.1rem}
+    .hero-nav{width:38px;height:38px;font-size:1.1rem;background:rgba(0,0,0,.18)}
+    .hero-nav.prev{left:.4rem}.hero-nav.next{right:.4rem}
+    .hero-counter{top:.9rem;right:.7rem;font-size:.7rem;padding:.22rem .65rem}
+    .hero-dots{bottom:1.15rem;gap:.45rem}
+    .hero-dot{width:24px;height:4px}
+    .hero-dot.active{width:34px}
+  }
+
+  /* ---------- PHONES IN PORTRAIT ----------
+     Keep the headline/buttons over the photo, but make the hero much
+     flatter (width-driven instead of 88vh) so the landscape slide image
+     is far less zoom-cropped and shows almost as fully as on desktop. */
+  @media(max-width:780px) and (orientation:portrait){
+    .hero-carousel,.hero-slides{height:clamp(320px,92vw,560px);min-height:0}
+    .hero-slide{align-items:flex-end}
+    .hero-slide .container{flex:1 1 100%;max-width:100%}
+    .hero-slide .hero-content{padding:1.1rem 0 3.4rem;text-align:left}
+    .hero-slide.text-center .hero-content{text-align:center}
+    .hero-slide.text-right .hero-content{text-align:right}
+    /* stronger bottom fade so text stays readable on the bright photo */
+    .hero-slide.overlay-blue  .bg::after{background:linear-gradient(120deg,rgba(37,99,235,.62),rgba(13,41,64,.22) 100%),linear-gradient(180deg,rgba(13,41,64,0) 30%,rgba(13,41,64,.86) 100%)}
+    .hero-slide.overlay-dark  .bg::after{background:linear-gradient(120deg,rgba(13,41,64,.62),rgba(13,41,64,.25) 100%),linear-gradient(180deg,rgba(13,41,64,0) 30%,rgba(13,41,64,.9) 100%)}
+    .hero-slide.overlay-amber .bg::after{background:linear-gradient(120deg,rgba(37,99,235,.55),rgba(231,111,81,.5) 100%),linear-gradient(180deg,rgba(13,41,64,0) 30%,rgba(13,41,64,.86) 100%)}
+    .hero-slide.overlay-minimal .bg::after{background:linear-gradient(180deg,rgba(13,41,64,0) 30%,rgba(13,41,64,.88) 100%)}
+    /* decorative right-glow should not spill below the photo */
+    .hero-slide::after{display:none}
+    /* side arrows would sit on top of the text in this flatter layout —
+       swipe + dots still navigate on touch devices */
+    .hero-nav{display:none}
+  }
+
+  /* ---------- VERY SMALL PHONES ---------- */
+  @media(max-width:360px){
+    .hero-carousel,.hero-slides{height:clamp(350px,92vw,560px)}
+    .hero .tag{font-size:.6rem;margin-bottom:.45rem}
+    .hero h1{font-size:clamp(1.3rem,6.2vw,1.7rem);line-height:1.18;margin-bottom:.45rem}
+    .hero p{font-size:.85rem;line-height:1.45;margin-bottom:.8rem}
+    .hero .subtitle{font-size:.88rem;margin-bottom:.4rem}
+    .hero-cta .btn{font-size:.8rem;padding:.5rem .9rem}
+    .hero-slide .hero-content{padding:.9rem 0 2.6rem}
+    .hero-dots{bottom:1rem}
+    .hero-dot{width:20px;height:4px}
+    .hero-dot.active{width:30px}
   }
   .stats{background:var(--primary-dark);color:#fff;padding:3rem 0}
   .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center}

@@ -65,6 +65,17 @@ $langs = available_languages();
   .lang-switch a:hover{opacity:1}
   .lang-switch a.active{background:var(--accent);color:#fff;opacity:1;font-weight:600}
   @media(max-width:600px){.lang-switch{margin-left:.4rem;font-size:.72rem}.lang-switch a{padding:.15rem .5rem}}
+
+  /* Mobile (hamburger-menu) language switcher — shown only on small screens,
+     styled as a light pill so it fits the white dropdown menu */
+  .nav-lang-mobile{width:100%}
+  .nav-lang-mobile .lang-switch{background:#eef2f7;border:1px solid #e2e8f0;margin-left:0}
+  .nav-lang-mobile .lang-switch a{color:#40506c;opacity:1}
+  .nav-lang-mobile .lang-switch a:hover{background:rgba(37,99,235,.08);color:var(--primary)}
+  .nav-lang-mobile .lang-switch a.active{background:var(--accent);color:#fff;opacity:1}
+  @media(max-width:880px){
+    .nav-lang-mobile{display:block;padding-top:1rem;margin-top:.4rem;border-top:1px solid #e9eef4}
+  }
 </style>
 <?php if (!empty($extra_head)) echo $extra_head; ?>
 </head>
@@ -89,12 +100,15 @@ $langs = available_languages();
 <!-- NAVBAR -->
 <header class="nav">
   <div class="nav-inner">
-    <a href="<?= $BU ?>" class="logo">
-      <div class="logo-mark"><img src="<?= $BU ?>images/logo.png" alt="Sharan Foundation"></div>
-      <div>Sharan Foundation<small><?= e(t('site_tagline')) ?></small></div>
+    <a href="<?= $BU ?>" class="logo" aria-label="Sharan Foundation – Home">
+      <div class="logo-mark"><img src="<?= $BU ?>images/logo.png" alt="Sharan Foundation logo"></div>
+      <div class="logo-text">
+        <span class="logo-name">Sharan Foundation</span>
+        <small><?= e(t('site_tagline')) ?></small>
+      </div>
     </a>
     <nav>
-      <button class="menu-toggle">☰</button>
+      <button class="menu-toggle" aria-label="Toggle menu">☰</button>
       <ul id="navlist">
         <li><a href="<?= $BU ?>" class="<?= $current_page==='home'?'active':'' ?>"><?= e(t('nav_home')) ?></a></li>
         <li><a href="<?= $BU ?>pages/about.php" class="<?= $current_page==='about'?'active':'' ?>"><?= e(t('nav_about')) ?></a></li>
@@ -105,6 +119,11 @@ $langs = available_languages();
         <li><a href="<?= $BU ?>pages/blog.php" class="<?= $current_page==='blog'?'active':'' ?>"><?= e(t('nav_blog')) ?></a></li>
         <li><a href="<?= $BU ?>pages/contact.php" class="<?= $current_page==='contact'?'active':'' ?>"><?= e(t('nav_contact')) ?></a></li>
         <li><a href="<?= $BU ?>pages/donate.php" class="btn btn-primary"><?= e(t('nav_donate')) ?> ♥</a></li>
+        <li class="nav-lang-mobile"><div class="lang-switch" title="Language / भाषा">
+          <?php foreach ($langs as $code => $info): ?>
+            <a href="<?= e(lang_url($code)) ?>" class="<?= $LANG===$code?'active':'' ?>" title="<?= e($info['name']) ?>"><?= e($info['flag']) ?> <?= e($code === 'hi' ? 'हि' : 'EN') ?></a>
+          <?php endforeach; ?>
+        </div></li>
       </ul>
     </nav>
   </div>
