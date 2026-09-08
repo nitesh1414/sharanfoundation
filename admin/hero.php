@@ -51,6 +51,7 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
         'cta_link_2'     => trim($_POST['cta_link_2'] ?? ''),
         'overlay_color'  => in_array($_POST['overlay_color']??'blue', ['blue','dark','amber','minimal']) ? $_POST['overlay_color'] : 'blue',
         'text_position'  => in_array($_POST['text_position']??'left', ['left','center','right']) ? $_POST['text_position'] : 'left',
+        'show_text'      => isset($_POST['show_text']) ? 1 : 0,
         'badge_text'     => trim($_POST['badge_text'] ?? ''),
         'display_order'  => (int)($_POST['display_order'] ?? 0),
         'status'         => $_POST['status'] ?? 'active',
@@ -101,7 +102,7 @@ if ($action === 'add' || $action === 'edit') {
     $row = ['id'=>0,'title'=>'','title_hi'=>'','subtitle'=>'','subtitle_hi'=>'','description'=>'','description_hi'=>'',
             'image'=>'','cta_text'=>'Donate Now','cta_text_hi'=>'','cta_link'=>'pages/donate.php',
             'cta_text_2'=>'Learn More','cta_text_2_hi'=>'','cta_link_2'=>'pages/about.php',
-            'overlay_color'=>'blue','text_position'=>'left','badge_text'=>'','display_order'=>0,'status'=>'active',
+            'overlay_color'=>'blue','text_position'=>'left','show_text'=>1,'badge_text'=>'','display_order'=>0,'status'=>'active',
             'media_type'=>'image','video_file'=>'','video_url'=>'','poster_image'=>''];
     if ($action === 'edit' && $id) {
         $stmt = $pdo->prepare("SELECT * FROM hero_slides WHERE id=?"); $stmt->execute([$id]);
@@ -200,6 +201,11 @@ if ($action === 'add' || $action === 'edit') {
         </select>
       </div>
     </div>
+    <label class="checkbox-row" style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;font-weight:600;background:#f9fafb;border:1px solid #eef0f3;border-radius:8px;padding:.75rem .9rem">
+      <input type="checkbox" name="show_text" value="1" <?= (int)($row['show_text'] ?? 1)===1?'checked':'' ?> style="width:18px;height:18px;accent-color:var(--primary)">
+      Show text over this image
+      <span style="font-weight:400;color:#888;font-size:.82rem">(headline + buttons on the photo — uncheck to show only the image)</span>
+    </label>
     <div class="form-row">
       <div class="form-group">
         <label>Display Order</label>
@@ -384,6 +390,9 @@ $active_count = (int)$pdo->query("SELECT COUNT(*) FROM hero_slides WHERE status=
           <td>
             <strong><?= e($r['title']) ?></strong>
             <?php if ($r['subtitle']): ?><br><small style="color:#888"><?= e($r['subtitle']) ?></small><?php endif; ?>
+            <?php if ((int)($r['show_text'] ?? 1) !== 1): ?>
+              <br><span class="status-badge" style="background:#eef2f7;color:#5a6a80;font-size:.72rem">🚫 No text on slide</span>
+            <?php endif; ?>
           </td>
           <td><?php if ($r['badge_text']): ?><span class="status-badge" style="background:#fef7e0;color:#5b4a2c"><?= e($r['badge_text']) ?></span><?php endif; ?></td>
           <td>

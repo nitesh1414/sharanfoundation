@@ -166,10 +166,10 @@ $s = $pdo->query("SELECT * FROM settings LIMIT 1")->fetch();
     </div>
     <div class="form-row">
       <div class="form-group"><label>From Email</label>
-        <input type="email" name="smtp_from_email" value="<?= e($s['smtp_from_email'] ?? '') ?>" placeholder="noreply@sharanfoundation.org">
+        <input type="email" name="smtp_from_email" value="<?= e($s['smtp_from_email'] ?? '') ?>" placeholder="noreply@sharanforall.org">
       </div>
       <div class="form-group"><label>Admin Notification Email</label>
-        <input type="email" name="admin_notify_email" value="<?= e($s['admin_notify_email'] ?? '') ?>" placeholder="admin@sharanfoundation.org">
+        <input type="email" name="admin_notify_email" value="<?= e($s['admin_notify_email'] ?? '') ?>" placeholder="admin@sharanforall.org">
         <p class="help">Where new submission alerts will be sent.</p>
       </div>
     </div>

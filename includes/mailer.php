@@ -33,9 +33,9 @@ function mail_config() {
     // Defaults
     $cfg += [
         'smtp_host' => '', 'smtp_port' => 587, 'smtp_username' => '', 'smtp_password' => '',
-        'smtp_encryption' => 'tls', 'smtp_from_email' => 'noreply@sharanfoundation.org',
+        'smtp_encryption' => 'tls', 'smtp_from_email' => 'noreply@sharanforall.org',
         'smtp_from_name' => 'Sharan Foundation',
-        'admin_notify_email' => 'admin@sharanfoundation.org',
+        'admin_notify_email' => 'admin@sharanforall.org',
     ];
     return $cfg;
 }
@@ -99,7 +99,7 @@ function send_mail($to, $subject, $html_body, $reply_to = null, $attachments = [
         $headers[] = "MIME-Version: 1.0";
         $headers[] = "From: " . mb_encode_mimeheader($cfg['smtp_from_name']) . " <{$cfg['smtp_from_email']}>";
         if ($reply_to) $headers[] = "Reply-To: {$reply_to}";
-        $headers[] = "X-Mailer: sharanfoundation-Mailer/2.1";
+        $headers[] = "X-Mailer: sharanforall-Mailer/2.1";
 
         if ($attachments) {
             $headers[] = "Content-Type: multipart/mixed; boundary=\"{$boundary}\"";

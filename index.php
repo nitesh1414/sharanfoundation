@@ -21,6 +21,7 @@ $carousel_config = [
     'show_counter' => (int)(get_setting('carousel_show_counter', 1) ?? 1),
     'transition'   => get_setting('carousel_transition', 'fade') ?: 'fade',
     'video_audio'  => (int)(get_setting('carousel_video_audio', 0) ?? 0),
+    'show_text'    => (int)(get_setting('carousel_show_text', 1) ?? 1),
 ];
 
 /** Extract a YouTube video ID from any URL form, or pass through if already an ID */
@@ -163,10 +164,17 @@ $extra_head = '<style>
     .hero-dot{width:20px;height:4px}
     .hero-dot.active{width:30px}
   }
-  .stats{background:var(--primary-dark);color:#fff;padding:3rem 0}
-  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center}
-  .stat h3{font-size:2.5rem;color:var(--accent);font-weight:800}
-  .stat p{font-size:.95rem;opacity:.9;letter-spacing:1px;text-transform:uppercase}
+  .stats{background:var(--primary-dark);color:#fff;padding:2.25rem 0}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;text-align:center}
+  .stat h3{font-size:2.5rem;color:var(--accent);font-weight:800;line-height:1.2}
+  .stat p{font-size:.95rem;opacity:.9;letter-spacing:1px;text-transform:uppercase;line-height:1.4}
+  /* Stats keep the same 4-across row on phones as on desktop */
+  @media(max-width:780px){
+    .stats{padding:1.75rem 0}
+    .stats-grid{gap:.9rem}
+    .stat h3{font-size:clamp(1.35rem,6.5vw,2rem)}
+    .stat p{font-size:.75rem;letter-spacing:.5px}
+  }
   .about-img{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);min-height:420px;
     background:linear-gradient(rgba(37,99,235,.15),rgba(26,46,53,.25)),url(\''.BASE_URL.'images/about.jpg\') center/cover}
   .about-img::before{content:"";position:absolute;inset:0;border:6px solid rgba(255,255,255,.5);border-radius:16px;margin:14px;pointer-events:none}
@@ -205,7 +213,7 @@ $extra_head = '<style>
   .loc-card ul{margin-top:1rem}
   .loc-card li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.95rem}
   .loc-card li::before{content:"✦ ";color:var(--accent)}
-  .cta-band{background:linear-gradient(rgba(37,99,235,.88),rgba(29,78,216,.88)),url(\''.BASE_URL.'images/donate-bg.jpg\') center/cover fixed;color:#fff;text-align:center;padding:5rem 1rem}
+  .cta-band{background:linear-gradient(rgba(37,99,235,.88),rgba(29,78,216,.88)),url(\''.BASE_URL.'images/donate-bg.jpg\') center/cover fixed;color:#fff;text-align:center;padding:3.25rem 1rem}
   .cta-band h2{font-size:clamp(1.8rem,3.5vw,2.8rem);margin-bottom:1rem;font-weight:700}
   .cta-band p{font-size:1.1rem;max-width:680px;margin:0 auto 2rem;opacity:.95}
   .cta-band .btn-primary{padding:1rem 2.2rem;font-size:1.05rem}
@@ -232,8 +240,9 @@ require __DIR__ . '/includes/public_header.php';
 <?php if (!$slides): ?>
   <!-- Fallback single hero when no slides configured -->
   <div class="hero-slides">
-    <div class="hero-slide active overlay-blue text-left">
+    <div class="hero-slide active overlay-blue text-left<?= $carousel_config['show_text'] ? '' : ' text-hidden' ?>">
       <div class="bg" style="background-image:url('<?= BASE_URL ?>images/hero.jpg')"></div>
+      <?php if ($carousel_config['show_text']): ?>
       <div class="container">
         <div class="hero-content">
           <span class="tag"><?= e(t('hero_badge')) ?></span>
@@ -245,6 +254,7 @@ require __DIR__ . '/includes/public_header.php';
           </div>
         </div>
       </div>
+      <?php endif; ?>
     </div>
   </div>
 <?php else: ?>
@@ -262,8 +272,10 @@ require __DIR__ . '/includes/public_header.php';
       $cta1     = tr_field($sl, 'cta_text')   ?: 'Learn More';
       $cta2     = tr_field($sl, 'cta_text_2');
       $audio_attr = $carousel_config['video_audio'] ? '' : 'muted';
+      // Per-slide + global control: hide the text overlay entirely when turned off
+      $text_visible = $carousel_config['show_text'] && (int)($sl['show_text'] ?? 1) === 1;
     ?>
-      <div class="hero-slide overlay-<?= e($overlay) ?> text-<?= e($pos) ?> media-<?= e($media_type) ?> <?= $i===0?'active':'' ?>"
+      <div class="hero-slide overlay-<?= e($overlay) ?> text-<?= e($pos) ?> media-<?= e($media_type) ?> <?= $i===0?'active':'' ?><?= $text_visible ? '' : ' text-hidden' ?>"
            data-index="<?= $i ?>"
            data-media="<?= e($media_type) ?>"
            data-loaded="<?= $media_type==='image' ? '1' : '0' ?>">
@@ -292,6 +304,7 @@ require __DIR__ . '/includes/public_header.php';
           <div class="bg" style="background-image:url('<?= $poster_url ?>')"></div>
         <?php endif; ?>
 
+        <?php if ($text_visible): ?>
         <div class="container">
           <div class="hero-content">
             <?php if ($sl['badge_text']): ?>
@@ -311,7 +324,8 @@ require __DIR__ . '/includes/public_header.php';
               <?php endif; ?>
             </div>
           </div>
-        </div>
+        </div><?php endif; ?>
+
       </div>
     <?php endforeach; ?>
   </div>

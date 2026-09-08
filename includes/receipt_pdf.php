@@ -14,7 +14,7 @@ class ActsReceiptPDF extends FPDF
     public $org_name      = 'Sharan Foundation';
     public $org_tagline   = 'Hope . Care . Transformation';
     public $org_addr      = 'Hyderabad, Telangana, India';
-    public $org_email     = 'india@sharanfoundation.org';
+    public $org_email     = 'india@sharanforall.org';
     public $org_phone     = '+91 98765 43210';
     public $reg_80g       = 'AAATA1234A';   // sample — replace with real
     public $charity_no_uk = '1234567';      // sample — replace with real

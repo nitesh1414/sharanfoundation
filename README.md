@@ -192,8 +192,8 @@ When any form is submitted, **two emails are sent automatically**:
 
 Edit `includes/mailer.php`:
 ```php
-define('MAIL_FROM_EMAIL',    'noreply@sharanfoundation.org');  // sender
-define('ADMIN_NOTIFY_EMAIL', 'admin@sharanfoundation.org');    // who gets alerts
+define('MAIL_FROM_EMAIL',    'noreply@sharanforall.org');  // sender
+define('ADMIN_NOTIFY_EMAIL', 'admin@sharanforall.org');    // who gets alerts
 ```
 
 #### XAMPP Local Setup

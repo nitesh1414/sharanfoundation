@@ -54,9 +54,14 @@ $langs = available_languages();
 <meta name="twitter:image"      content="<?= $BU ?>icons/icon-512.png" />
 <!-- ============ END PWA ============ -->
 
+<!-- ============ FONTS (Poppins + Roboto) ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+
 <link rel="stylesheet" href="<?= $BU ?>css/style.css" />
 <?php if ($LANG === 'hi'): ?>
-<style>body{font-family:'Noto Sans Devanagari','Segoe UI',sans-serif}</style>
+<style>body,h1,h2,h3,h4,h5,h6,.logo{font-family:'Noto Sans Devanagari','Poppins','Roboto','Segoe UI',sans-serif}</style>
 <?php endif; ?>
 <style>
   /* Language switcher */
@@ -64,7 +69,7 @@ $langs = available_languages();
   .lang-switch a{padding:.2rem .7rem;color:#fff;opacity:.7;border-radius:50px;transition:.2s;text-decoration:none}
   .lang-switch a:hover{opacity:1}
   .lang-switch a.active{background:var(--accent);color:#fff;opacity:1;font-weight:600}
-  @media(max-width:600px){.lang-switch{margin-left:.4rem;font-size:.72rem}.lang-switch a{padding:.15rem .5rem}}
+  @media(max-width:600px){.lang-switch{margin-left:.4rem;font-size:.75rem}.lang-switch a{padding:.15rem .5rem}}
 
   /* Mobile (hamburger-menu) language switcher — shown only on small screens,
      styled as a light pill so it fits the white dropdown menu */
@@ -84,7 +89,7 @@ $langs = available_languages();
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="container">
-    <div>📧 <?= e(get_setting('email_in','contact@sharanfoundation.org')) ?> &nbsp;|&nbsp; 📞 <?= e(get_setting('phone_in','+91 98765 43210')) ?> (IN) &nbsp;|&nbsp; <?= e(get_setting('phone_uk','+44 20 1234 5678')) ?> (UK)</div>
+    <div>📧 <?= e(get_setting('email_in','contact@sharanforall.org')) ?> &nbsp;|&nbsp; 📞 <?= e(get_setting('phone_in','+91 98765 43210')) ?> (IN) &nbsp;|&nbsp; <?= e(get_setting('phone_uk','+44 20 1234 5678')) ?> (UK)</div>
     <div style="display:flex;align-items:center;flex-wrap:wrap">
       <a href="<?= $BU ?>pages/volunteer.php"><?= e(t('nav_volunteer')) ?></a>
       <a href="<?= $BU ?>pages/partner.php"><?= e(t('nav_partner')) ?></a>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Acts Foundation — Diagnostic Tool
+ * Sharan Foundation — Diagnostic Tool
  *
  * Visit /admin/diagnose.php to see exactly what's wrong when a page returns 500.
  * It shows: PHP errors, missing tables, missing columns, missing functions, file perms.
@@ -17,7 +17,7 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/includes/auth.php';
 admin_check();   // must be logged-in admin
 
-echo '<!DOCTYPE html><html><head><title>Diagnose | Acts Foundation</title>';
+echo '<!DOCTYPE html><html><head><title>Diagnose | Sharan Foundation</title>';
 echo '<style>body{font-family:Consolas,monospace;background:#0d2940;color:#e8ecef;padding:2rem;max-width:1100px;margin:0 auto;line-height:1.6}';
 echo 'h1{color:#f4a261;border-bottom:2px solid #f4a261;padding-bottom:.5rem}';
 echo 'h2{color:#60a5fa;margin-top:2rem;padding-top:1rem;border-top:1px solid #2a4060}';
@@ -30,7 +30,7 @@ echo 'code{background:#1e3a5f;padding:.1rem .4rem;border-radius:3px}';
 echo '.box{background:#152a44;padding:1.2rem;border-radius:8px;border-left:4px solid #60a5fa;margin:.7rem 0}';
 echo '.box.err{border-color:#ef4444}.box.ok{border-color:#10b981}.box.warn{border-color:#f59e0b}';
 echo 'a{color:#60a5fa}</style></head><body>';
-echo '<h1>🔧 Acts Foundation — Diagnostic Tool</h1>';
+echo '<h1>🔧 Sharan Foundation — Diagnostic Tool</h1>';
 echo '<p class="dim">Run at: ' . date('Y-m-d H:i:s') . ' · PHP ' . PHP_VERSION . ' · Server: ' . htmlspecialchars($_SERVER['SERVER_SOFTWARE'] ?? '?') . '</p>';
 
 // ============================================================
@@ -200,5 +200,5 @@ echo '<li><strong>Delete this file</strong> when done: <code>admin/diagnose.php<
 echo '</ol>';
 echo '</div>';
 
-echo '<p class="dim" style="margin-top:2rem">Acts Foundation Diagnostic v1.0</p>';
+echo '<p class="dim" style="margin-top:2rem">Sharan Foundation Diagnostic v1.0</p>';
 echo '</body></html>';
