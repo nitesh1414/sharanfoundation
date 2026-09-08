@@ -82,16 +82,25 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
         if ($error) {
             flash_set('error', $error);
         } else {
-            if ($action === 'add') {
-                $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
-                $pdo->prepare("INSERT INTO hero_slides ($cols) VALUES ($place)")->execute($data);
-                flash_set('success','✓ Hero slide added.');
-            } else {
-                $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
-                $data['id']=$id;
-                $pdo->prepare("UPDATE hero_slides SET $set WHERE id=:id")->execute($data);
-                flash_set('success','✓ Hero slide updated.');
+            try {
+                if ($action === 'add') {
+                    $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
+                    $pdo->prepare("INSERT INTO hero_slides ($cols) VALUES ($place)")->execute($data);
+                    flash_set('success','✓ Hero slide added.');
+                } else {
+                    $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
+                    $data['id']=$id;
+                    $pdo->prepare("UPDATE hero_slides SET $set WHERE id=:id")->execute($data);
+                    flash_set('success','✓ Hero slide updated.');
+                }
+            } catch (Throwable $ex) {
+                $msg = $ex->getMessage();
+                if (stripos($msg, 'show_text') !== false) {
+                    $msg .= ' → The database is missing the new `show_text` column. Run: ALTER TABLE `hero_slides` ADD COLUMN IF NOT EXISTS `show_text` TINYINT(1) DEFAULT 1; (see sql/acts_foundation.sql)';
+                }
+                flash_set('error', 'Hero slide could not be saved: ' . $msg);
             }
+            // Always return to the list — never a blank page.
             redirect(ADMIN_URL.'hero.php');
         }
     }

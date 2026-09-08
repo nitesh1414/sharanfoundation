@@ -15,8 +15,17 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
         'carousel_show_text'    => isset($_POST['carousel_show_text']) ? 1 : 0,
     ];
     $set = implode(',', array_map(fn($k) => "$k=:$k", array_keys($data)));
-    $pdo->prepare("UPDATE settings SET $set WHERE id=1")->execute($data);
-    flash_set('success', '✓ Carousel settings saved.');
+    try {
+        $pdo->prepare("UPDATE settings SET $set WHERE id=1")->execute($data);
+        flash_set('success', '✓ Carousel settings saved.');
+    } catch (Throwable $ex) {
+        $msg = $ex->getMessage();
+        if (stripos($msg, 'carousel_show_text') !== false) {
+            $msg .= ' → The database is missing the new `carousel_show_text` column. Run: ALTER TABLE `settings` ADD COLUMN IF NOT EXISTS `carousel_show_text` TINYINT(1) DEFAULT 1; (see sql/acts_foundation.sql)';
+        }
+        flash_set('error', 'Carousel settings could not be saved: ' . $msg);
+    }
+    // Always return to the settings page — never a blank page.
     redirect(ADMIN_URL.'carousel_settings.php');
 }
 

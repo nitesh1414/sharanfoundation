@@ -28,9 +28,9 @@ ul{list-style:none}
 .sidebar-head h2{color:#fff;font-size:1rem;line-height:1.2}
 .sidebar-head small{color:#8da4a8;font-size:.7rem;letter-spacing:1px}
 
-.sidebar-menu{padding:1rem 0}
-.menu-label{padding:.7rem 1.3rem;font-size:.72rem;text-transform:uppercase;color:#5e757b;letter-spacing:1.5px;margin-top:.5rem}
-.sidebar-menu a{display:flex;align-items:center;gap:.8rem;padding:.75rem 1.3rem;color:#bcc6c9;transition:.2s;border-left:3px solid transparent;font-weight:500;font-size:.92rem}
+.sidebar-menu{padding:5px 0}
+.menu-label{padding:5px 1.3rem;font-size:.72rem;text-transform:uppercase;color:#5e757b;letter-spacing:1.5px;margin-top:.4rem}
+.sidebar-menu a{display:flex;align-items:center;gap:.8rem;padding:5px 1.3rem;color:#bcc6c9;transition:.2s;border-left:3px solid transparent;font-weight:500;font-size:.92rem}
 .sidebar-menu a:hover{background:var(--sidebar-hover);color:#fff;border-left-color:var(--accent)}
 .sidebar-menu a.active{background:var(--sidebar-hover);color:#fff;border-left-color:var(--accent)}
 .sidebar-menu a .icon{font-size:1.05rem;width:22px;text-align:center}
