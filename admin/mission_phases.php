@@ -50,7 +50,8 @@ if ($action==='add'||$action==='edit') {
 <form method="post" class="card"><?= csrf_field() ?><div class="card-body">
   <div class="form-row">
     <div class="form-group"><label>Phase Number <span class="req">*</span></label><input type="number" name="phase_number" value="<?= (int)$row['phase_number'] ?>" required></div>
-    <div class="form-group"><label>Icon</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4"></div>
+    <div class="form-group"><label>Icon</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4">
+      <?= icon_howto_help('icon') ?></div>
   </div>
 
   <div class="lang-tabs">

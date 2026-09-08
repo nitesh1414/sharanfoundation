@@ -63,7 +63,8 @@ if ($action==='add' || $action==='edit') {
   <div class="card-body">
     <div class="form-row">
       <div class="form-group"><label>Year <span class="req">*</span></label><input type="text" name="year" value="<?= e($row['year']) ?>" required placeholder="2024 or Today"></div>
-      <div class="form-group"><label>Icon (Emoji)</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="🌱"></div>
+      <div class="form-group"><label>Icon (Emoji)</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="🌱">
+      <?= icon_howto_help('icon') ?></div>
     </div>
 
     <div class="lang-tabs">

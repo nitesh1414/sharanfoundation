@@ -60,7 +60,8 @@ if ($action==='add' || $action==='edit') {
       </datalist>
       <p class="help">Type a new category or pick an existing one.</p>
     </div>
-    <div class="form-group"><label>Icon</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="📷"></div>
+    <div class="form-group"><label>Icon</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="📷">
+      <?= icon_howto_help('icon') ?></div>
   </div>
 
   <div class="lang-tabs">

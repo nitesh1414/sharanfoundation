@@ -639,6 +639,28 @@ INSERT IGNORE INTO `hero_slides`
 (6,'Equipping Servants of God','परमेश्वर के सेवकों को तैयार करना','Acts Bible College','एक्ट्स बाइबल कॉलेज','Theological training and discipleship preparing the next generation of ministers.','धार्मिक प्रशिक्षण।','uploads/hero/slide-bible.jpg','Support a Student','एक छात्र का समर्थन करें','pages/donate.php','About the College','कॉलेज के बारे में','pages/programs.php#bible-college','dark','✦ BIBLE COLLEGE',6);
 
 -- ============================================================
+-- MARQUEE ANNOUNCEMENTS (ticker between hero & stats — v11)
+-- Add / edit / delete entries from Admin → Marquee.
+-- The ticker is hidden on the homepage automatically when no
+-- active marquee rows exist.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `marquees` (
+  `id`              INT AUTO_INCREMENT PRIMARY KEY,
+  `text`            VARCHAR(255) NOT NULL,
+  `text_hi`         VARCHAR(255) NULL,
+  `icon`            VARCHAR(20) NULL,
+  `display_order`   INT DEFAULT 0,
+  `status`          ENUM('active','inactive') DEFAULT 'active',
+  `created_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_order (`status`,`display_order`)
+) ENGINE=InnoDB;
+
+INSERT IGNORE INTO `marquees` (`id`,`text`,`text_hi`,`icon`,`display_order`,`status`) VALUES
+(1,'Supporting 2,500+ children with education, shelter and love across India & Nepal',NULL,'💝',1,'active'),
+(2,'Your generosity brings hope — volunteer, partner or donate today',NULL,'🙏',2,'active');
+
+-- ============================================================
 -- MILESTONES (v9)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `milestones` (

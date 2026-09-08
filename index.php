@@ -5,6 +5,24 @@ require_once __DIR__ . '/includes/functions.php';
 $programs = $pdo->query("SELECT * FROM programs WHERE status='active' ORDER BY display_order, id LIMIT 8")->fetchAll();
 $testimonials = $pdo->query("SELECT * FROM testimonials WHERE status='active' ORDER BY display_order, id LIMIT 3")->fetchAll();
 
+// Marquee announcements — ticker shown between the hero and stats.
+// Empty/missing table => section hidden automatically.
+$marquees = [];
+try {
+    $marquees = $pdo->query("SELECT * FROM marquees WHERE status='active' ORDER BY display_order, id")->fetchAll();
+} catch (Throwable $e) { /* table not migrated yet — marquee stays hidden */ }
+
+if ($marquees) {
+    $mq_len = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
+    $mq_chars = 0;
+    foreach ($marquees as $m) {
+        $mq_chars += $mq_len((string)($m['icon'] ?? '')) + 1 + $mq_len((string)($m['text'] ?? ''));
+    }
+    $marquee_dur = max(18, min(90, (int)round($mq_chars * 0.3)));
+} else {
+    $marquee_dur = 30;
+}
+
 // Hero slides for the carousel — graceful fallback if table doesn't exist yet
 $slides = [];
 try {
@@ -164,16 +182,27 @@ $extra_head = '<style>
     .hero-dot{width:20px;height:4px}
     .hero-dot.active{width:30px}
   }
-  .stats{background:var(--primary-dark);color:#fff;padding:2.25rem 0}
-  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;text-align:center}
-  .stat h3{font-size:2.5rem;color:var(--accent);font-weight:800;line-height:1.2}
-  .stat p{font-size:.95rem;opacity:.9;letter-spacing:1px;text-transform:uppercase;line-height:1.4}
+  /* Marquee ticker between hero and stats */
+  .marquee{position:relative;background:linear-gradient(90deg,var(--accent-dark),var(--accent));color:#fff;overflow:hidden;white-space:nowrap;padding:.55rem 0;font-family:'Roboto','Poppins',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .marquee-track{display:inline-flex;align-items:center;will-change:transform;animation:marqueeScroll var(--mq-dur,40s) linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-content{display:inline-flex;align-items:center}
+  .marquee-item{display:inline-flex;align-items:center;gap:.45rem;padding:0 1.8rem;font-size:clamp(.9rem,1.5vw,1.02rem);font-weight:600;letter-spacing:.3px}
+  .marquee-item .mq-ico{font-size:1.05em}
+  @keyframes marqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.marquee-track{animation:none}}
+
+  /* Slim stats strip (compact height, still readable) */
+  .stats{background:var(--primary-dark);color:#fff;padding:1rem 0}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center}
+  .stat h3{font-size:1.55rem;color:var(--accent);font-weight:800;line-height:1.25}
+  .stat p{font-size:.8rem;opacity:.92;letter-spacing:1px;text-transform:uppercase;line-height:1.35}
   /* Stats keep the same 4-across row on phones as on desktop */
   @media(max-width:780px){
-    .stats{padding:1.75rem 0}
-    .stats-grid{gap:.9rem}
-    .stat h3{font-size:clamp(1.35rem,6.5vw,2rem)}
-    .stat p{font-size:.75rem;letter-spacing:.5px}
+    .stats{padding:.85rem 0}
+    .stats-grid{gap:.6rem}
+    .stat h3{font-size:clamp(1.15rem,5.5vw,1.5rem)}
+    .stat p{font-size:.75rem;letter-spacing:.4px}
   }
   .about-img{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);min-height:420px;
     background:linear-gradient(rgba(37,99,235,.15),rgba(26,46,53,.25)),url(\''.BASE_URL.'images/about.jpg\') center/cover}
@@ -509,6 +538,24 @@ require __DIR__ . '/includes/public_header.php';
   resetTimer();
 })();
 </script>
+
+<?php if ($marquees): ?>
+<!-- MARQUEE TICKER -->
+<div class="marquee" aria-label="Announcements">
+  <div class="marquee-track" style="--mq-dur: <?= $marquee_dur ?>s">
+    <?php for ($copy = 0; $copy < 2; $copy++): ?>
+    <div class="marquee-content"<?= $copy === 1 ? ' aria-hidden="true"' : '' ?>>
+      <?php foreach ($marquees as $m): ?>
+        <span class="marquee-item">
+          <?php if (!empty($m['icon'])): ?><span class="mq-ico"><?= e($m['icon']) ?></span><?php endif; ?>
+          <span class="mq-text"><?= e(tr_field($m, 'text')) ?></span>
+        </span>
+      <?php endforeach; ?>
+    </div>
+    <?php endfor; ?>
+  </div>
+</div>
+<?php endif; ?>
 
 <!-- STATS -->
 <section class="stats">

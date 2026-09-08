@@ -61,6 +61,7 @@ $page_title = $page_title ?? 'Dashboard';
     <div class="menu-label">Content</div>
     <a href="<?= ADMIN_URL ?>hero.php" class="<?= $current=='hero.php'?'active':'' ?>"><span class="icon">🎞️</span> Hero Carousel</a>
     <a href="<?= ADMIN_URL ?>carousel_settings.php" class="<?= $current=='carousel_settings.php'?'active':'' ?>"><span class="icon">⚡</span> Carousel Settings</a>
+    <a href="<?= ADMIN_URL ?>marquee.php" class="<?= $current=='marquee.php'?'active':'' ?>"><span class="icon">📢</span> Marquee</a>
     <a href="<?= ADMIN_URL ?>programs.php" class="<?= $current=='programs.php'?'active':'' ?>"><span class="icon">📚</span> Programs</a>
     <a href="<?= ADMIN_URL ?>program_courses.php" class="<?= $current=='program_courses.php'?'active':'' ?>"><span class="icon">🎓</span> Program Courses</a>
     <a href="<?= ADMIN_URL ?>milestones.php" class="<?= $current=='milestones.php'?'active':'' ?>"><span class="icon">🌱</span> Milestones</a>

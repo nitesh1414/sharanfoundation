@@ -106,6 +106,14 @@ function csrf_field(){
     return '<input type="hidden" name="csrf" value="' . e(csrf_token()) . '">';
 }
 
+/**
+ * Admin helper — inline instructions for emoji/icon fields.
+ * Prints a short 'how to add the icon' help line under the input.
+ */
+function icon_howto_help($label = 'icon'){
+    return '<p class="help">💡 <strong>How to add the ' . e($label) . ':</strong> paste a <strong>single emoji</strong> into the box above — e.g. 📚, 🎯, 🌱, 🙏. To insert one: on <strong>Windows</strong> press <code>Win + .</code> (Windows key + full stop), on <strong>Mac</strong> press <code>Ctrl + ⌘ + Space</code>, or copy an emoji from <strong>emojipedia.org</strong>. Leave the box blank to use the built-in default.</p>';
+}
+
 function format_money($amount, $currency = 'INR'){
     $symbols = ['INR' => '₹', 'GBP' => '£', 'USD' => '$'];
     $sym = $symbols[$currency] ?? '';

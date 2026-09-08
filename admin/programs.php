@@ -77,6 +77,7 @@ if ($action === 'add' || $action === 'edit') {
           <div class="form-group">
             <label>Icon (Emoji)</label>
             <input type="text" name="icon" value="<?= e($row['icon']) ?>" placeholder="📚">
+            <?= icon_howto_help('icon') ?>
           </div>
         </div>
 
