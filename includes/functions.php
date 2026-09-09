@@ -114,6 +114,47 @@ function icon_howto_help($label = 'icon'){
     return '<p class="help">💡 <strong>How to add the ' . e($label) . ':</strong> paste a <strong>single emoji</strong> into the box above — e.g. 📚, 🎯, 🌱, 🙏. To insert one: on <strong>Windows</strong> press <code>Win + .</code> (Windows key + full stop), on <strong>Mac</strong> press <code>Ctrl + ⌘ + Space</code>, or copy an emoji from <strong>emojipedia.org</strong>. Leave the box blank to use the built-in default.</p>';
 }
 
+/**
+ * Site media manager — per-key images editable from Admin → Banners & Images.
+ * Returns the stored relative path (e.g. 'uploads/media/xyz.jpg') or $default.
+ * Reads the whole `site_media` table once per request; missing table → default.
+ */
+function site_media_path($slug, $default = ''){
+    static $cache = null;
+    if ($cache === null) {
+        global $pdo;
+        $cache = [];
+        try {
+            foreach ($pdo->query("SELECT slug, path FROM site_media")->fetchAll() as $r) {
+                $cache[$r['slug']] = $r['path'];
+            }
+        } catch (Throwable $e) { /* table not migrated yet */ }
+    }
+    $p = $cache[$slug] ?? $default;
+    return $p !== '' && $p !== null ? $p : $default;
+}
+
+/** Absolute URL of a site-managed image (prefixes BASE_URL). */
+function site_image_url($slug, $default = ''){
+    $p = site_media_path($slug, $default);
+    return $p !== '' ? BASE_URL . ltrim($p, '/') : '';
+}
+
+/**
+ * Inline `style` value that paints a site-managed image as a background,
+ * optionally stacked over a CSS gradient (e.g. a navy overlay for legibility).
+ * Caller prints it inside style="…":   style="<?= e(site_bg_attr('banner_about')) ?>"
+ * $gradient must be a full CSS gradient value, e.g. 'linear-gradient(rgba(13,41,64,.5), rgba(29,78,216,.25))'.
+ */
+function site_bg_attr($slug, $gradient = null, $default = ''){
+    $u = site_image_url($slug, $default);
+    if ($u === '') return 'background-color:#0d2940;';
+    $img = "url('" . $u . "')";
+    $bg  = $gradient ? $gradient . ', ' . $img : $img;
+    return 'background-image:' . $bg . ';background-size:cover;background-position:center';
+}
+
+
 function format_money($amount, $currency = 'INR'){
     $symbols = ['INR' => '₹', 'GBP' => '£', 'USD' => '$'];
     $sym = $symbols[$currency] ?? '';

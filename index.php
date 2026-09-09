@@ -75,7 +75,7 @@ require __DIR__ . '/includes/public_header.php';
   <!-- Fallback single hero when no slides configured -->
   <div class="hero-slides">
     <div class="hero-slide active overlay-blue text-left<?= $carousel_config['show_text'] ? '' : ' text-hidden' ?>">
-      <div class="bg" style="background-image:url('<?= BASE_URL ?>images/hero.jpg')"></div>
+      <div class="bg" style="background-image:url('<?= e(site_image_url('home_hero', 'images/hero.jpg')) ?>')"></div>
       <?php if ($carousel_config['show_text']): ?>
       <div class="container">
         <div class="hero-content">
@@ -97,7 +97,7 @@ require __DIR__ . '/includes/public_header.php';
     <?php foreach ($slides as $i => $sl):
       $media_type = $sl['media_type'] ?? 'image';
       $has_img = !empty($sl['image']) && file_exists(__DIR__ . '/' . $sl['image']);
-      $poster_url = $has_img ? BASE_URL . e($sl['image']) : BASE_URL . 'images/hero.jpg';
+      $poster_url = $has_img ? BASE_URL . e($sl['image']) : site_image_url('home_hero', 'images/hero.jpg');
       $overlay = $sl['overlay_color'] ?: 'blue';
       $pos = $sl['text_position'] ?: 'left';
       $title    = tr_field($sl, 'title');
@@ -379,7 +379,7 @@ require __DIR__ . '/includes/public_header.php';
 <section id="about">
   <div class="container">
     <div class="grid-2">
-      <div class="about-img"></div>
+      <div class="about-img" style="<?= e(site_bg_attr('story_img', 'linear-gradient(rgba(37,99,235,.15),rgba(26,46,53,.25))', 'images/about.jpg')) ?>"></div>
       <div class="about-text">
         <span class="tag"><?= e(t('about_badge')) ?></span>
         <h2><?= e(t('about_title')) ?></h2>
@@ -453,7 +453,7 @@ require __DIR__ . '/includes/public_header.php';
 </section>
 
 <!-- DONATE CTA -->
-<section class="cta-band">
+<section class="cta-band" style="<?= e(site_bg_attr('donate_bg', 'linear-gradient(rgba(37,99,235,.88),rgba(29,78,216,.88))', 'images/donate-bg.jpg')) ?>">
   <div class="container">
     <h2><?= e(t('donate_band_title')) ?></h2>
     <p><?= e(t('donate_band_text')) ?></p>

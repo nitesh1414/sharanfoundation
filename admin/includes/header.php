@@ -62,10 +62,12 @@ $page_title = $page_title ?? 'Dashboard';
     <a href="<?= ADMIN_URL ?>hero.php" class="<?= $current=='hero.php'?'active':'' ?>"><span class="icon">🎞️</span> Hero Carousel</a>
     <a href="<?= ADMIN_URL ?>carousel_settings.php" class="<?= $current=='carousel_settings.php'?'active':'' ?>"><span class="icon">⚡</span> Carousel Settings</a>
     <a href="<?= ADMIN_URL ?>marquee.php" class="<?= $current=='marquee.php'?'active':'' ?>"><span class="icon">📢</span> Marquee</a>
+    <a href="<?= ADMIN_URL ?>site_media.php" class="<?= $current=='site_media.php'?'active':'' ?>"><span class="icon">🎨</span> Banners &amp; Images</a>
     <a href="<?= ADMIN_URL ?>programs.php" class="<?= $current=='programs.php'?'active':'' ?>"><span class="icon">📚</span> Programs</a>
     <a href="<?= ADMIN_URL ?>program_courses.php" class="<?= $current=='program_courses.php'?'active':'' ?>"><span class="icon">🎓</span> Program Courses</a>
     <a href="<?= ADMIN_URL ?>milestones.php" class="<?= $current=='milestones.php'?'active':'' ?>"><span class="icon">🌱</span> Milestones</a>
     <a href="<?= ADMIN_URL ?>mission_phases.php" class="<?= $current=='mission_phases.php'?'active':'' ?>"><span class="icon">🚧</span> Mission Plan</a>
+    <a href="<?= ADMIN_URL ?>vision_capacity.php" class="<?= $current=='vision_capacity.php'?'active':'' ?>"><span class="icon">👥</span> Vision Capacity</a>
     <a href="<?= ADMIN_URL ?>projects.php" class="<?= $current=='projects.php'?'active':'' ?>"><span class="icon">🎯</span> Projects</a>
     <a href="<?= ADMIN_URL ?>blog.php" class="<?= $current=='blog.php'?'active':'' ?>"><span class="icon">📝</span> Blog Posts</a>
     <a href="<?= ADMIN_URL ?>gallery.php" class="<?= $current=='gallery.php'?'active':'' ?>"><span class="icon">🖼️</span> Gallery</a>

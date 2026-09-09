@@ -661,6 +661,38 @@ INSERT IGNORE INTO `marquees` (`id`,`text`,`text_hi`,`icon`,`display_order`,`sta
 (2,'Your generosity brings hope — volunteer, partner or donate today',NULL,'🙏',2,'active');
 
 -- ============================================================
+-- SITE MEDIA (v11) — page hero banners & content images that the
+-- admin can replace from Admin → Banners & Images. Each row maps a
+-- fixed usage key (slug) to an uploaded image. path may be reset to
+-- the built-in default by the admin panel.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `site_media` (
+  `slug`          VARCHAR(80) PRIMARY KEY,
+  `label`         VARCHAR(150) NOT NULL,
+  `group_name`    VARCHAR(80)  NOT NULL DEFAULT 'content',
+  `default_path`  VARCHAR(255) NOT NULL,
+  `path`          VARCHAR(255) NOT NULL,
+  `updated_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+INSERT IGNORE INTO `site_media` (`slug`,`label`,`group_name`,`default_path`,`path`) VALUES
+-- Page hero banners
+('banner_about','About page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_blog','Blog page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_contact','Contact page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_gallery','Gallery page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_partner','Partner page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_programs','Programs page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_projects','Projects page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_start_fundraiser','Start Fundraiser page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_volunteer','Volunteer page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_donate','Donate page banner','banner','images/donate-bg.jpg','images/donate-bg.jpg'),
+-- Homepage & content images
+('home_hero','Homepage fallback hero / video-cover image','content','images/hero.jpg','images/hero.jpg'),
+('story_img','Homepage & About “Our Story” image','content','images/about.jpg','images/about.jpg'),
+('donate_bg','Donation banner / call-to-action background','content','images/donate-bg.jpg','images/donate-bg.jpg');
+
+-- ============================================================
 -- MILESTONES (v9)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `milestones` (

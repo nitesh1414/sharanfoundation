@@ -77,6 +77,7 @@ try {
         'recurring_donations','recurring_charges','cron_log',
         'webhook_events','hero_slides',
         'milestones','mission_phases','vision_capacity','program_courses',
+        'marquees','site_media',
     ];
     $missing = array_diff($needed, $tables);
     echo '<table>';

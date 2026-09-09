@@ -58,7 +58,7 @@ $extra_head = '<style>
 require __DIR__ . '/../includes/public_header.php';
 ?>
 
-<section class="page-header">
+<section class="page-header" style="<?= e(site_bg_attr('banner_about', 'linear-gradient(rgba(29,78,216,.15),rgba(26,46,53,.15))', 'images/hero.jpg')) ?>">
   <div class="container">
     <h1><?= e(t('page_about')) ?></h1>
     <div class="breadcrumb"><a href="<?= BASE_URL ?>"><?= e(t('home')) ?></a> &nbsp;›&nbsp; <?= e(t('nav_about')) ?></div>
@@ -68,7 +68,7 @@ require __DIR__ . '/../includes/public_header.php';
 <section>
   <div class="container">
     <div class="story-grid story">
-      <div class="story-img"></div>
+      <div class="story-img" style="<?= e(site_bg_attr('story_img', 'linear-gradient(rgba(13,41,64,.18),rgba(29,78,216,.12))', 'images/about.jpg')) ?>"></div>
       <div>
         <span class="tag">✦ OUR STORY</span>
         <h2>From a Small Group to a <span>Global Mission</span></h2>
@@ -89,7 +89,7 @@ require __DIR__ . '/../includes/public_header.php';
 
 <?php if ($vision_cap || get_setting('vision_statement')): ?>
 <!-- VISION & CAPACITY -->
-<section style="background:linear-gradient(135deg,#f0f7ff,#fff);padding:5rem 0">
+<section id="vision" style="background:linear-gradient(135deg,#f0f7ff,#fff);padding:5rem 0">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ OUR VISION</span>

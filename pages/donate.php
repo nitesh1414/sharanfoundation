@@ -111,7 +111,7 @@ require __DIR__ . '/../includes/public_header.php';
 ?>
 
 <!-- HERO -->
-<section class="donate-hero">
+<section class="donate-hero" style="<?= e(site_bg_attr('banner_donate', 'linear-gradient(rgba(29,78,216,.88),rgba(26,46,53,.88))', 'images/donate-bg.jpg')) ?>">
   <div class="container">
     <span class="tag" style="background:rgba(244,162,97,.2);color:var(--accent)">✦ <?= strtoupper(e(t('nav_donate'))) ?></span>
     <h1 style="margin-top:.5rem"><?= e(t('donate_hero_title')) ?> ❤️</h1>
