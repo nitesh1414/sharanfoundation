@@ -58,10 +58,6 @@ nav a.btn::after{display:none}
 
 .menu-toggle{display:none;background:none;border:none;font-size:1.6rem;color:var(--primary-dark);cursor:pointer}
 
-/* Mobile language switcher (shown inside the hamburger menu on small screens,
-   where the topbar — which normally holds the language switcher — is hidden) */
-.nav-lang-mobile{display:none}
-
 /* PAGE HEADER (banner on inner pages) */
 .page-header{
   position:relative;padding:6rem 0 4rem;color:#fff;text-align:center;

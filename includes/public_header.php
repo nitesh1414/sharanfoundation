@@ -61,27 +61,54 @@ $gt_codes = json_encode(site_language_codes());
 
 <link rel="stylesheet" href="<?= $BU ?>css/style.css" />
 <style>
-  /* Google Translate widget — replaces the old EN/Hindi manual switcher */
-  .gt-widget{display:inline-flex;align-items:center}
-  .gt-widget .goog-te-gadget{font-family:'Roboto',sans-serif}
-  .gt-widget .goog-te-combo{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:50px;padding:.28rem .7rem;font-size:.8rem;font-family:'Roboto',sans-serif;cursor:pointer;outline:none;max-width:150px}
-  .gt-widget .goog-te-combo option{color:#222;background:#fff}
-  .gt-widget .goog-logo-link,.gt-widget .goog-te-gadget span{display:none !important}
+  /* Google Translate — floating icon pinned to the right edge of the screen,
+     always visible on desktop & mobile (replaces the old EN/Hindi switcher) */
+  .gt-float{
+    position:fixed;            /* stays in place while the page scrolls */
+    right:10px;                /* right side of the template */
+    top:50%;
+    margin-top:-22px;          /* ~half the pill height: keeps it centred without transform (safe for the GT dropdown) */
+    z-index:9998;
+    line-height:0;
+  }
+  .gt-float .goog-te-gadget{font-family:'Roboto',sans-serif;line-height:normal}
+  /* the pill itself — compact white capsule */
+  .gt-float .goog-te-gadget-simple{
+    background:#ffffff;
+    border:1px solid rgba(13,41,64,.18);
+    border-radius:50px;
+    padding:.55rem .62rem;
+    box-shadow:0 6px 18px rgba(13,41,64,.16);
+    cursor:pointer;
+    white-space:nowrap;
+    transition:box-shadow .2s ease, transform .2s ease;
+  }
+  .gt-float .goog-te-gadget-simple:hover{box-shadow:0 8px 24px rgba(37,99,235,.32);transform:translateY(-1px)}
+  .gt-float .goog-te-gadget-simple:focus{outline:2px solid #2563eb;outline-offset:2px}
+  .gt-float .goog-te-gadget img{vertical-align:middle;border:none}
+  /* icon-only look: keep the translate glyphs, hide the “Select Language” text label */
+  .gt-float .goog-te-gadget span{display:none !important}
+  .gt-float .goog-te-gadget option{color:#222;background:#fff;display:block}
+  /* hide Google branding/banner/tooltip chrome; language menu stays functional */
   .goog-te-banner-frame{display:none !important}
+  .goog-logo-link{display:none !important}
   #goog-gt-tt{display:none !important}
   .goog-te-spinner-pos{display:none !important}
 
-  /* Mobile menu version (light background) */
-  .nav-lang-mobile{display:none;width:100%}
-  .nav-lang-mobile .gt-widget{width:100%}
-  .nav-lang-mobile .goog-te-combo{width:100%;max-width:none;background:#fff;color:#333;border:1px solid #d5dde3;border-radius:8px;padding:.55rem .8rem;font-size:.9rem}
-  @media(max-width:880px){
-    .nav-lang-mobile{display:block;padding-top:.9rem;margin-top:.2rem;border-top:1px solid #e9eef4}
+  /* slightly closer to the edge + smaller on phones */
+  @media(max-width:640px){
+    .gt-float{right:6px;margin-top:-19px}
+    .gt-float .goog-te-gadget-simple{padding:.48rem .55rem}
   }
 </style>
 <?php if (!empty($extra_head)) echo $extra_head; ?>
 </head>
 <body>
+
+<!-- Google Translate icon — fixed to the right side of the page, visible on web & mobile -->
+<div class="gt-float" id="gt_float" title="Translate this website / अनुवाद करें" aria-label="Google Translate – select language">
+  <div id="google_translate_element"></div>
+</div>
 
 <!-- TOP BAR -->
 <div class="topbar">
@@ -90,7 +117,6 @@ $gt_codes = json_encode(site_language_codes());
     <div style="display:flex;align-items:center;flex-wrap:wrap">
       <a href="<?= $BU ?>pages/volunteer.php"><?= e(t('nav_volunteer')) ?></a>
       <a href="<?= $BU ?>pages/partner.php"><?= e(t('nav_partner')) ?></a>
-      <span class="gt-widget" id="google_translate_element"></span>
     </div>
   </div>
 </div>
@@ -117,7 +143,6 @@ $gt_codes = json_encode(site_language_codes());
         <li><a href="<?= $BU ?>pages/blog.php" class="<?= $current_page==='blog'?'active':'' ?>"><?= e(t('nav_blog')) ?></a></li>
         <li><a href="<?= $BU ?>pages/contact.php" class="<?= $current_page==='contact'?'active':'' ?>"><?= e(t('nav_contact')) ?></a></li>
         <li><a href="<?= $BU ?>pages/donate.php" class="btn btn-primary"><?= e(t('nav_donate')) ?> ♥</a></li>
-        <li class="nav-lang-mobile"><span class="gt-widget" id="google_translate_element_mobile"></span></li>
       </ul>
     </nav>
   </div>
@@ -129,20 +154,14 @@ function googleTranslateElementInit(){
   if (window.__gtInitDone) return;
   window.__gtInitDone = true;
   var codes = <?= $gt_codes ?>; /* e.g. ["en","hi","fi"] — from Admin -> Languages & Translation */
-  var opts = {
+  var el = document.getElementById('google_translate_element');
+  if (!el) return;
+  new google.translate.TranslateElement({
     pageLanguage: 'en',
     includedLanguages: codes.join(','),
     autoDisplay: false,
     layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-  };
-  try {
-    if (document.getElementById('google_translate_element'))
-      new google.translate.TranslateElement(opts, 'google_translate_element');
-  } catch(e){}
-  try {
-    if (document.getElementById('google_translate_element_mobile'))
-      new google.translate.TranslateElement(opts, 'google_translate_element_mobile');
-  } catch(e){}
+  }, 'google_translate_element');
 }
 </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
