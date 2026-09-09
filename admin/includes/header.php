@@ -85,6 +85,7 @@ $page_title = $page_title ?? 'Dashboard';
     <a href="<?= ADMIN_URL ?>subscribers.php" class="<?= $current=='subscribers.php'?'active':'' ?>"><span class="icon">📧</span> Subscribers</a>
 
     <div class="menu-label">System</div>
+    <a href="<?= ADMIN_URL ?>languages.php" class="<?= $current=='languages.php'?'active':'' ?>"><span class="icon">🌐</span> Languages &amp; Translation</a>
     <a href="<?= ADMIN_URL ?>settings.php" class="<?= $current=='settings.php'?'active':'' ?>"><span class="icon">⚙️</span> Site Settings</a>
     <a href="<?= ADMIN_URL ?>payments.php" class="<?= $current=='payments.php'?'active':'' ?>"><span class="icon">💳</span> Payment Gateways</a>
     <a href="<?= ADMIN_URL ?>email_log.php" class="<?= $current=='email_log.php'?'active':'' ?>"><span class="icon">📨</span> Email Log</a>

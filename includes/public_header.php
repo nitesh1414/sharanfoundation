@@ -8,7 +8,7 @@ $page_title = $page_title ?? 'Sharan Foundation';
 $page_desc = $page_desc ?? 'A Christian charity serving India & UK through education, shelter and faith.';
 $BU = BASE_URL;
 $LANG = current_lang();
-$langs = available_languages();
+$gt_codes = json_encode(site_language_codes());
 ?><!DOCTYPE html>
 <html lang="<?= e($LANG) ?>">
 <head>
@@ -60,26 +60,23 @@ $langs = available_languages();
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 
 <link rel="stylesheet" href="<?= $BU ?>css/style.css" />
-<?php if ($LANG === 'hi'): ?>
-<style>body,h1,h2,h3,h4,h5,h6,.logo{font-family:'Noto Sans Devanagari','Poppins','Roboto','Segoe UI',sans-serif}</style>
-<?php endif; ?>
 <style>
-  /* Language switcher */
-  .lang-switch{display:inline-flex;align-items:center;gap:.3rem;margin-left:1rem;background:rgba(255,255,255,.1);padding:.15rem .15rem;border-radius:50px;font-size:.8rem}
-  .lang-switch a{padding:.2rem .7rem;color:#fff;opacity:.7;border-radius:50px;transition:.2s;text-decoration:none}
-  .lang-switch a:hover{opacity:1}
-  .lang-switch a.active{background:var(--accent);color:#fff;opacity:1;font-weight:600}
-  @media(max-width:600px){.lang-switch{margin-left:.4rem;font-size:.75rem}.lang-switch a{padding:.15rem .5rem}}
+  /* Google Translate widget — replaces the old EN/Hindi manual switcher */
+  .gt-widget{display:inline-flex;align-items:center}
+  .gt-widget .goog-te-gadget{font-family:'Roboto',sans-serif}
+  .gt-widget .goog-te-combo{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:50px;padding:.28rem .7rem;font-size:.8rem;font-family:'Roboto',sans-serif;cursor:pointer;outline:none;max-width:150px}
+  .gt-widget .goog-te-combo option{color:#222;background:#fff}
+  .gt-widget .goog-logo-link,.gt-widget .goog-te-gadget span{display:none !important}
+  .goog-te-banner-frame{display:none !important}
+  #goog-gt-tt{display:none !important}
+  .goog-te-spinner-pos{display:none !important}
 
-  /* Mobile (hamburger-menu) language switcher — shown only on small screens,
-     styled as a light pill so it fits the white dropdown menu */
-  .nav-lang-mobile{width:100%}
-  .nav-lang-mobile .lang-switch{background:#eef2f7;border:1px solid #e2e8f0;margin-left:0}
-  .nav-lang-mobile .lang-switch a{color:#40506c;opacity:1}
-  .nav-lang-mobile .lang-switch a:hover{background:rgba(37,99,235,.08);color:var(--primary)}
-  .nav-lang-mobile .lang-switch a.active{background:var(--accent);color:#fff;opacity:1}
+  /* Mobile menu version (light background) */
+  .nav-lang-mobile{display:none;width:100%}
+  .nav-lang-mobile .gt-widget{width:100%}
+  .nav-lang-mobile .goog-te-combo{width:100%;max-width:none;background:#fff;color:#333;border:1px solid #d5dde3;border-radius:8px;padding:.55rem .8rem;font-size:.9rem}
   @media(max-width:880px){
-    .nav-lang-mobile{display:block;padding-top:1rem;margin-top:.4rem;border-top:1px solid #e9eef4}
+    .nav-lang-mobile{display:block;padding-top:.9rem;margin-top:.2rem;border-top:1px solid #e9eef4}
   }
 </style>
 <?php if (!empty($extra_head)) echo $extra_head; ?>
@@ -93,11 +90,7 @@ $langs = available_languages();
     <div style="display:flex;align-items:center;flex-wrap:wrap">
       <a href="<?= $BU ?>pages/volunteer.php"><?= e(t('nav_volunteer')) ?></a>
       <a href="<?= $BU ?>pages/partner.php"><?= e(t('nav_partner')) ?></a>
-      <div class="lang-switch" title="Language / भाषा">
-        <?php foreach ($langs as $code => $info): ?>
-          <a href="<?= e(lang_url($code)) ?>" class="<?= $LANG===$code?'active':'' ?>" title="<?= e($info['name']) ?>"><?= e($info['flag']) ?> <?= e($code === 'hi' ? 'हि' : 'EN') ?></a>
-        <?php endforeach; ?>
-      </div>
+      <span class="gt-widget" id="google_translate_element"></span>
     </div>
   </div>
 </div>
@@ -124,12 +117,33 @@ $langs = available_languages();
         <li><a href="<?= $BU ?>pages/blog.php" class="<?= $current_page==='blog'?'active':'' ?>"><?= e(t('nav_blog')) ?></a></li>
         <li><a href="<?= $BU ?>pages/contact.php" class="<?= $current_page==='contact'?'active':'' ?>"><?= e(t('nav_contact')) ?></a></li>
         <li><a href="<?= $BU ?>pages/donate.php" class="btn btn-primary"><?= e(t('nav_donate')) ?> ♥</a></li>
-        <li class="nav-lang-mobile"><div class="lang-switch" title="Language / भाषा">
-          <?php foreach ($langs as $code => $info): ?>
-            <a href="<?= e(lang_url($code)) ?>" class="<?= $LANG===$code?'active':'' ?>" title="<?= e($info['name']) ?>"><?= e($info['flag']) ?> <?= e($code === 'hi' ? 'हि' : 'EN') ?></a>
-          <?php endforeach; ?>
-        </div></li>
+        <li class="nav-lang-mobile"><span class="gt-widget" id="google_translate_element_mobile"></span></li>
       </ul>
     </nav>
   </div>
 </header>
+
+<!-- ===== Google Translate (client-side translation) ===== -->
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  if (window.__gtInitDone) return;
+  window.__gtInitDone = true;
+  var codes = <?= $gt_codes ?>; /* e.g. ["en","hi","fi"] — from Admin -> Languages & Translation */
+  var opts = {
+    pageLanguage: 'en',
+    includedLanguages: codes.join(','),
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  };
+  try {
+    if (document.getElementById('google_translate_element'))
+      new google.translate.TranslateElement(opts, 'google_translate_element');
+  } catch(e){}
+  try {
+    if (document.getElementById('google_translate_element_mobile'))
+      new google.translate.TranslateElement(opts, 'google_translate_element_mobile');
+  } catch(e){}
+}
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+

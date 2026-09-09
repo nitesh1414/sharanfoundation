@@ -163,3 +163,10 @@ table td .actions{display:flex;gap:.4rem}
   .form-row{grid-template-columns:1fr}
   .detail-grid{grid-template-columns:1fr}
 }
+
+/* Google-Translate era — content is entered once in English. Legacy Hindi
+   tabs / Hindi-only inputs in forms are hidden (not required anymore). */
+.lang-tab[data-lang="hi"]{display:none !important}
+.lang-panel[data-lang-panel="hi"]{display:none !important}
+.form-group:has(input[name$="_hi"]),
+.form-group:has(textarea[name$="_hi"]){display:none !important}

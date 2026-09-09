@@ -1,55 +1,26 @@
 <?php
 /**
- * Sharan Foundation — Internationalization (i18n) Helper
+ * Sharan Foundation — i18n helper (Google Translate edition)
  *
- * Supports: en (English), hi (Hindi)
- * Detection order: ?lang=xx → cookie → browser Accept-Language → site default → 'en'
+ * The public site is always rendered in English; a Google Translate widget
+ * (see includes/public_header.php) translates the page client-side into the
+ * languages chosen in Admin → Languages & Translation. Content is therefore
+ * entered ONCE (in English) — admins no longer need to type Hindi/other
+ * translations (legacy *_hi DB columns and lang/hi.php remain for reference
+ * but are not used for rendering).
  */
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-define('AVAILABLE_LANGS', ['en','hi']);
-
 global $LANG, $T;
+$LANG = 'en';   // Google Translate handles all visitor languages client-side
 
-// 1. Handle language switch via ?lang=xx
-if (isset($_GET['lang']) && in_array($_GET['lang'], AVAILABLE_LANGS)) {
-    $LANG = $_GET['lang'];
-    setcookie('site_lang', $LANG, time() + 86400*365, '/');
-    $_SESSION['site_lang'] = $LANG;
-}
-// 2. Cookie / session
-elseif (!empty($_SESSION['site_lang']) && in_array($_SESSION['site_lang'], AVAILABLE_LANGS)) {
-    $LANG = $_SESSION['site_lang'];
-}
-elseif (!empty($_COOKIE['site_lang']) && in_array($_COOKIE['site_lang'], AVAILABLE_LANGS)) {
-    $LANG = $_COOKIE['site_lang'];
-    $_SESSION['site_lang'] = $LANG;
-}
-// 3. Browser Accept-Language (only if no other preference)
-elseif (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-    $accept = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-    if (strpos($accept, 'hi') === 0) $LANG = 'hi';
-    else                              $LANG = 'en';
-}
-// 4. Default
-else {
-    $LANG = function_exists('get_setting') ? get_setting('default_language','en') : 'en';
-    if (!in_array($LANG, AVAILABLE_LANGS)) $LANG = 'en';
-}
-
-// Load translation file
-$_lang_file = __DIR__ . '/../lang/' . $LANG . '.php';
-$_en_file   = __DIR__ . '/../lang/en.php';
-$T = is_file($_lang_file) ? require $_lang_file : require $_en_file;
-
-// Always merge with English as fallback for missing keys
-if ($LANG !== 'en' && is_file($_en_file)) {
-    $T = array_merge(require $_en_file, $T);
-}
+// Load the English strings (single source of truth)
+$_en_file = __DIR__ . '/../lang/en.php';
+$T = is_file($_en_file) ? require $_en_file : [];
 
 /**
- * Translate: t('nav_home') -> "Home" or "मुख्य पृष्ठ"
+ * t('nav_home') -> "Home"
  */
 function t($key, $default = null) {
     global $T;
@@ -57,41 +28,92 @@ function t($key, $default = null) {
 }
 
 /**
- * Get a translated DB field. Falls back to English if Hindi missing.
- * tr_field($row, 'title') uses 'title_hi' when lang=hi, else 'title'
+ * DB content is stored once, in English. (Kept for API compatibility.)
  */
 function tr_field($row, $field) {
-    global $LANG;
-    if ($LANG === 'en') return $row[$field] ?? '';
-    $hi_field = $field . '_hi';
-    if (!empty($row[$hi_field])) return $row[$hi_field];
     return $row[$field] ?? '';
 }
 
 /**
- * Build language switcher URL preserving current path.
+ * Get current rendering language — always 'en' (Google Translate is client-side).
  */
-function lang_url($lang_code) {
-    $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-    $qs  = $_GET;
-    $qs['lang'] = $lang_code;
-    return $uri . '?' . http_build_query($qs);
+function current_lang() {
+    return 'en';
 }
 
 /**
- * Get all available languages for the switcher.
+ * Catalog of Google-Translate-supported languages that the admin can enable.
+ * code => ['English name', 'native name', 'flag emoji']
+ * (only codes understood by translate.google.com are listed)
  */
-function available_languages() {
+function gt_language_catalog() {
     return [
-        'en' => ['name' => 'English',  'native' => 'English',  'flag' => '🇬🇧'],
-        'hi' => ['name' => 'Hindi',    'native' => 'हिन्दी',    'flag' => '🇮🇳'],
+        'en'    => ['English',   'English',       '🇬🇧'],
+        'hi'    => ['Hindi',     'हिन्दी',        '🇮🇳'],
+        'fi'    => ['Finnish',   'Suomi',         '🇫🇮'],
+        'mr'    => ['Marathi',   'मराठी',         '🇮🇳'],
+        'gu'    => ['Gujarati',  'ગુજરાતી',       '🇮🇳'],
+        'pa'    => ['Punjabi',   'ਪੰਜਾਬੀ',        '🇮🇳'],
+        'bn'    => ['Bengali',   'বাংলা',         '🇧🇩'],
+        'ta'    => ['Tamil',     'தமிழ்',         '🇮🇳'],
+        'te'    => ['Telugu',    'తెలుగు',        '🇮🇳'],
+        'kn'    => ['Kannada',   'ಕನ್ನಡ',         '🇮🇳'],
+        'ml'    => ['Malayalam', 'മലയാളം',       '🇮🇳'],
+        'ur'    => ['Urdu',      'اردو',          '🇵🇰'],
+        'ne'    => ['Nepali',    'नेपाली',        '🇳🇵'],
+        'de'    => ['German',    'Deutsch',       '🇩🇪'],
+        'fr'    => ['French',    'Français',      '🇫🇷'],
+        'es'    => ['Spanish',   'Español',       '🇪🇸'],
+        'pt'    => ['Portuguese','Português',     '🇵🇹'],
+        'it'    => ['Italian',   'Italiano',      '🇮🇹'],
+        'nl'    => ['Dutch',     'Nederlands',    '🇳🇱'],
+        'sv'    => ['Swedish',   'Svenska',       '🇸🇪'],
+        'da'    => ['Danish',    'Dansk',         '🇩🇰'],
+        'tr'    => ['Turkish',   'Türkçe',        '🇹🇷'],
+        'ru'    => ['Russian',   'Русский',       '🇷🇺'],
+        'ar'    => ['Arabic',    'العربية',       '🇸🇦'],
+        'zh-CN' => ['Chinese (Simplified)', '简体中文', '🇨🇳'],
+        'ja'    => ['Japanese',  '日本語',         '🇯🇵'],
+        'ko'    => ['Korean',    '한국어',          '🇰🇷'],
     ];
 }
 
 /**
- * Get current language code.
+ * Admin-configured language codes (comma CSV from settings.site_languages),
+ * validated against the catalog. English is always included (it is the page
+ * language and must be offered so users can return to the original).
+ * Default: en,hi,fi
  */
-function current_lang() {
-    global $LANG;
-    return $LANG;
+function site_language_codes() {
+    $raw  = function_exists('get_setting') ? get_setting('site_languages', 'en,hi,fi') : 'en,hi,fi';
+    $cat  = gt_language_catalog();
+    $out  = [];
+    foreach (array_map('trim', explode(',', (string)$raw)) as $c) {
+        if (isset($cat[$c]) && !in_array($c, $out, true)) $out[] = $c;
+    }
+    if (!in_array('en', $out, true)) array_unshift($out, 'en');
+    return $out ?: ['en', 'hi', 'fi'];
+}
+
+/**
+ * Language switcher list (kept for compatibility): code => [name,native,flag]
+ * for the currently enabled languages.
+ */
+function available_languages() {
+    $out = [];
+    foreach (site_language_codes() as $c) {
+        $cat = gt_language_catalog();
+        if (isset($cat[$c])) {
+            $out[$c] = ['name' => $cat[$c][0], 'native' => $cat[$c][1], 'flag' => $cat[$c][2]];
+        }
+    }
+    return $out;
+}
+
+/**
+ * Legacy ?lang= URL helper — retained so nothing breaks; switching is now done
+ * through Google Translate.
+ */
+function lang_url($lang_code) {
+    return $_SERVER['REQUEST_URI'] ?? '/';
 }

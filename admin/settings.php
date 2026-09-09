@@ -117,13 +117,10 @@ $s = $pdo->query("SELECT * FROM settings LIMIT 1")->fetch();
 
   <div class="card-head" id="language"><h3>🌐 Language</h3></div>
   <div class="card-body">
-    <div class="form-group">
-      <label>Default Site Language</label>
-      <select name="default_language" style="max-width:280px">
-        <option value="en" <?= ($s['default_language'] ?? 'en')==='en'?'selected':'' ?>>🇬🇧 English</option>
-        <option value="hi" <?= ($s['default_language'] ?? '')==='hi'?'selected':'' ?>>🇮🇳 हिन्दी (Hindi)</option>
-      </select>
-      <p class="help">Visitors can switch languages with the flag toggle in the site header. This is the default for first-time visitors.</p>
+    <input type="hidden" name="default_language" value="en">
+    <div style="background:#eaf2ff;border-left:4px solid #2563eb;padding:.9rem 1.1rem;border-radius:6px">
+      <strong>Google Translate handles site languages.</strong>
+      <p style="margin:.4rem 0 0;color:#40506c">The website is translated automatically by Google Translate. Choose which languages visitors can switch to on the <a href="<?= ADMIN_URL ?>languages.php" style="color:#2563eb;font-weight:600">🌐 Languages &amp; Translation</a> page. Content is entered once, in English — no manual translations needed.</p>
     </div>
   </div>
 

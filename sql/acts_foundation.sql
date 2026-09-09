@@ -111,6 +111,12 @@ ALTER TABLE `settings`
   ADD COLUMN IF NOT EXISTS `carousel_video_audio`   TINYINT(1) DEFAULT 0,
   ADD COLUMN IF NOT EXISTS `carousel_show_text`     TINYINT(1) DEFAULT 1;
 
+-- v11: Google-Translate language list (admin-configurable, comma CSV, default en,hi,fi)
+ALTER TABLE `settings`
+  ADD COLUMN IF NOT EXISTS `site_languages` VARCHAR(255) DEFAULT 'en,hi,fi';
+
+UPDATE `settings` SET `site_languages`='en,hi,fi' WHERE `site_languages` IS NULL OR `site_languages`='';
+
 -- Story / Vision / Motto (v9)
 ALTER TABLE `settings`
   ADD COLUMN IF NOT EXISTS `story_intro`            TEXT NULL,
