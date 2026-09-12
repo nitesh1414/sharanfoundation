@@ -20,7 +20,7 @@ $extra_head = '<style>
   .story-img{border-radius:16px;overflow:hidden;box-shadow:var(--shadow);min-height:400px;background:url(\''.BASE_URL.'images/about.jpg\') center/cover}
   .story h2{color:var(--dark);margin-bottom:.7rem;font-size:16px}
   .story h2 span{color:var(--primary)}
-  .story p{color:var(--ink-muted);margin-bottom:.85rem;font-size:12px}
+  .story p{color:var(--ink-muted);margin-bottom:.85rem;font-size:14px}
   .verse{border-left:4px solid var(--accent);padding:1rem 1.2rem;background:#fffaf0;font-style:italic;color:#5b4a2c;margin:1.5rem 0;border-radius:6px}
   .mv{background:var(--bg-sage)}
   .mv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
@@ -45,8 +45,8 @@ $extra_head = '<style>
   .team-avatar{height:220px;background:linear-gradient(135deg,var(--primary),var(--accent));display:grid;place-items:center;color:#fff;font-size:4rem;font-weight:800;background-size:cover;background-position:center}
   .team-body{padding:1.5rem}
   .team-body h4{color:var(--dark);font-size:14px;margin-bottom:.3rem}
-  .team-body .role{color:var(--primary);font-size:12px;font-weight:600;margin-bottom:.5rem}
-  .team-body p{color:var(--ink-muted);font-size:12px}
+  .team-body .role{color:var(--primary);font-size:14px;font-weight:600;margin-bottom:.5rem}
+  .team-body p{color:var(--ink-muted);font-size:14px}
   @media(max-width:880px){
     .story-grid{grid-template-columns:1fr}
     .timeline-line{left:18px}

@@ -12,7 +12,7 @@ $extra_head = '<style>
   .contact-item{display:flex;gap:1rem;margin-bottom:1.4rem;align-items:flex-start}
   .contact-item .ico{width:45px;height:45px;border-radius:10px;background:rgba(37,99,235,.1);color:var(--primary);display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
   .contact-item h4{color:var(--dark);margin-bottom:.2rem;font-size:14px}
-  .contact-item p{color:var(--ink-muted);font-size:12px}
+  .contact-item p{color:var(--ink-muted);font-size:14px}
   form.contact-form{background:#fff;padding:2.2rem;border-radius:14px;box-shadow:var(--shadow)}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
   form.contact-form input,form.contact-form textarea,form.contact-form select{width:100%;padding:.85rem 1rem;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:.95rem;background:#fff;margin-bottom:1rem;transition:.25s}

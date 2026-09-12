@@ -27,14 +27,14 @@ $extra_head = '<style>
   .prog-content h2{font-size:16px;color:var(--dark);margin-bottom:.5rem}
   .prog-content h2 span{color:var(--primary)}
   .prog-content .sub{color:var(--primary);font-weight:600;margin-bottom:.7rem;font-size:14px;letter-spacing:.6px;text-transform:uppercase}
-  .prog-content p{color:var(--ink-muted);margin-bottom:.85rem;font-size:12px}
+  .prog-content p{color:var(--ink-muted);margin-bottom:.85rem;font-size:14px}
   .prog-features{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.2rem}
-  .prog-features div{display:flex;align-items:center;gap:.5rem;font-size:12px;color:var(--ink)}
+  .prog-features div{display:flex;align-items:center;gap:.5rem;font-size:14px;color:var(--ink)}
   .prog-features div::before{content:"\\2713";color:var(--primary);font-weight:bold;background:rgba(37,99,235,.1);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-size:.75rem}
   .prog-stats{display:flex;gap:2rem;margin:1.5rem 0;flex-wrap:wrap}
   .prog-stats div{text-align:center}
   .prog-stats h4{color:var(--accent);font-size:16px;font-weight:800}
-  .prog-stats p{font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin:0}
+  .prog-stats p{font-size:14px;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin:0}
   .placeholder-img{background:linear-gradient(135deg,#1a4d6e,#5fa8c9);display:grid;place-items:center;min-height:380px}
   .placeholder-img.alt{background:linear-gradient(135deg,#5b3a1f,#d4a017)}
   .placeholder-img .icon{font-size:7rem;color:#fff;opacity:.9}

@@ -2,7 +2,7 @@
    Sharan Foundation — SHARED STYLES
    Domain: sharanforall.org
    Type: Poppins (headings) + Roboto (body)
-   Scale: Heading 16px · Subheading 14px · Text/Button 12px
+   Scale: Heading 16px · Subheading 14px · Text/Button 14px
    ============================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -23,8 +23,8 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
   --font-body:'Roboto','Poppins',sans-serif;
   --fs-h:16px;
   --fs-sub:14px;
-  --fs-text:12px;
-  --fs-btn:12px;
+  --fs-text:14px;
+  --fs-btn:14px;
 
   /* Silent section tints — muted, high-contrast with dark ink */
   --ink:#1a2c3d;
