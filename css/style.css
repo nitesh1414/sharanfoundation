@@ -84,8 +84,8 @@ input,textarea,select,button{font-family:var(--font-body);font-size:var(--fs-tex
 header.nav{background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:1000}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem 1rem;max-width:100%;margin:0 auto}
 .logo{display:flex;align-items:center;gap:.65rem;min-width:0;color:var(--primary-dark)}
-header.nav .logo{flex:0 1 auto;max-width:min(380px,48vw)}
-.logo-mark{width:56px;height:56px;border-radius:50%;background:transparent;display:grid;place-items:center;overflow:hidden;flex-shrink:0}
+header.nav .logo{flex:0 1 auto;max-width:min(480px,58vw)}
+.logo-mark{width:150px;height:150px;border-radius:50%;background:transparent;display:grid;place-items:center;overflow:hidden;flex-shrink:0}
 .logo-mark img{width:100%;height:100%;object-fit:cover}
 .logo-text{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-width:0;gap:1px;line-height:1.15}
 .logo-text .logo-name{
@@ -187,8 +187,8 @@ footer input,footer button.btn{font-size:var(--fs-btn)}
 
 /* RESPONSIVE — logo lockup stays aligned at every breakpoint */
 @media (max-width:1100px){
-  header.nav .logo{max-width:min(300px,40vw)}
-  header.nav .logo-mark{width:50px;height:50px}
+  header.nav .logo{max-width:min(420px,52vw)}
+  header.nav .logo-mark{width:150px;height:150px}
   nav ul{gap:.85rem}
 }
 @media (max-width:880px){
@@ -200,9 +200,9 @@ footer input,footer button.btn{font-size:var(--fs-btn)}
   nav ul > li > a:not(.btn){display:block;width:100%;font-size:var(--fs-text)}
   nav ul a.btn{width:100%;justify-content:center;padding:.6rem 1rem;margin-top:.1rem;font-size:var(--fs-btn)}
   nav ul a.btn:hover{transform:none}
-  .nav-inner{gap:.55rem;padding:.4rem .7rem}
+  .nav-inner{gap:.55rem;padding:.4rem .7rem;align-items:center}
   header.nav .logo{max-width:calc(100% - 48px);gap:.55rem}
-  header.nav .logo-mark{width:44px;height:44px}
+  header.nav .logo-mark{width:90px;height:90px}
   header.nav .logo-name{font-size:var(--fs-h);white-space:nowrap}
   header.nav .logo-text small{font-size:var(--fs-text)}
   .grid-2{grid-template-columns:1fr}
@@ -215,12 +215,12 @@ footer input,footer button.btn{font-size:var(--fs-btn)}
   .foot-grid{grid-template-columns:1fr}
   .nav-inner{gap:.4rem;padding:.35rem .55rem}
   header.nav .logo{max-width:calc(100% - 44px);gap:.45rem}
-  header.nav .logo-mark{width:40px;height:40px}
+  header.nav .logo-mark{width:72px;height:72px}
   header.nav .logo-name{font-size:var(--fs-h)}
   header.nav .logo-text small{font-size:var(--fs-text)}
 }
 @media (max-width:360px){
-  header.nav .logo-mark{width:36px;height:36px}
+  header.nav .logo-mark{width:64px;height:64px}
   header.nav .logo-name{white-space:normal}
   header.nav .logo-text small{white-space:normal}
 }
