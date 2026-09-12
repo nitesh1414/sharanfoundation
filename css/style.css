@@ -84,41 +84,42 @@ input,textarea,select,button{font-family:var(--font-body);font-size:var(--fs-tex
 header.nav{
   background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:1000;
   --logo-size:100px;
-  --logo-name-size:24px;   /* ~24% of the 100px mark */
-  --logo-sub-size:14px;    /* ~58% of the name, floor 14px */
+  --logo-name-size:28px;   /* sized to the 100px mark */
+  --logo-sub-size:16px;
   --logo-gap:12px;
 }
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.35rem 1rem;max-width:100%;margin:0 auto}
 .logo{display:flex;align-items:center;gap:var(--logo-gap,12px);min-width:0;color:var(--primary-dark)}
-header.nav .logo{flex:0 1 auto;max-width:min(520px,62vw)}
+header.nav .logo{flex:0 1 auto;max-width:min(560px,68vw)}
 .logo-mark{width:var(--logo-size,100px);height:var(--logo-size,100px);border-radius:50%;background:transparent;display:grid;place-items:center;overflow:hidden;flex-shrink:0}
 .logo-mark img{width:100%;height:100%;object-fit:contain}
-.logo-text{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-width:0;gap:2px;line-height:1.15}
+.logo-text{
+  display:flex;flex-direction:column;justify-content:center;
+  align-items:stretch;min-width:0;gap:3px;line-height:1.1;
+  width:max-content;max-width:100%;
+}
 .logo-text .logo-name{
   display:block;
   font-family:var(--font-heading);
-  font-size:var(--logo-name-size,24px);
+  font-size:var(--logo-name-size,28px);
   font-weight:700;
   color:var(--primary-dark);
-  line-height:1.15;
+  line-height:1.1;
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  max-width:100%;
+  width:100%;
   letter-spacing:.01em;
 }
 .logo-text small{
   display:block;
   font-family:var(--font-body);
-  font-size:var(--logo-sub-size,14px);
+  font-size:var(--logo-sub-size,16px);
   color:var(--gray);
-  font-weight:400;
-  letter-spacing:.25px;
-  line-height:1.25;
+  font-weight:500;
+  line-height:1.2;
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  max-width:100%;
+  width:100%;
+  text-align:justify;
+  text-align-last:justify;   /* same visual length as the name */
 }
 
 nav ul{display:flex;gap:1.15rem;align-items:center}
@@ -208,12 +209,12 @@ footer input,footer button.btn{font-size:var(--fs-btn)}
   .nav-inner{gap:.55rem;padding:.35rem .7rem;align-items:center}
   header.nav{
     --logo-size:80px;
-    --logo-name-size:20px;
+    --logo-name-size:22px;
     --logo-sub-size:14px;
     --logo-gap:10px;
   }
   header.nav .logo{max-width:calc(100% - 48px)}
-  header.nav .logo-name{white-space:nowrap}
+  header.nav .logo-name,header.nav .logo-text small{white-space:nowrap}
   .grid-2{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr 1fr}
   section{padding:2.5rem 0}
@@ -238,6 +239,5 @@ footer input,footer button.btn{font-size:var(--fs-btn)}
     --logo-sub-size:14px;
     --logo-gap:7px;
   }
-  header.nav .logo-name{white-space:normal}
-  header.nav .logo-text small{white-space:normal}
+  header.nav .logo-name,header.nav .logo-text small{white-space:nowrap}
 }

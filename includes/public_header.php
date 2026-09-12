@@ -61,44 +61,70 @@ $gt_codes = json_encode(site_language_codes());
 
 <link rel="stylesheet" href="<?= $BU ?>css/style.css" />
 <style>
-  /* Google Translate — floating icon pinned to the right edge of the screen,
-     always visible on desktop & mobile (replaces the old EN/Hindi switcher) */
+  /* Google Translate — always-visible 🌐 FAB on desktop AND mobile.
+     The real Google widget sits on top (opacity 0) so a tap still opens
+     the language list; the globe is the visible icon at every breakpoint. */
   .gt-float{
-    position:fixed;            /* stays in place while the page scrolls */
-    right:10px;                /* right side of the template */
+    position:fixed;
+    right:14px;
     top:50%;
-    margin-top:-22px;          /* ~half the pill height: keeps it centred without transform (safe for the GT dropdown) */
-    z-index:9998;
-    line-height:0;
-  }
-  .gt-float .goog-te-gadget{font-family:'Roboto',sans-serif;line-height:normal}
-  /* the pill itself — compact white capsule */
-  .gt-float .goog-te-gadget-simple{
-    background:#ffffff;
+    margin-top:-26px;          /* no transform — keeps GT dropdown anchored */
+    z-index:10050;
+    width:52px;height:52px;
+    display:flex !important;
+    align-items:center;justify-content:center;
+    background:#fff;
     border:1px solid rgba(13,41,64,.18);
-    border-radius:50px;
-    padding:.55rem .62rem;
-    box-shadow:0 6px 18px rgba(13,41,64,.16);
+    border-radius:50%;
+    box-shadow:0 6px 18px rgba(13,41,64,.22);
     cursor:pointer;
-    white-space:nowrap;
-    transition:box-shadow .2s ease, transform .2s ease;
+    overflow:visible;
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
   }
-  .gt-float .goog-te-gadget-simple:hover{box-shadow:0 8px 24px rgba(37,99,235,.32);transform:translateY(-1px)}
-  .gt-float .goog-te-gadget-simple:focus{outline:2px solid #2563eb;outline-offset:2px}
-  .gt-float .goog-te-gadget img{vertical-align:middle;border:none}
-  /* icon-only look: keep the translate glyphs, hide the “Select Language” text label */
+  .gt-fallback{
+    position:absolute;inset:0;
+    display:grid;place-items:center;
+    font-size:26px;line-height:1;
+    pointer-events:none;
+    z-index:0;
+  }
+  .gt-float #google_translate_element,
+  .gt-float .goog-te-gadget,
+  .gt-float .goog-te-gadget-simple{
+    position:absolute;inset:0;
+    width:52px !important;height:52px !important;
+    max-width:52px;max-height:52px;
+    opacity:0;                 /* invisible but clickable */
+    cursor:pointer;
+    z-index:2;
+  }
+  .gt-float .goog-te-gadget-simple{background:transparent;border:0;padding:0;box-shadow:none}
   .gt-float .goog-te-gadget span{display:none !important}
-  .gt-float .goog-te-gadget option{color:#222;background:#fff;display:block}
-  /* hide Google branding/banner/tooltip chrome; language menu stays functional */
-  .goog-te-banner-frame{display:none !important}
+  .goog-te-banner-frame,.skiptranslate iframe.skiptranslate{display:none !important}
   .goog-logo-link{display:none !important}
   #goog-gt-tt{display:none !important}
   .goog-te-spinner-pos{display:none !important}
+  iframe.goog-te-menu-frame{z-index:10060 !important}
+  body{top:0 !important}
 
-  /* slightly closer to the edge + smaller on phones */
-  @media(max-width:640px){
-    .gt-float{right:6px;margin-top:-19px}
-    .gt-float .goog-te-gadget-simple{padding:.48rem .55rem}
+  /* Mobile: pin to bottom-right so it stays on screen above thumbs / hero arrows */
+  @media(max-width:880px){
+    .gt-float{
+      top:auto;bottom:18px;right:14px;margin-top:0;
+      width:56px;height:56px;
+      display:flex !important;
+      visibility:visible !important;
+      opacity:1 !important;
+    }
+    .gt-fallback{font-size:28px}
+    .gt-float #google_translate_element,
+    .gt-float .goog-te-gadget,
+    .gt-float .goog-te-gadget-simple{
+      width:56px !important;height:56px !important;
+      max-width:56px;max-height:56px;
+    }
   }
 </style>
 <?php if (!empty($extra_head)) echo $extra_head; ?>
@@ -131,16 +157,16 @@ $gt_codes = json_encode(site_language_codes());
   }
   /* Header lockup — name & tagline sized to the 100×100 mark */
   header.nav .logo-name{
-    font-size:var(--logo-name-size,24px) !important;
+    font-size:var(--logo-name-size,28px) !important;
     font-family:'Poppins','Roboto',sans-serif !important;
     font-weight:700;
-    line-height:1.15;
+    line-height:1.1;
   }
   header.nav .logo-text small{
-    font-size:var(--logo-sub-size,14px) !important;
+    font-size:var(--logo-sub-size,16px) !important;
     font-family:'Roboto','Poppins',sans-serif !important;
-    font-weight:400;
-    line-height:1.25;
+    font-weight:500;
+    line-height:1.2;
   }
   footer .logo-name{font-size:16px !important;font-family:'Poppins','Roboto',sans-serif !important}
   footer .logo-text small{font-size:14px !important;font-family:'Roboto','Poppins',sans-serif !important}
@@ -152,6 +178,7 @@ $gt_codes = json_encode(site_language_codes());
 
 <!-- Google Translate icon — fixed to the right side of the page, visible on web & mobile -->
 <div class="gt-float" id="gt_float" title="Translate this website / अनुवाद करें" aria-label="Google Translate – select language">
+  <span class="gt-fallback" aria-hidden="true">🌐</span>
   <div id="google_translate_element"></div>
 </div>
 
