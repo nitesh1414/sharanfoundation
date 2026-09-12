@@ -111,7 +111,7 @@ $gt_codes = json_encode(site_language_codes());
   }
   body,p,li,td,th,label,input,textarea,select{font-family:'Roboto','Poppins',sans-serif}
   h1,h2,.section-head h2,.page-header h1,.hero h1,.donate-hero h1,.fr-hero h1,.post-hero h1,
-  .cta-band h2,.impact h2,.prog-content h2,.story h2,.about-text h2,.logo-name{
+  .cta-band h2,.impact h2,.prog-content h2,.story h2,.about-text h2{
     font-size:16px !important;
     font-family:'Poppins','Roboto',sans-serif !important;
     font-weight:700;
@@ -129,7 +129,21 @@ $gt_codes = json_encode(site_language_codes());
     font-size:14px !important;
     font-family:'Poppins','Roboto',sans-serif !important;
   }
-  .logo-text small{font-size:14px !important;font-family:'Roboto','Poppins',sans-serif !important}
+  /* Header lockup — name & tagline sized to the 100×100 mark */
+  header.nav .logo-name{
+    font-size:var(--logo-name-size,24px) !important;
+    font-family:'Poppins','Roboto',sans-serif !important;
+    font-weight:700;
+    line-height:1.15;
+  }
+  header.nav .logo-text small{
+    font-size:var(--logo-sub-size,14px) !important;
+    font-family:'Roboto','Poppins',sans-serif !important;
+    font-weight:400;
+    line-height:1.25;
+  }
+  footer .logo-name{font-size:16px !important;font-family:'Poppins','Roboto',sans-serif !important}
+  footer .logo-text small{font-size:14px !important;font-family:'Roboto','Poppins',sans-serif !important}
   /* Numeric displays stay at heading size so figures remain visible */
   .stat h3,.stats-bar h3,.tier .amount,.donate-card .amt,.prog-stats h4,.impact-stat h3{font-size:16px !important;font-family:'Poppins','Roboto',sans-serif !important}
 </style>
