@@ -55,9 +55,9 @@ A full-featured **PHP + MySQL** charity platform built for Sharan Foundation (In
 - ✅ Failed-payment handling marks donation as `failed` with reason
 
 **Webhook URLs to configure in each gateway dashboard:**
-- Razorpay → `https://yoursite.com/LIVEpro/acts-foundation/api/payment/razorpay_webhook.php`
-- Stripe → `https://yoursite.com/LIVEpro/acts-foundation/api/payment/stripe_webhook.php`
-- PayPal → `https://yoursite.com/LIVEpro/acts-foundation/api/payment/paypal_webhook.php`
+- Razorpay → `https://sharanforall.org/api/payment/razorpay_webhook.php`
+- Stripe → `https://sharanforall.org/api/payment/stripe_webhook.php`
+- PayPal → `https://sharanforall.org/api/payment/paypal_webhook.php`
 
 **Test cards (Sandbox):**
 - Razorpay → `4111 1111 1111 1111`, any CVV, future expiry • UPI: `success@razorpay`
@@ -86,7 +86,7 @@ A full-featured **PHP + MySQL** charity platform built for Sharan Foundation (In
   - Logs every run to `cron_log` table for audit
 - **Schedule options**:
   - Real cron: `0 9 * * * /usr/bin/php /path/to/cron/recurring_donations.php`
-  - Web ping: `https://yoursite.com/cron/recurring_donations.php?key=YOUR_SECRET`
+  - Web ping: `https://sharanforall.org/cron/recurring_donations.php?key=YOUR_SECRET`
   - Admin button: "Run Cron Now" in admin panel
 
 ### 🎗️ Peer-to-Peer Fundraising

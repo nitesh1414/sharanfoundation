@@ -69,7 +69,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section style="padding:3rem 0;background:#f9f9f5">
+<section class="sec-cream">
   <div class="container">
     <?php if ($flash): ?>
       <div class="alert <?= $flash['type']==='success'?'success':'error' ?>" style="padding:1rem 1.4rem;border-radius:10px;margin-bottom:1.5rem;font-weight:500;<?= $flash['type']==='success'?'background:#e8f5ef;color:#1d4ed8;border-left:4px solid #2563eb':'background:#fdecea;color:#c0392b;border-left:4px solid #e74c3c' ?>"><?= e($flash['msg']) ?></div>

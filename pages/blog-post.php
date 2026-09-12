@@ -86,7 +86,7 @@ $url_full = (isset($_SERVER['HTTPS'])?'https':'http') . '://' . $_SERVER['HTTP_H
   </div>
 </section>
 
-<section style="background:#f9f9f5;padding:0 1rem 5rem">
+<section class="sec-cream" style="padding:0 1rem 5rem">
   <div class="article-wrap">
     <article class="article">
       <?= tr_field($post, 'content')  /* admin-provided HTML, language-aware */ ?>

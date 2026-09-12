@@ -102,6 +102,37 @@ $gt_codes = json_encode(site_language_codes());
   }
 </style>
 <?php if (!empty($extra_head)) echo $extra_head; ?>
+<style id="site-type-scale">
+  /* Applied last so Heading 16 / Sub 14 / Text+Button 12 wins over page extra_head.
+     Poppins = titles, Roboto = body. 12px is the minimum readable size. */
+  body,p,li,td,th,label,input,textarea,select,.help,.breadcrumb,.tag,.section-head p,
+  .foot p,.foot li,.copy,nav a,.topbar,.topbar a,.checkbox-row span,.form-group .help{
+    font-size:12px !important;
+  }
+  body,p,li,td,th,label,input,textarea,select{font-family:'Roboto','Poppins',sans-serif}
+  h1,h2,.section-head h2,.page-header h1,.hero h1,.donate-hero h1,.fr-hero h1,.post-hero h1,
+  .cta-band h2,.impact h2,.prog-content h2,.story h2,.about-text h2,.logo-name{
+    font-size:16px !important;
+    font-family:'Poppins','Roboto',sans-serif !important;
+    font-weight:700;
+    line-height:1.35;
+  }
+  h3,h4,h5,h6,.form-section h3,.contact-info h3,.why-card h4,.ptype h4,.program h3,.mv-card h3,
+  .loc-card h3,.proj-body h3,.post h3,.team-body h4,.test-author h4,.bank-details h3,.bank-grid h4,
+  .hero .subtitle,.prog-content .sub,.foot h4,.payment-methods h3{
+    font-size:14px !important;
+    font-family:'Poppins','Roboto',sans-serif !important;
+    font-weight:600;
+    line-height:1.4;
+  }
+  .btn,button.btn,.submit-btn,nav a.btn,input[type=submit],button[type=submit]{
+    font-size:12px !important;
+    font-family:'Poppins','Roboto',sans-serif !important;
+  }
+  .logo-text small{font-size:12px !important;font-family:'Roboto','Poppins',sans-serif !important}
+  /* Numeric displays stay at heading size so figures remain visible */
+  .stat h3,.stats-bar h3,.tier .amount,.donate-card .amt,.prog-stats h4,.impact-stat h3{font-size:16px !important;font-family:'Poppins','Roboto',sans-serif !important}
+</style>
 </head>
 <body>
 

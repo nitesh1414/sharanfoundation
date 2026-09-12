@@ -110,7 +110,7 @@ $share_url = (isset($_SERVER['HTTPS'])?'https':'http') . '://' . $_SERVER['HTTP_
   </div>
 </section>
 
-<section style="padding:0 0 5rem;background:#f9f9f5">
+<section class="sec-cream" style="padding:0 0 5rem">
   <div class="container">
 
     <?php if ($flash): ?>

@@ -40,7 +40,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section style="background:#f9f9f5;padding:4rem 0 2rem">
+<section class="sec-peach">
   <div class="container">
     <div class="section-head">
       <span class="tag"><?= e(t('partner_opps')) ?></span>
@@ -55,7 +55,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section style="background:#fff;padding:4rem 0">
+<section class="sec-sage">
   <div class="container">
     <div class="section-head">
       <span class="tag"><?= e(t('partner_inquiry')) ?></span>

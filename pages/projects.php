@@ -60,7 +60,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section>
+<section class="sec-mist">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ ONGOING INITIATIVES</span>

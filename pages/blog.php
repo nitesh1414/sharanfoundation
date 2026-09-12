@@ -104,7 +104,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section>
+<section class="sec-cream">
   <div class="container">
     <?php if ($flash): ?><div class="alert <?= e($flash['type']) ?>"><?= e($flash['msg']) ?></div><?php endif; ?>
 

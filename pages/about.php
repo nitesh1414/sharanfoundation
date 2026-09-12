@@ -18,16 +18,16 @@ $current_page = 'about';
 $extra_head = '<style>
   .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
   .story-img{border-radius:16px;overflow:hidden;box-shadow:var(--shadow);min-height:400px;background:url(\''.BASE_URL.'images/about.jpg\') center/cover}
-  .story h2{color:var(--dark);margin-bottom:1rem;font-size:2rem}
+  .story h2{color:var(--dark);margin-bottom:.7rem;font-size:16px}
   .story h2 span{color:var(--primary)}
-  .story p{color:#555;margin-bottom:1rem}
+  .story p{color:var(--ink-muted);margin-bottom:.85rem;font-size:12px}
   .verse{border-left:4px solid var(--accent);padding:1rem 1.2rem;background:#fffaf0;font-style:italic;color:#5b4a2c;margin:1.5rem 0;border-radius:6px}
-  .mv{background:linear-gradient(135deg,#f5f5f0,#fff)}
+  .mv{background:var(--bg-sage)}
   .mv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
   .mv-card{background:#fff;padding:2.5rem;border-radius:14px;box-shadow:var(--shadow);text-align:center}
   .mv-card .ico{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 1.2rem;display:grid;place-items:center;color:#fff;font-size:1.8rem}
   .mv-card h3{color:var(--dark);margin-bottom:.8rem}
-  .timeline{background:#fff;position:relative}
+  .timeline{background:var(--bg-peach);position:relative}
   .timeline-line{position:absolute;left:50%;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--primary),var(--accent));transform:translateX(-50%)}
   .tl-item{position:relative;width:50%;padding:1.5rem 2.5rem;margin-bottom:1rem}
   .tl-item:nth-child(odd){left:0;text-align:right}
@@ -38,15 +38,15 @@ $extra_head = '<style>
   .tl-card{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:var(--shadow);border-top:3px solid var(--accent)}
   .tl-card h4{color:var(--primary-dark);margin-bottom:.4rem}
   .tl-year{display:inline-block;background:var(--primary);color:#fff;padding:.2rem .7rem;border-radius:50px;font-size:.85rem;font-weight:700;margin-bottom:.5rem}
-  .team{background:#f9f9f5}
+  .team{background:var(--bg-lilac)}
   .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem}
   .team-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);text-align:center;transition:.3s}
   .team-card:hover{transform:translateY(-6px)}
   .team-avatar{height:220px;background:linear-gradient(135deg,var(--primary),var(--accent));display:grid;place-items:center;color:#fff;font-size:4rem;font-weight:800;background-size:cover;background-position:center}
   .team-body{padding:1.5rem}
-  .team-body h4{color:var(--dark);font-size:1.1rem;margin-bottom:.3rem}
-  .team-body .role{color:var(--primary);font-size:.9rem;font-weight:600;margin-bottom:.6rem}
-  .team-body p{color:var(--gray);font-size:.88rem}
+  .team-body h4{color:var(--dark);font-size:14px;margin-bottom:.3rem}
+  .team-body .role{color:var(--primary);font-size:12px;font-weight:600;margin-bottom:.5rem}
+  .team-body p{color:var(--ink-muted);font-size:12px}
   @media(max-width:880px){
     .story-grid{grid-template-columns:1fr}
     .timeline-line{left:18px}
@@ -65,7 +65,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section>
+<section class="sec-cream">
   <div class="container">
     <div class="story-grid story">
       <div class="story-img" style="<?= e(site_bg_attr('story_img', 'linear-gradient(rgba(13,41,64,.18),rgba(29,78,216,.12))', 'images/about.jpg')) ?>"></div>
@@ -89,13 +89,13 @@ require __DIR__ . '/../includes/public_header.php';
 
 <?php if ($vision_cap || get_setting('vision_statement')): ?>
 <!-- VISION & CAPACITY -->
-<section id="vision" style="background:linear-gradient(135deg,#f0f7ff,#fff);padding:5rem 0">
+<section id="vision" class="sec-mist">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ OUR VISION</span>
       <h2>A <span>Community Care &amp; Transformation</span> Campus</h2>
       <?php if ($total_vision_capacity > 0): ?>
-        <p style="font-size:1.05rem">Serving <strong style="color:var(--primary);font-size:1.2rem"><?= number_format($total_vision_capacity) ?>+</strong> vulnerable individuals through a comprehensive care campus.</p>
+        <p>Serving <strong style="color:var(--primary)"><?= number_format($total_vision_capacity) ?>+</strong> vulnerable individuals through a comprehensive care campus.</p>
       <?php endif; ?>
     </div>
 
@@ -104,8 +104,8 @@ require __DIR__ . '/../includes/public_header.php';
       <?php foreach ($vision_cap as $vc): ?>
         <div style="background:#fff;border-radius:14px;padding:1.8rem;text-align:center;box-shadow:var(--shadow);border-top:4px solid var(--primary);transition:.25s" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform=''">
           <div style="font-size:2.2rem;margin-bottom:.6rem"><?= e($vc['icon']) ?></div>
-          <div style="font-size:2.2rem;color:var(--primary);font-weight:800"><?= number_format($vc['capacity']) ?></div>
-          <p style="color:var(--gray);text-transform:uppercase;letter-spacing:1px;font-size:.82rem;margin-top:.3rem"><?= e(current_lang()==='hi' && $vc['category_hi'] ? $vc['category_hi'] : $vc['category']) ?></p>
+          <div style="font-size:16px;color:var(--primary);font-weight:800"><?= number_format($vc['capacity']) ?></div>
+          <p style="color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-top:.3rem"><?= e(current_lang()==='hi' && $vc['category_hi'] ? $vc['category_hi'] : $vc['category']) ?></p>
         </div>
       <?php endforeach; ?>
     </div>
@@ -113,7 +113,7 @@ require __DIR__ . '/../includes/public_header.php';
 
     <?php $vs = current_lang()==='hi' && get_setting('vision_statement_hi') ? get_setting('vision_statement_hi') : get_setting('vision_statement'); ?>
     <?php if ($vs): ?>
-    <blockquote style="max-width:760px;margin:0 auto;text-align:center;background:#fff;padding:2rem 2.5rem;border-radius:14px;border-left:4px solid var(--accent);font-style:italic;color:#444;font-size:1.05rem;line-height:1.7;box-shadow:var(--shadow)">
+    <blockquote style="max-width:760px;margin:0 auto;text-align:center;background:#fff;padding:1.5rem 1.8rem;border-radius:14px;border-left:4px solid var(--accent);font-style:italic;color:#444;line-height:1.7;box-shadow:var(--shadow)">
       "<?= e($vs) ?>"
     </blockquote>
     <?php endif; ?>
@@ -123,7 +123,7 @@ require __DIR__ . '/../includes/public_header.php';
 
 <?php if ($phases): ?>
 <!-- MISSION DEVELOPMENT PLAN -->
-<section style="padding:5rem 0;background:#fff">
+<section class="sec-sand">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ MISSION DEVELOPMENT PLAN</span>
@@ -137,11 +137,11 @@ require __DIR__ . '/../includes/public_header.php';
           <div style="position:absolute;top:1rem;right:1rem;background:<?= $sc ?>;color:#fff;padding:.2rem .7rem;border-radius:50px;font-size:.7rem;font-weight:700;text-transform:uppercase"><?= e($ph['status']) ?></div>
           <div style="font-size:2.4rem;margin-bottom:.6rem"><?= e($ph['icon']) ?></div>
           <div style="color:var(--primary);font-weight:800;font-size:.85rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:.3rem">Phase <?= (int)$ph['phase_number'] ?></div>
-          <h3 style="color:var(--dark);margin-bottom:.6rem;font-size:1.15rem"><?= e(current_lang()==='hi' && $ph['title_hi'] ? $ph['title_hi'] : $ph['title']) ?></h3>
+          <h3 style="color:var(--dark);margin-bottom:.6rem"><?= e(current_lang()==='hi' && $ph['title_hi'] ? $ph['title_hi'] : $ph['title']) ?></h3>
           <?php if ($ph['capacity']): ?>
             <span style="display:inline-block;background:#eaf2ff;color:var(--primary-dark);padding:.2rem .7rem;border-radius:50px;font-size:.78rem;font-weight:600;margin-bottom:.7rem">📊 <?= e($ph['capacity']) ?></span>
           <?php endif; ?>
-          <p style="color:var(--gray);font-size:.92rem"><?= e(current_lang()==='hi' && $ph['description_hi'] ? $ph['description_hi'] : $ph['description']) ?></p>
+          <p style="color:var(--gray)"><?= e(current_lang()==='hi' && $ph['description_hi'] ? $ph['description_hi'] : $ph['description']) ?></p>
         </div>
       <?php endforeach; ?>
     </div>

@@ -22,13 +22,13 @@ $current_page = 'donate';
 
 $extra_head = '<style>
   .donate-hero{position:relative;color:#fff;text-align:center;padding:5rem 0;background:linear-gradient(rgba(29,78,216,.88),rgba(26,46,53,.88)),url(\''.BASE_URL.'images/donate-bg.jpg\') center/cover}
-  .donate-hero h1{font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:.6rem}
-  .donate-hero p{font-size:1.1rem;opacity:.95;max-width:680px;margin:0 auto}
+  .donate-hero h1{font-size:16px;font-weight:700;margin-bottom:.5rem;color:#fff}
+  .donate-hero p{font-size:12px;opacity:.96;max-width:680px;margin:0 auto;color:#fff}
 
-  .stats-bar{background:#fff;padding:2rem 0;box-shadow:0 4px 12px rgba(0,0,0,.04)}
+  .stats-bar{background:var(--bg-sky);padding:2rem 0;box-shadow:0 4px 12px rgba(0,0,0,.04)}
   .stats-bar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;text-align:center}
-  .stats-bar h3{font-size:2rem;color:var(--primary);font-weight:800;margin-bottom:.2rem}
-  .stats-bar p{font-size:.85rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px}
+  .stats-bar h3{font-size:16px;color:var(--primary);font-weight:800;margin-bottom:.2rem}
+  .stats-bar p{font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.6px}
 
   /* IMPACT TIERS */
   .impact-tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin:0 0 2.5rem}
@@ -37,9 +37,9 @@ $extra_head = '<style>
   .tier.selected{border-color:var(--accent);background:#fffaf0;box-shadow:0 12px 28px rgba(231,111,81,.18)}
   .tier.popular{border-color:var(--accent)}
   .tier .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:.2rem .8rem;border-radius:50px;font-size:.7rem;font-weight:700;letter-spacing:1px;white-space:nowrap}
-  .tier .amount{font-size:2rem;font-weight:800;color:var(--primary-dark);margin:.3rem 0}
-  .tier .currency{font-size:1rem;color:var(--gray)}
-  .tier .desc{font-size:.85rem;color:var(--gray);min-height:42px}
+  .tier .amount{font-size:16px;font-weight:800;color:var(--primary-dark);margin:.3rem 0}
+  .tier .currency{font-size:12px;color:var(--gray)}
+  .tier .desc{font-size:12px;color:var(--gray);min-height:36px}
 
   .currency-toggle{display:inline-flex;background:#f1f4f6;padding:.3rem;border-radius:50px;margin-bottom:1.5rem}
   .currency-toggle button{padding:.5rem 1.2rem;background:transparent;border:none;border-radius:50px;cursor:pointer;font-weight:600;font-size:.9rem;color:#666;transition:.2s}
@@ -49,7 +49,7 @@ $extra_head = '<style>
   .donate-form-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:2.5rem;max-width:1000px;margin:0 auto}
   .form-section{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #eee}
   .form-section:last-of-type{border-bottom:none}
-  .form-section h3{color:var(--primary-dark);font-size:1.15rem;margin-bottom:1.2rem;padding-bottom:.5rem;border-bottom:2px solid var(--accent);display:inline-block}
+  .form-section h3{color:var(--primary-dark);font-size:14px;margin-bottom:1.2rem;padding-bottom:.5rem;border-bottom:2px solid var(--accent);display:inline-block}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
   .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
   .form-group{margin-bottom:1rem}
@@ -96,7 +96,7 @@ $extra_head = '<style>
   .bank-grid li{padding:.4rem 0;border-bottom:1px dashed #ddd;font-size:.88rem;display:flex;justify-content:space-between;gap:1rem}
   .bank-grid li strong{color:var(--primary-dark)}
 
-  .submit-btn{width:100%;padding:1.1rem;font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:10px;cursor:pointer;transition:.25s;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 8px 20px rgba(231,111,81,.3)}
+  .submit-btn{width:100%;padding:.75rem;font-size:12px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:10px;cursor:pointer;transition:.25s;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 8px 20px rgba(231,111,81,.3);font-family:'Poppins','Roboto',sans-serif}
   .submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(231,111,81,.45)}
 
   @media(max-width:780px){
@@ -132,7 +132,7 @@ require __DIR__ . '/../includes/public_header.php';
 </section>
 
 <!-- DONATION FORM -->
-<section style="padding:4rem 0;background:#f9f9f5" id="donation-form">
+<section class="sec-cream" id="donation-form">
   <div class="container">
 
     <?php if ($flash): ?>
@@ -306,7 +306,7 @@ require __DIR__ . '/../includes/public_header.php';
 </section>
 
 <!-- BANK DETAILS -->
-<section style="padding:3rem 0;background:#fff">
+<section class="sec-sand">
   <div class="container" style="max-width:1000px">
     <div class="bank-details">
       <h3><?= e(t('bank_details')) ?> &amp; UPI</h3>
@@ -343,7 +343,7 @@ require __DIR__ . '/../includes/public_header.php';
 </section>
 
 <!-- WHY DONATE -->
-<section style="padding:3rem 0;background:#f9f9f5">
+<section class="sec-lilac">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ TRUST &amp; TRANSPARENCY</span>

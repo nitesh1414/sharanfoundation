@@ -376,7 +376,7 @@ require __DIR__ . '/includes/public_header.php';
 </section>
 
 <!-- ABOUT -->
-<section id="about">
+<section id="about" class="sec-cream">
   <div class="container">
     <div class="grid-2">
       <div class="about-img" style="<?= e(site_bg_attr('story_img', 'linear-gradient(rgba(37,99,235,.15),rgba(26,46,53,.25))', 'images/about.jpg')) ?>"></div>

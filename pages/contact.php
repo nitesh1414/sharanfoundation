@@ -8,12 +8,12 @@ $page_desc = 'Get in touch with Sharan Foundation in India or UK. Donate, volunt
 $current_page = 'contact';
 $extra_head = '<style>
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem}
-  .contact-info h3{color:var(--primary-dark);margin-bottom:1.2rem;font-size:1.4rem;padding-bottom:.5rem;border-bottom:2px solid var(--accent);display:inline-block}
+  .contact-info h3{color:var(--primary-dark);margin-bottom:1.2rem;font-size:16px;padding-bottom:.5rem;border-bottom:2px solid var(--accent);display:inline-block}
   .contact-item{display:flex;gap:1rem;margin-bottom:1.4rem;align-items:flex-start}
   .contact-item .ico{width:45px;height:45px;border-radius:10px;background:rgba(37,99,235,.1);color:var(--primary);display:grid;place-items:center;font-size:1.2rem;flex-shrink:0}
-  .contact-item h4{color:var(--dark);margin-bottom:.2rem;font-size:1rem}
-  .contact-item p{color:var(--gray);font-size:.95rem}
-  form.contact-form{background:#f9f9f5;padding:2.2rem;border-radius:14px}
+  .contact-item h4{color:var(--dark);margin-bottom:.2rem;font-size:14px}
+  .contact-item p{color:var(--ink-muted);font-size:12px}
+  form.contact-form{background:#fff;padding:2.2rem;border-radius:14px;box-shadow:var(--shadow)}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
   form.contact-form input,form.contact-form textarea,form.contact-form select{width:100%;padding:.85rem 1rem;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:.95rem;background:#fff;margin-bottom:1rem;transition:.25s}
   form.contact-form input:focus,form.contact-form textarea:focus,form.contact-form select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
@@ -50,7 +50,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section id="contact-form">
+<section id="contact-form" class="sec-cream">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ <?= strtoupper(e(t('we_love_hear'))) ?></span>
@@ -122,7 +122,7 @@ require __DIR__ . '/../includes/public_header.php';
     <span class="tag" style="background:rgba(244,162,97,.2);color:var(--accent)">✦ <?= strtoupper(e(t('nav_donate'))) ?></span>
     <h2 style="color:#fff;margin-top:.6rem"><?= e(t('donate_title')) ?></h2>
     <p style="color:#bfc8cb;max-width:600px;margin:0 auto 2rem"><?= e(t('donate_subtitle')) ?></p>
-    <a href="<?= BASE_URL ?>pages/donate.php" class="btn btn-primary" style="padding:1rem 2rem;font-size:1.05rem">💝 <?= e(t('btn_donate_now')) ?> →</a>
+    <a href="<?= BASE_URL ?>pages/donate.php" class="btn btn-primary" style="padding:.6rem 1.4rem">💝 <?= e(t('btn_donate_now')) ?> →</a>
     <div class="payment-methods">
       <h3><?= e(t('we_accept')) ?></h3>
       <div class="methods">
@@ -139,7 +139,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section style="background:#fff">
+<section class="sec-sage">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ OTHER WAYS TO HELP</span>
