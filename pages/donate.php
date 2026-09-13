@@ -104,7 +104,7 @@ $extra_head = '<style>
   .bank-grid li span{text-align:left}
   .bank-grid li strong{color:var(--primary-dark);text-align:right}
 
-  .submit-btn{width:100%;padding:.75rem;font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:10px;cursor:pointer;transition:.25s;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 8px 20px rgba(231,111,81,.3);font-family:'Poppins','Roboto',sans-serif}
+  .submit-btn{width:100%;padding:.75rem;font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:10px;cursor:pointer;transition:.25s;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 8px 20px rgba(231,111,81,.3);font-family:var(--font-heading)}
   .submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(231,111,81,.45)}
 
   @media(max-width:880px){
