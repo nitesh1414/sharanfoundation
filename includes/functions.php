@@ -10,6 +10,83 @@ function flash_set($type, $msg){
     $_SESSION['flash'] = ['type'=>$type, 'msg'=>$msg];
 }
 
+/**
+ * Store a full saved record so the list page can show every uploaded/edited field.
+ * $verb is "added" or "updated".
+ */
+function flash_saved($verb, $entity, array $fields, $image = ''){
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    $skip = ['id','csrf','password','password_hash','manage_token','video_file'];
+    $clean = [];
+    foreach ($fields as $k => $v) {
+        $key = (string)$k;
+        if (in_array($key, $skip, true)) continue;
+        if (substr($key, -3) === '_hi') continue; // Hindi copies are optional / unused
+        if (in_array($key, ['image','cover_image','poster_image','photo'], true)) {
+            if ($v) $image = $image ?: $v;
+            continue;
+        }
+        if (is_array($v) || $v === null || $v === '') continue;
+        $label = ucwords(str_replace('_', ' ', $key));
+        if (is_bool($v) || strpos($key, 'is_') === 0 || strpos($key, 'show_') === 0) {
+            $val = ($v === true || $v === 1 || $v === '1') ? 'Yes' : 'No';
+        } else {
+            $val = (string)$v;
+        }
+        $val = trim(html_entity_decode(strip_tags($val)));
+        if ($val === '') continue;
+        if (function_exists('mb_strimwidth')) {
+            $val = mb_strimwidth($val, 0, 280, '…');
+        } elseif (strlen($val) > 280) {
+            $val = substr($val, 0, 280) . '…';
+        }
+        $clean[$label] = $val;
+    }
+    $verb_label = $verb === 'updated' ? 'Updated' : 'Added';
+    $_SESSION['flash'] = [
+        'type'   => 'success',
+        'msg'    => '✓ ' . $verb_label . ' — ' . $entity,
+        'record' => [
+            'action' => $verb_label,
+            'entity' => $entity,
+            'image'  => $image,
+            'fields' => $clean,
+        ],
+    ];
+}
+
+/** Load the saved DB row and flash it for the list page. */
+function flash_saved_row($verb, $entity, $table, $id){
+    global $pdo;
+    $allowed = [
+        'programs','projects','hero_slides','blog_posts','gallery','team_members',
+        'testimonials','marquees','program_courses','milestones','mission_phases',
+        'vision_capacity','fundraisers','partners','volunteers','contacts',
+        'donations','recurring_donations',
+    ];
+    $id = (int)$id;
+    if ($id < 1 || !in_array($table, $allowed, true)) {
+        flash_set('success', '✓ ' . ($verb === 'updated' ? 'Updated' : 'Added') . ' — ' . $entity);
+        return;
+    }
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE id = ?");
+        $stmt->execute([$id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Throwable $e) {
+        $row = false;
+    }
+    if (!$row) {
+        flash_set('success', '✓ ' . ($verb === 'updated' ? 'Updated' : 'Added') . ' — ' . $entity);
+        return;
+    }
+    $image = '';
+    foreach (['image','cover_image','poster_image','photo'] as $k) {
+        if (!empty($row[$k])) { $image = $row[$k]; break; }
+    }
+    flash_saved($verb, $entity, $row, $image);
+}
+
 function flash_get(){
     if (session_status() === PHP_SESSION_NONE) session_start();
     if (!empty($_SESSION['flash'])) {
@@ -25,7 +102,23 @@ function flash_render(){
     if (!$f) return '';
     $color = $f['type']==='success' ? '#2563eb' : ($f['type']==='error' ? '#c0392b' : '#d4a017');
     $bg = $f['type']==='success' ? '#e8f5ef' : ($f['type']==='error' ? '#fdecea' : '#fef7e0');
-    return "<div style='background:$bg;color:$color;padding:.9rem 1.2rem;border-left:4px solid $color;border-radius:6px;margin-bottom:1.5rem;font-weight:500'>" . e($f['msg']) . "</div>";
+    $html = "<div style='background:$bg;color:$color;padding:.9rem 1.2rem;border-left:4px solid $color;border-radius:6px;margin-bottom:1.5rem;font-weight:500'>" . e($f['msg']) . "</div>";
+    if (empty($f['record']) || empty($f['record']['fields'])) return $html;
+
+    $r = $f['record'];
+    $html .= '<div class="saved-record">';
+    $html .= '<div class="saved-record-head">' . e($r['action']) . ' ' . e($r['entity']) . ' — full details</div>';
+    $html .= '<div class="saved-record-body">';
+    if (!empty($r['image']) && defined('BASE_URL')) {
+        $src = BASE_URL . ltrim($r['image'], '/');
+        $html .= '<div class="saved-record-img"><img src="' . e($src) . '" alt=""></div>';
+    }
+    $html .= '<dl class="saved-record-fields">';
+    foreach ($r['fields'] as $label => $val) {
+        $html .= '<div><dt>' . e($label) . '</dt><dd>' . e($val) . '</dd></div>';
+    }
+    $html .= '</dl></div></div>';
+    return $html;
 }
 
 function slugify($text){

@@ -36,12 +36,12 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
     if ($action==='add') {
         $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
         $pdo->prepare("INSERT INTO milestones ($cols) VALUES ($place)")->execute($data);
-        flash_set('success','✓ Milestone added.');
+        flash_saved_row('added', 'Milestone', 'milestones', (int)$pdo->lastInsertId());
     } else {
         $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
         $data['id']=$id;
         $pdo->prepare("UPDATE milestones SET $set WHERE id=:id")->execute($data);
-        flash_set('success','✓ Milestone updated.');
+        flash_saved_row('updated', 'Milestone', 'milestones', $id);
     }
     redirect(ADMIN_URL.'milestones.php');
 }

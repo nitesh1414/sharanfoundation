@@ -20,12 +20,12 @@ if (($action==='add'||$action==='edit') && $_SERVER['REQUEST_METHOD']==='POST' &
         if ($action==='add') {
             $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
             $pdo->prepare("INSERT INTO team_members ($cols) VALUES ($place)")->execute($data);
-            flash_set('success','Team member added.');
+            flash_saved_row('added', 'Team member', 'team_members', (int)$pdo->lastInsertId());
         } else {
             $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
             $data['id']=$id;
             $pdo->prepare("UPDATE team_members SET $set WHERE id=:id")->execute($data);
-            flash_set('success','Team member updated.');
+            flash_saved_row('updated', 'Team member', 'team_members', $id);
         }
         redirect(ADMIN_URL.'team.php');
     }

@@ -41,12 +41,12 @@ if (($action === 'add' || $action === 'edit') && $_SERVER['REQUEST_METHOD'] === 
             $cols = implode(',', array_keys($data));
             $place = ':' . implode(',:', array_keys($data));
             $pdo->prepare("INSERT INTO programs ($cols) VALUES ($place)")->execute($data);
-            flash_set('success', 'Program added.');
+            flash_saved_row('added', 'Program', 'programs', (int)$pdo->lastInsertId());
         } else {
             $set = implode(',', array_map(fn($k) => "$k=:$k", array_keys($data)));
             $data['id'] = $id;
             $pdo->prepare("UPDATE programs SET $set WHERE id=:id")->execute($data);
-            flash_set('success', 'Program updated.');
+            flash_saved_row('updated', 'Program', 'programs', $id);
         }
         redirect(ADMIN_URL . 'programs.php');
     }

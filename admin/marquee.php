@@ -49,12 +49,12 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
         if ($action === 'add') {
             $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
             $pdo->prepare("INSERT INTO marquees ($cols) VALUES ($place)")->execute($data);
-            flash_set('success', '✓ Marquee added.');
+            flash_saved_row('added', 'Marquee', 'marquees', (int)$pdo->lastInsertId());
         } else {
             $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
             $data['id']=$id;
             $pdo->prepare("UPDATE marquees SET $set WHERE id=:id")->execute($data);
-            flash_set('success', '✓ Marquee updated.');
+            flash_saved_row('updated', 'Marquee', 'marquees', $id);
         }
     } catch (Throwable $ex) {
         flash_set('error', 'Marquee could not be saved: ' . $ex->getMessage() . marquee_table_hint());

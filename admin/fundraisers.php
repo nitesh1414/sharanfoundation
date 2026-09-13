@@ -66,9 +66,9 @@ if ($action === 'update' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_c
             }
         }
 
-        flash_set('success','✓ Fundraiser updated.');
+        flash_saved_row('updated', 'Fundraiser', 'fundraisers', $id);
     }
-    redirect(ADMIN_URL.'fundraisers.php?view='.$id);
+    redirect(ADMIN_URL.'fundraisers.php');
 }
 
 // ===== ADD NEW =====
@@ -95,7 +95,7 @@ if ($action === 'add' && $_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POS
     $cols = implode(',', array_keys($data));
     $place = ':' . implode(',:', array_keys($data));
     $pdo->prepare("INSERT INTO fundraisers ($cols) VALUES ($place)")->execute($data);
-    flash_set('success','✓ Fundraiser created.');
+    flash_saved_row('added', 'Fundraiser', 'fundraisers', (int)$pdo->lastInsertId());
     redirect(ADMIN_URL.'fundraisers.php');
 }
 

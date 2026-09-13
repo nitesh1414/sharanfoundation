@@ -26,54 +26,61 @@ $extra_head = '<style>
   .donate-hero p{font-size:14px;opacity:.96;max-width:680px;margin:0 auto;color:#fff}
 
   .stats-bar{background:var(--bg-sky);padding:2rem 0;box-shadow:0 4px 12px rgba(0,0,0,.04)}
-  .stats-bar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;text-align:center}
+  .stats-bar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.5rem;text-align:center;align-items:stretch}
+  .stats-bar-grid > div{display:flex;flex-direction:column;justify-content:center;align-items:center}
   .stats-bar h3{font-size:16px;color:var(--primary);font-weight:800;margin-bottom:.2rem}
   .stats-bar p{font-size:14px;color:var(--gray);text-transform:uppercase;letter-spacing:.6px}
 
-  /* IMPACT TIERS */
-  .impact-tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin:0 0 2.5rem}
-  .tier{background:#fff;border:2px solid #eee;border-radius:14px;padding:1.5rem;text-align:center;cursor:pointer;transition:.25s;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.04)}
+  /* IMPACT TIERS — equal columns, equal height, smiley + amount + desc stacked */
+  .section-toolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.15rem}
+  .section-toolbar h3{margin:0;padding:0;border:none;display:block}
+  .impact-tiers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;margin:0 0 1.5rem;align-items:stretch}
+  .tier{background:#fff;border:2px solid #eee;border-radius:14px;padding:1.35rem .7rem 1.1rem;text-align:center;cursor:pointer;transition:.25s;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.04);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;height:100%;min-height:168px}
   .tier:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 12px 28px rgba(231,111,81,.18)}
   .tier.selected{border-color:var(--accent);background:#fffaf0;box-shadow:0 12px 28px rgba(231,111,81,.18)}
-  .tier.popular{border-color:var(--accent)}
+  .tier.popular{border-color:var(--accent);padding-top:1.7rem}
   .tier .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:.2rem .8rem;border-radius:50px;font-size:.7rem;font-weight:700;letter-spacing:1px;white-space:nowrap}
-  .tier .amount{font-size:16px;font-weight:800;color:var(--primary-dark);margin:.3rem 0}
+  .tier-smile{font-size:1.85rem;line-height:1;margin-bottom:.35rem}
+  .tier .amount{font-size:16px;font-weight:800;color:var(--primary-dark);margin:.15rem 0 .35rem;line-height:1.2}
   .tier .currency{font-size:14px;color:var(--gray)}
-  .tier .desc{font-size:14px;color:var(--gray);min-height:36px}
+  .tier .desc{font-size:14px;color:var(--gray);flex:1;display:flex;align-items:center;justify-content:center;min-height:2.6em;line-height:1.35;padding:0 .2rem}
 
-  .currency-toggle{display:inline-flex;background:#f1f4f6;padding:.3rem;border-radius:50px;margin-bottom:1.5rem}
-  .currency-toggle button{padding:.5rem 1.2rem;background:transparent;border:none;border-radius:50px;cursor:pointer;font-weight:600;font-size:.9rem;color:#666;transition:.2s}
+  .currency-toggle{display:inline-flex;align-items:center;background:#f1f4f6;padding:.3rem;border-radius:50px;margin:0}
+  .currency-toggle button{padding:.5rem 1.2rem;background:transparent;border:none;border-radius:50px;cursor:pointer;font-weight:600;font-size:14px;color:#666;transition:.2s;line-height:1.2}
   .currency-toggle button.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3)}
 
-  /* FORM */
+  /* FORM — every field shares the same label + control height so rows line up */
   .donate-form-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:2.5rem;max-width:1000px;margin:0 auto}
   .form-section{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #eee}
   .form-section:last-of-type{border-bottom:none}
-  .form-section h3{color:var(--primary-dark);font-size:14px;margin-bottom:1.2rem;padding-bottom:.5rem;border-bottom:2px solid var(--accent);display:inline-block}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-  .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
-  .form-group{margin-bottom:1rem}
-  .form-group label{display:block;font-weight:600;margin-bottom:.4rem;color:#444;font-size:.9rem}
+  .form-section h3{color:var(--primary-dark);font-size:14px;margin:0 0 1.2rem;padding:0 0 .5rem;border-bottom:2px solid var(--accent);display:block}
+  .form-section .section-toolbar h3{margin:0;padding:0;border:none}
+  .form-row,.form-row-3{display:grid;gap:1rem;align-items:start}
+  .form-row{grid-template-columns:1fr 1fr}
+  .form-row-3{grid-template-columns:1fr 1fr 1fr}
+  .form-group{margin-bottom:1rem;display:flex;flex-direction:column;min-width:0}
+  .form-group label{display:flex;align-items:center;min-height:1.45em;font-weight:600;margin-bottom:.4rem;color:#444;font-size:14px;line-height:1.35}
   .form-group .req{color:#e74c3c}
-  .form-group input,.form-group select,.form-group textarea{width:100%;padding:.85rem 1rem;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:.95rem;background:#fff;transition:.2s}
+  .form-group input,.form-group select,.form-group textarea{width:100%;min-height:46px;padding:.7rem 1rem;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:14px;background:#fff;transition:.2s;box-sizing:border-box}
   .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
   .form-group textarea{resize:vertical;min-height:90px}
-  .form-group .help{font-size:.78rem;color:#888;margin-top:.3rem}
+  .form-group .help{font-size:14px;color:#888;margin-top:.3rem}
 
-  .amount-input{position:relative}
-  .amount-input .symbol{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);font-size:1.3rem;font-weight:700;color:var(--primary);pointer-events:none}
-  .amount-input input{padding-left:2.5rem;font-size:1.3rem;font-weight:700;color:var(--primary-dark)}
+  .amount-input{position:relative;width:100%}
+  .amount-input .symbol{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);font-size:16px;font-weight:700;color:var(--primary);pointer-events:none;line-height:1}
+  .amount-input input{padding-left:2.4rem;font-size:16px;font-weight:700;color:var(--primary-dark);min-height:46px;width:100%}
 
-  .pay-methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem}
-  .pay-method{position:relative;cursor:pointer}
+  .pay-methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;align-items:stretch}
+  .pay-method{position:relative;cursor:pointer;display:flex;min-width:0}
   .pay-method input{position:absolute;opacity:0;pointer-events:none}
-  .pay-method label{display:flex;flex-direction:column;align-items:center;gap:.4rem;padding:1rem .8rem;background:#fff;border:2px solid #eee;border-radius:10px;cursor:pointer;transition:.2s;font-size:.85rem;font-weight:600;color:#555;text-align:center;margin:0}
+  .pay-method label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1rem .7rem;background:#fff;border:2px solid #eee;border-radius:10px;cursor:pointer;transition:.2s;font-size:14px;font-weight:600;color:#555;text-align:center;margin:0;width:100%;min-height:118px}
   .pay-method input:checked + label{border-color:var(--primary);background:#e8f5ef;color:var(--primary-dark)}
   .pay-method .ico{font-size:1.8rem;line-height:1}
+  .pay-method small{display:block;line-height:1.3}
 
-  .checkbox-row{display:flex;align-items:flex-start;gap:.6rem;padding:.6rem 0;cursor:pointer}
+  .checkbox-row{display:flex;align-items:flex-start;gap:.6rem;padding:.55rem 0;cursor:pointer;margin:0}
   .checkbox-row input{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--primary)}
-  .checkbox-row span{font-size:.92rem;color:#444}
+  .checkbox-row span{font-size:14px;color:#444;line-height:1.4}
 
   .alert{padding:1rem 1.4rem;border-radius:10px;margin-bottom:1.5rem;font-weight:500;animation:slideDown .4s ease}
   .alert.success{background:#e8f5ef;color:#1d4ed8;border-left:4px solid #2563eb}
@@ -81,29 +88,38 @@ $extra_head = '<style>
   @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
   /* WHY DONATE */
-  .why-donate{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-top:2rem}
-  .why-card{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:var(--shadow);text-align:center;border-top:3px solid var(--primary)}
-  .why-card .ico{font-size:2.2rem;margin-bottom:.6rem}
-  .why-card h4{color:var(--primary-dark);margin-bottom:.5rem;font-size:1.05rem}
-  .why-card p{color:var(--gray);font-size:.88rem}
+  .why-donate{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem;margin-top:2rem;align-items:stretch}
+  .why-card{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:var(--shadow);text-align:center;border-top:3px solid var(--primary);display:flex;flex-direction:column;align-items:center;height:100%}
+  .why-card .ico{font-size:2.2rem;margin-bottom:.6rem;line-height:1}
+  .why-card h4{color:var(--primary-dark);margin-bottom:.5rem;font-size:14px}
+  .why-card p{color:var(--gray);font-size:14px;flex:1}
 
   /* BANK DETAILS */
   .bank-details{background:linear-gradient(135deg,#fffaf0,#fff);padding:2rem;border-radius:14px;border:2px dashed var(--accent);margin-bottom:2rem}
-  .bank-details h3{color:var(--primary-dark);margin-bottom:1rem;font-size:1.2rem}
-  .bank-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-  .bank-grid h4{color:var(--accent-dark);margin-bottom:.6rem;font-size:.95rem}
-  .bank-grid ul{list-style:none;padding:0}
-  .bank-grid li{padding:.4rem 0;border-bottom:1px dashed #ddd;font-size:.88rem;display:flex;justify-content:space-between;gap:1rem}
-  .bank-grid li strong{color:var(--primary-dark)}
+  .bank-details h3{color:var(--primary-dark);margin-bottom:1rem;font-size:16px}
+  .bank-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
+  .bank-grid h4{color:var(--accent-dark);margin-bottom:.6rem;font-size:14px}
+  .bank-grid ul{list-style:none;padding:0;margin:0}
+  .bank-grid li{padding:.45rem 0;border-bottom:1px dashed #ddd;font-size:14px;display:grid;grid-template-columns:1fr 1fr;gap:.75rem;align-items:center}
+  .bank-grid li span{text-align:left}
+  .bank-grid li strong{color:var(--primary-dark);text-align:right}
 
   .submit-btn{width:100%;padding:.75rem;font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:10px;cursor:pointer;transition:.25s;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 8px 20px rgba(231,111,81,.3);font-family:'Poppins','Roboto',sans-serif}
   .submit-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(231,111,81,.45)}
 
+  @media(max-width:880px){
+    .why-donate{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .impact-tiers{grid-template-columns:repeat(3,minmax(0,1fr))}
+  }
   @media(max-width:780px){
     .donate-form-card{padding:1.5rem}
-    .form-row,.form-row-3{grid-template-columns:1fr}
-    .bank-grid{grid-template-columns:1fr}
-    .impact-tiers{grid-template-columns:repeat(2,1fr)}
+    .form-row,.form-row-3,.bank-grid{grid-template-columns:1fr}
+    .impact-tiers{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .stats-bar-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+    .section-toolbar{align-items:flex-start}
+  }
+  @media(max-width:480px){
+    .why-donate,.impact-tiers{grid-template-columns:1fr}
   }
 </style>';
 
@@ -143,37 +159,40 @@ require __DIR__ . '/../includes/public_header.php';
 
       <!-- AMOUNT SECTION -->
       <div class="form-section">
-        <h3>💝 <?= e(t('choose_amount')) ?></h3>
-
-        <div class="currency-toggle" role="group" aria-label="Currency">
-          <button type="button" class="curr-btn active" data-curr="INR">🇮🇳 INR (₹)</button>
-          <button type="button" class="curr-btn" data-curr="GBP">🇬🇧 GBP (£)</button>
+        <div class="section-toolbar">
+          <h3>💝 <?= e(t('choose_amount')) ?></h3>
+          <div class="currency-toggle" role="group" aria-label="Currency">
+            <button type="button" class="curr-btn active" data-curr="INR">🇮🇳 INR (₹)</button>
+            <button type="button" class="curr-btn" data-curr="GBP">🇬🇧 GBP (£)</button>
+          </div>
         </div>
         <input type="hidden" name="currency" id="currencyInput" value="INR">
 
         <!-- INR tiers -->
         <div class="impact-tiers tier-set" data-curr="INR">
-          <div class="tier" data-amount="500"><div class="amount">₹500</div><div class="desc"><?= e(t('sponsor_meals')) ?></div></div>
-          <div class="tier" data-amount="1000"><div class="amount">₹1,000</div><div class="desc"><?= e(t('sponsor_books')) ?></div></div>
-          <div class="tier popular selected" data-amount="2500"><div class="ribbon">★ <?= e(t('most_popular')) ?></div><div class="amount">₹2,500</div><div class="desc"><?= e(t('sponsor_education')) ?></div></div>
-          <div class="tier" data-amount="5000"><div class="amount">₹5,000</div><div class="desc"><?= e(t('sponsor_hostel')) ?></div></div>
-          <div class="tier" data-amount="10000"><div class="amount">₹10,000</div><div class="desc"><?= e(t('sponsor_bible')) ?></div></div>
+          <div class="tier" data-amount="500"><div class="tier-smile" aria-hidden="true">😊</div><div class="amount">₹500</div><div class="desc"><?= e(t('sponsor_meals')) ?></div></div>
+          <div class="tier" data-amount="1000"><div class="tier-smile" aria-hidden="true">😄</div><div class="amount">₹1,000</div><div class="desc"><?= e(t('sponsor_books')) ?></div></div>
+          <div class="tier popular selected" data-amount="2500"><div class="ribbon">★ <?= e(t('most_popular')) ?></div><div class="tier-smile" aria-hidden="true">🤗</div><div class="amount">₹2,500</div><div class="desc"><?= e(t('sponsor_education')) ?></div></div>
+          <div class="tier" data-amount="5000"><div class="tier-smile" aria-hidden="true">🥰</div><div class="amount">₹5,000</div><div class="desc"><?= e(t('sponsor_hostel')) ?></div></div>
+          <div class="tier" data-amount="10000"><div class="tier-smile" aria-hidden="true">🤩</div><div class="amount">₹10,000</div><div class="desc"><?= e(t('sponsor_bible')) ?></div></div>
         </div>
 
         <!-- GBP tiers -->
         <div class="impact-tiers tier-set" data-curr="GBP" style="display:none">
-          <div class="tier" data-amount="10"><div class="amount">£10</div><div class="desc"><?= e(t('sponsor_books')) ?></div></div>
-          <div class="tier popular selected" data-amount="25"><div class="ribbon">★ <?= e(t('most_popular')) ?></div><div class="amount">£25</div><div class="desc"><?= e(t('sponsor_education')) ?></div></div>
-          <div class="tier" data-amount="50"><div class="amount">£50</div><div class="desc"><?= e(t('sponsor_hostel')) ?></div></div>
-          <div class="tier" data-amount="100"><div class="amount">£100</div><div class="desc"><?= e(t('sponsor_bible')) ?></div></div>
-          <div class="tier" data-amount="250"><div class="amount">£250</div><div class="desc">Supports a full classroom</div></div>
+          <div class="tier" data-amount="10"><div class="tier-smile" aria-hidden="true">😊</div><div class="amount">£10</div><div class="desc"><?= e(t('sponsor_books')) ?></div></div>
+          <div class="tier popular selected" data-amount="25"><div class="ribbon">★ <?= e(t('most_popular')) ?></div><div class="tier-smile" aria-hidden="true">😄</div><div class="amount">£25</div><div class="desc"><?= e(t('sponsor_education')) ?></div></div>
+          <div class="tier" data-amount="50"><div class="tier-smile" aria-hidden="true">🤗</div><div class="amount">£50</div><div class="desc"><?= e(t('sponsor_hostel')) ?></div></div>
+          <div class="tier" data-amount="100"><div class="tier-smile" aria-hidden="true">🥰</div><div class="amount">£100</div><div class="desc"><?= e(t('sponsor_bible')) ?></div></div>
+          <div class="tier" data-amount="250"><div class="tier-smile" aria-hidden="true">🤩</div><div class="amount">£250</div><div class="desc">Supports a full classroom</div></div>
         </div>
 
-        <p style="color:var(--gray);font-size:.9rem;margin-bottom:.5rem"><?= e(t('choose_custom')) ?>:</p>
         <div class="form-row">
-          <div class="form-group amount-input">
-            <span class="symbol" id="currSym">₹</span>
-            <input type="number" name="amount" id="amountInput" value="2500" min="1" step="any" required placeholder="0">
+          <div class="form-group">
+            <label><?= e(t('choose_custom')) ?> <span class="req">*</span></label>
+            <div class="amount-input">
+              <span class="symbol" id="currSym">₹</span>
+              <input type="number" name="amount" id="amountInput" value="2500" min="1" step="any" required placeholder="0">
+            </div>
           </div>
           <div class="form-group">
             <label><?= e(t('donation_type')) ?></label>

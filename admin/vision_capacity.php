@@ -37,12 +37,12 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
         if ($action === 'add') {
             $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
             $pdo->prepare("INSERT INTO vision_capacity ($cols) VALUES ($place)")->execute($data);
-            flash_set('success', '✓ Capacity entry added.');
+            flash_saved_row('added', 'Capacity entry', 'vision_capacity', (int)$pdo->lastInsertId());
         } else {
             $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
             $data['id']=$id;
             $pdo->prepare("UPDATE vision_capacity SET $set WHERE id=:id")->execute($data);
-            flash_set('success', '✓ Capacity entry updated.');
+            flash_saved_row('updated', 'Capacity entry', 'vision_capacity', $id);
         }
     } catch (Throwable $ex) {
         flash_set('error', 'Could not save: ' . $ex->getMessage() . vc_table_hint());

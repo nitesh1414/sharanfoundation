@@ -32,12 +32,12 @@ if (($action === 'add' || $action === 'edit') && $_SERVER['REQUEST_METHOD'] === 
         if ($action === 'add') {
             $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
             $pdo->prepare("INSERT INTO projects ($cols) VALUES ($place)")->execute($data);
-            flash_set('success','Project added.');
+            flash_saved_row('added', 'Project', 'projects', (int)$pdo->lastInsertId());
         } else {
             $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
             $data['id']=$id;
             $pdo->prepare("UPDATE projects SET $set WHERE id=:id")->execute($data);
-            flash_set('success','Project updated.');
+            flash_saved_row('updated', 'Project', 'projects', $id);
         }
         redirect(ADMIN_URL.'projects.php');
     }

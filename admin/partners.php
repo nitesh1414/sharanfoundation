@@ -13,8 +13,8 @@ if ($action==='delete' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_che
 if ($action==='update' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
     $pdo->prepare("UPDATE partners SET status=?, admin_notes=? WHERE id=?")
         ->execute([$_POST['status'], trim($_POST['admin_notes']), $id]);
-    flash_set('success','Updated.');
-    redirect(ADMIN_URL.'partners.php?view='.$id);
+    flash_saved_row('updated', 'Partnership inquiry', 'partners', $id);
+    redirect(ADMIN_URL.'partners.php');
 }
 
 if (isset($_GET['view']) && $id) {

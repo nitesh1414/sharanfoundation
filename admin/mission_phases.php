@@ -26,12 +26,12 @@ if (($action==='add'||$action==='edit') && $_SERVER['REQUEST_METHOD']==='POST' &
     if ($action==='add') {
         $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
         $pdo->prepare("INSERT INTO mission_phases ($cols) VALUES ($place)")->execute($data);
-        flash_set('success','✓ Phase added.');
+        flash_saved_row('added', 'Mission phase', 'mission_phases', (int)$pdo->lastInsertId());
     } else {
         $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
         $data['id']=$id;
         $pdo->prepare("UPDATE mission_phases SET $set WHERE id=:id")->execute($data);
-        flash_set('success','✓ Phase updated.');
+        flash_saved_row('updated', 'Mission phase', 'mission_phases', $id);
     }
     redirect(ADMIN_URL.'mission_phases.php');
 }

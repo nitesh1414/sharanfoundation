@@ -32,12 +32,12 @@ if (($action==='add'||$action==='edit') && $_SERVER['REQUEST_METHOD']==='POST' &
         if ($action==='add') {
             $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
             $pdo->prepare("INSERT INTO blog_posts ($cols) VALUES ($place)")->execute($data);
-            flash_set('success','Blog post added.');
+            flash_saved_row('added', 'Blog post', 'blog_posts', (int)$pdo->lastInsertId());
         } else {
             $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
             $data['id']=$id;
             $pdo->prepare("UPDATE blog_posts SET $set WHERE id=:id")->execute($data);
-            flash_set('success','Blog post updated.');
+            flash_saved_row('updated', 'Blog post', 'blog_posts', $id);
         }
         redirect(ADMIN_URL.'blog.php');
     }

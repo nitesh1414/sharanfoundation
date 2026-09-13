@@ -15,8 +15,8 @@ if ($action==='delete' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_che
 if ($action==='update' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
     $pdo->prepare("UPDATE volunteers SET status=?, admin_notes=? WHERE id=?")
         ->execute([$_POST['status'], trim($_POST['admin_notes']), $id]);
-    flash_set('success','Application updated.');
-    redirect(ADMIN_URL.'volunteers.php?view='.$id);
+    flash_saved_row('updated', 'Volunteer application', 'volunteers', $id);
+    redirect(ADMIN_URL.'volunteers.php');
 }
 
 // VIEW SINGLE
