@@ -111,7 +111,7 @@ $gt_codes = json_encode(site_language_codes());
 </style>
 <?php if (!empty($extra_head)) echo $extra_head; ?>
 <style id="site-type-scale">
-  /* Applied last so Heading 16 / Sub 14 / Text+Button 12 wins over page extra_head.
+  /* Applied last so Heading 16 / Sub 14 / Text+Button 14 wins over page extra_head.
      Poppins = titles, Roboto = body. 14px is the minimum readable size. */
   body,p,li,td,th,label,input,textarea,select,.help,.breadcrumb,.tag,.section-head p,
   .foot p,.foot li,.copy,nav a,.topbar,.topbar a,.checkbox-row span,.form-group .help{

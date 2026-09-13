@@ -40,7 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_check($_POST['csrf'] ?? '')) {
             } else {
                 try {
                     $pdo->prepare("UPDATE site_media SET path = ? WHERE slug = ?")->execute([$up, $slug]);
-                    flash_set('success', '✓ “' . e($slug) . '” image updated.');
+                    $stmt = $pdo->prepare("SELECT * FROM site_media WHERE slug = ?");
+                    $stmt->execute([$slug]);
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC) ?: ['slug'=>$slug, 'path'=>$up];
+                    flash_saved('updated', $row['label'] ?? $slug, $row, $up);
                 } catch (Throwable $ex) {
                     flash_set('error', 'Image saved but DB update failed: ' . $ex->getMessage() . sm_table_hint());
                 }

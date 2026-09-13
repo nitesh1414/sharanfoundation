@@ -35,11 +35,11 @@ $extra_head = '<style>
   .section-toolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.15rem}
   .section-toolbar h3{margin:0;padding:0;border:none;display:block}
   .impact-tiers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;margin:0 0 1.5rem;align-items:stretch}
-  .tier{background:#fff;border:2px solid #eee;border-radius:14px;padding:1.35rem .7rem 1.1rem;text-align:center;cursor:pointer;transition:.25s;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.04);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;height:100%;min-height:168px}
+  .tier{background:#fff;border:2px solid #eee;border-radius:14px;padding:1.55rem .7rem 1.1rem;text-align:center;cursor:pointer;transition:.25s;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.04);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;height:100%;min-height:168px}
   .tier:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 12px 28px rgba(231,111,81,.18)}
   .tier.selected{border-color:var(--accent);background:#fffaf0;box-shadow:0 12px 28px rgba(231,111,81,.18)}
-  .tier.popular{border-color:var(--accent);padding-top:1.7rem}
-  .tier .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:.2rem .8rem;border-radius:50px;font-size:.7rem;font-weight:700;letter-spacing:1px;white-space:nowrap}
+  .tier.popular{border-color:var(--accent)}
+  .tier .ribbon{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:.2rem .8rem;border-radius:50px;font-size:14px;font-weight:700;letter-spacing:1px;white-space:nowrap;line-height:1.2}
   .tier-smile{font-size:1.85rem;line-height:1;margin-bottom:.35rem}
   .tier .amount{font-size:16px;font-weight:800;color:var(--primary-dark);margin:.15rem 0 .35rem;line-height:1.2}
   .tier .currency{font-size:14px;color:var(--gray)}
@@ -70,7 +70,7 @@ $extra_head = '<style>
   .amount-input .symbol{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);font-size:16px;font-weight:700;color:var(--primary);pointer-events:none;line-height:1}
   .amount-input input{padding-left:2.4rem;font-size:16px;font-weight:700;color:var(--primary-dark);min-height:46px;width:100%}
 
-  .pay-methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;align-items:stretch}
+  .pay-methods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;align-items:stretch}
   .pay-method{position:relative;cursor:pointer;display:flex;min-width:0}
   .pay-method input{position:absolute;opacity:0;pointer-events:none}
   .pay-method label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1rem .7rem;background:#fff;border:2px solid #eee;border-radius:10px;cursor:pointer;transition:.2s;font-size:14px;font-weight:600;color:#555;text-align:center;margin:0;width:100%;min-height:118px}
@@ -110,16 +110,17 @@ $extra_head = '<style>
   @media(max-width:880px){
     .why-donate{grid-template-columns:repeat(2,minmax(0,1fr))}
     .impact-tiers{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .pay-methods{grid-template-columns:repeat(3,minmax(0,1fr))}
   }
   @media(max-width:780px){
     .donate-form-card{padding:1.5rem}
     .form-row,.form-row-3,.bank-grid{grid-template-columns:1fr}
-    .impact-tiers{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .impact-tiers,.pay-methods{grid-template-columns:repeat(2,minmax(0,1fr))}
     .stats-bar-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
     .section-toolbar{align-items:flex-start}
   }
   @media(max-width:480px){
-    .why-donate,.impact-tiers{grid-template-columns:1fr}
+    .why-donate,.impact-tiers,.pay-methods{grid-template-columns:1fr}
   }
 </style>';
 
@@ -213,7 +214,7 @@ require __DIR__ . '/../includes/public_header.php';
               <option value="quarterly">Quarterly (every 3 months)</option>
               <option value="yearly">Yearly</option>
             </select>
-            <p style="font-size:.82rem;color:#5b4a2c;margin-top:.4rem">
+            <p style="font-size:14px;color:#5b4a2c;margin-top:.4rem">
               💡 You'll receive a personal link to <strong>manage, pause, or cancel</strong> anytime.
               We'll also send a friendly reminder 3 days before each charge.
             </p>
@@ -283,7 +284,7 @@ require __DIR__ . '/../includes/public_header.php';
         <h3><?= e(t('payment_info')) ?></h3>
 
         <?php if ($gateway_mode === 'sandbox' && $gateways): ?>
-          <div style="background:#fef7e0;padding:.6rem 1rem;border-left:3px solid #d4a017;border-radius:6px;color:#5b4a2c;font-size:.85rem;margin-bottom:1rem">
+          <div style="background:#fef7e0;padding:.6rem 1rem;border-left:3px solid #d4a017;border-radius:6px;color:#5b4a2c;font-size:14px;margin-bottom:1rem">
             🧪 <strong>Sandbox/Test Mode</strong> — no real money will be charged. Use gateway test cards.
           </div>
         <?php endif; ?>
@@ -292,13 +293,13 @@ require __DIR__ . '/../includes/public_header.php';
           <!-- Live gateway options first -->
           <?php foreach ($gateways as $gw_id => $gw):
             $checked = $gw_id === 'razorpay' ? 'checked' : ''; ?>
-          <div class="pay-method"><input type="radio" name="payment_method" value="<?= $gw_id ?>" id="pm-<?= $gw_id ?>" <?= $checked ?> data-live="1"><label for="pm-<?= $gw_id ?>"><span class="ico"><?= $gw['icon'] ?></span><?= e($gw['name']) ?><br><small style="font-weight:400;color:#888;font-size:.72rem"><?= e($gw['desc']) ?></small></label></div>
+          <div class="pay-method"><input type="radio" name="payment_method" value="<?= $gw_id ?>" id="pm-<?= $gw_id ?>" <?= $checked ?> data-live="1"><label for="pm-<?= $gw_id ?>"><span class="ico"><?= $gw['icon'] ?></span><?= e($gw['name']) ?><br><small style="font-weight:400;color:#888;font-size:14px"><?= e($gw['desc']) ?></small></label></div>
           <?php endforeach; ?>
 
           <!-- Manual methods (always available) -->
-          <div class="pay-method"><input type="radio" name="payment_method" value="upi" id="pm-upi" <?= !$gateways ? 'checked' : '' ?>><label for="pm-upi"><span class="ico">📱</span>UPI<br><small style="font-weight:400;color:#888;font-size:.72rem">Pay later manually</small></label></div>
-          <div class="pay-method"><input type="radio" name="payment_method" value="bank_transfer" id="pm-bank"><label for="pm-bank"><span class="ico">🏦</span>Bank Transfer<br><small style="font-weight:400;color:#888;font-size:.72rem">Pay later manually</small></label></div>
-          <div class="pay-method"><input type="radio" name="payment_method" value="cheque" id="pm-ch"><label for="pm-ch"><span class="ico">📝</span>Cheque / DD<br><small style="font-weight:400;color:#888;font-size:.72rem">Send via post</small></label></div>
+          <div class="pay-method"><input type="radio" name="payment_method" value="upi" id="pm-upi" <?= !$gateways ? 'checked' : '' ?>><label for="pm-upi"><span class="ico">📱</span>UPI<br><small style="font-weight:400;color:#888;font-size:14px">Pay later manually</small></label></div>
+          <div class="pay-method"><input type="radio" name="payment_method" value="bank_transfer" id="pm-bank"><label for="pm-bank"><span class="ico">🏦</span>Bank Transfer<br><small style="font-weight:400;color:#888;font-size:14px">Pay later manually</small></label></div>
+          <div class="pay-method"><input type="radio" name="payment_method" value="cheque" id="pm-ch"><label for="pm-ch"><span class="ico">📝</span>Cheque / DD<br><small style="font-weight:400;color:#888;font-size:14px">Send via post</small></label></div>
         </div>
 
         <div class="form-group" id="manualTxnField" style="margin-top:1rem">
@@ -318,7 +319,7 @@ require __DIR__ . '/../includes/public_header.php';
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">❤️ <?= e(t('complete_donation')) ?> →</button>
-      <p style="text-align:center;margin-top:1rem;color:var(--gray);font-size:.85rem">🔒 Your information is safe. We use industry-standard encryption.</p>
+      <p style="text-align:center;margin-top:1rem;color:var(--gray);font-size:14px">🔒 Your information is safe. We use industry-standard encryption.</p>
     </form>
 
   </div>
@@ -329,7 +330,7 @@ require __DIR__ . '/../includes/public_header.php';
   <div class="container" style="max-width:1000px">
     <div class="bank-details">
       <h3><?= e(t('bank_details')) ?> &amp; UPI</h3>
-      <p style="color:var(--gray);font-size:.92rem;margin-bottom:1.2rem">If you prefer to make a direct bank transfer or use UPI, please use the details below:</p>
+      <p style="color:var(--gray);font-size:14px;margin-bottom:1.2rem">If you prefer to make a direct bank transfer or use UPI, please use the details below:</p>
       <div class="bank-grid">
         <div>
           <h4>🇮🇳 For Indian Donations</h4>
@@ -354,7 +355,7 @@ require __DIR__ . '/../includes/public_header.php';
           </ul>
         </div>
       </div>
-      <p style="margin-top:1.5rem;font-size:.85rem;color:#5b4a2c;background:#fffaf0;padding:.7rem 1rem;border-radius:6px">
+      <p style="margin-top:1.5rem;font-size:14px;color:#5b4a2c;background:#fffaf0;padding:.7rem 1rem;border-radius:6px">
         💡 <strong>After making payment</strong>, please fill out the form above with your transaction ID so we can send your receipt.
       </p>
     </div>

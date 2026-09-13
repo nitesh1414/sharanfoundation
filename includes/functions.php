@@ -82,7 +82,7 @@ function flash_saved_row($verb, $entity, $table, $id){
         return;
     }
     $image = '';
-    foreach (['image','cover_image','poster_image','photo'] as $k) {
+    foreach (['image','cover_image','poster_image','photo','path'] as $k) {
         if (!empty($row[$k])) { $image = $row[$k]; break; }
     }
     flash_saved($verb, $entity, $row, $image);
@@ -104,7 +104,7 @@ function flash_render(){
     $color = $f['type']==='success' ? '#2563eb' : ($f['type']==='error' ? '#c0392b' : '#d4a017');
     $bg = $f['type']==='success' ? '#e8f5ef' : ($f['type']==='error' ? '#fdecea' : '#fef7e0');
     $html = "<div style='background:$bg;color:$color;padding:.9rem 1.2rem;border-left:4px solid $color;border-radius:6px;margin-bottom:1.5rem;font-weight:500'>" . e($f['msg']) . "</div>";
-    if (empty($f['record']) || empty($f['record']['fields'])) return $html;
+    if (empty($f['record']) || (empty($f['record']['fields']) && empty($f['record']['image']))) return $html;
 
     $r = $f['record'];
     $html .= '<div class="saved-record">';
