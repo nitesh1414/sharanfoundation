@@ -21,8 +21,9 @@ function flash_saved($verb, $entity, array $fields, $image = ''){
     foreach ($fields as $k => $v) {
         $key = (string)$k;
         if (in_array($key, $skip, true)) continue;
+        if (preg_match('/password|secret|token|csrf/i', $key)) continue;
         if (substr($key, -3) === '_hi') continue; // Hindi copies are optional / unused
-        if (in_array($key, ['image','cover_image','poster_image','photo'], true)) {
+        if (in_array($key, ['image','cover_image','poster_image','photo','path'], true)) {
             if ($v) $image = $image ?: $v;
             continue;
         }

@@ -37,7 +37,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
     }
     $set = implode(',', array_map(fn($k)=>"$k=:$k", array_keys($data)));
     $pdo->prepare("UPDATE settings SET $set WHERE id=1")->execute($data);
-    flash_set('success','✓ Settings updated.');
+    $saved = $pdo->query("SELECT * FROM settings LIMIT 1")->fetch(PDO::FETCH_ASSOC) ?: $data;
+    flash_saved('updated', 'Site settings', $saved);
     redirect(ADMIN_URL.'settings.php');
 }
 

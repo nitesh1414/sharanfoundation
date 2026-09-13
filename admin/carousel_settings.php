@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
     $set = implode(',', array_map(fn($k) => "$k=:$k", array_keys($data)));
     try {
         $pdo->prepare("UPDATE settings SET $set WHERE id=1")->execute($data);
-        flash_set('success', '✓ Carousel settings saved.');
+        flash_saved('updated', 'Carousel settings', $data);
     } catch (Throwable $ex) {
         $msg = $ex->getMessage();
         if (stripos($msg, 'carousel_show_text') !== false) {

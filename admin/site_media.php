@@ -22,7 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_check($_POST['csrf'] ?? '')) {
             // Reset this key to its built-in default image
             try {
                 $pdo->prepare("UPDATE site_media SET path = default_path WHERE slug = ?")->execute([$slug]);
-                flash_set('success', '✓ “' . e($slug) . '” restored to its default image.');
+                $row = $pdo->prepare("SELECT * FROM site_media WHERE slug = ?");
+                $row->execute([$slug]);
+                $row = $row->fetch(PDO::FETCH_ASSOC) ?: ['slug'=>$slug];
+                flash_saved('updated', ($row['label'] ?? $slug) . ' (restored default)', $row, $row['path'] ?? '');
             } catch (Throwable $ex) {
                 flash_set('error', 'Could not reset image: ' . $ex->getMessage() . sm_table_hint());
             }
@@ -102,7 +105,8 @@ $group_hints  = ['banner' => 'The large background photo at the top of each page
             <form method="post" enctype="multipart/form-data" style="display:flex;flex-direction:column;gap:.4rem">
               <?= csrf_field() ?>
               <input type="hidden" name="slug" value="<?= e($r['slug']) ?>">
-              <input type="file" name="<?= e($file_key) ?>" accept="image/*" style="font-size:.8rem;width:100%">
+              <input type="file" name="<?= e($file_key) ?>" accept="image/*" data-rec-w="1920" data-rec-h="1080" style="font-size:.8rem;width:100%">
+              <?= image_upload_help(1920, 1080) ?>
               <div style="display:flex;gap:.4rem">
                 <button class="btn-sm btn-edit" style="border:none">📤 Replace</button>
                 <?php if (!$is_default): ?>

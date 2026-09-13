@@ -21,7 +21,12 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
     $csv = implode(',', $codes);
     try {
         $pdo->prepare("UPDATE settings SET site_languages = ? WHERE id=1")->execute([$csv]);
-        flash_set('success', '✓ Languages updated — the website translator now offers: ' . implode(', ', array_map(fn($c)=>$catalog[$c][0], $codes)) . '.');
+        $names = array_map(fn($c) => $catalog[$c][0], $codes);
+        flash_saved('updated', 'Languages & Translation', [
+            'enabled_languages' => implode(', ', $names),
+            'language_codes'    => $csv,
+            'count'             => count($codes),
+        ]);
     } catch (Throwable $ex) {
         flash_set('error', 'Could not save languages: ' . $ex->getMessage() . lang_col_hint());
     }
