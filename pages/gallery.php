@@ -36,14 +36,14 @@ require __DIR__ . '/../includes/public_header.php';
 $cats_in_db = $pdo->query("SELECT DISTINCT category FROM gallery ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
-<section class="page-header">
+<section class="page-header" style="<?= e(site_bg_attr('banner_gallery', 'linear-gradient(rgba(29,78,216,.15),rgba(26,46,53,.15))', 'images/hero.jpg')) ?>">
   <div class="container">
     <h1><?= e(t('page_gallery')) ?></h1>
     <div class="breadcrumb"><a href="<?= BASE_URL ?>"><?= e(t('home')) ?></a> &nbsp;›&nbsp; <?= e(t('nav_gallery')) ?></div>
   </div>
 </section>
 
-<section>
+<section class="sec-cream">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ MOMENTS OF GRACE</span>
@@ -89,10 +89,10 @@ $cats_in_db = $pdo->query("SELECT DISTINCT category FROM gallery ORDER BY catego
 <section style="background:#0a1c2e;color:#fff;text-align:center">
   <div class="container">
     <span class="tag" style="background:rgba(244,162,97,.2);color:var(--accent)">✦ WATCH OUR STORY</span>
-    <h2 style="color:#fff;font-size:clamp(1.6rem,3vw,2.2rem);margin:.8rem 0">Witness the Impact</h2>
+    <h2 style="color:#fff;margin:.8rem 0">Witness the Impact</h2>
     <p style="opacity:.9;max-width:600px;margin:0 auto 2rem">A short video showcasing the lives being transformed every day at Sharan Foundation.</p>
     <div style="max-width:800px;margin:0 auto;aspect-ratio:16/9;background:linear-gradient(135deg,#1d4ed8,#0d2940);border-radius:14px;display:grid;place-items:center;box-shadow:0 20px 60px rgba(0,0,0,.4);cursor:pointer;position:relative;overflow:hidden">
-      <div style="position:absolute;inset:0;background:url('<?= BASE_URL ?>images/hero.jpg') center/cover;opacity:.4"></div>
+      <div style="position:absolute;inset:0;background:url('<?= e(site_image_url('home_hero', 'images/hero.jpg')) ?>') center/cover;opacity:.4"></div>
       <div style="position:relative;z-index:2;text-align:center">
         <div style="width:80px;height:80px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-size:2rem;color:#fff;margin:0 auto 1rem;box-shadow:0 10px 30px rgba(0,0,0,.4)">▶</div>
         <p style="font-weight:600">Watch "Stories of Hope" — 3 min</p>

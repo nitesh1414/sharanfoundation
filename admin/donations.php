@@ -67,14 +67,14 @@ if ($action === 'update' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_c
         [$ok, $err] = send_donation_receipt($fresh);
         if ($ok) {
             $pdo->prepare("UPDATE donations SET receipt_sent_at=NOW() WHERE id=?")->execute([$id]);
-            flash_set('success','✓ Donation updated and receipt emailed to ' . e($fresh['email']));
+            flash_saved_row('updated', 'Donation (receipt emailed to ' . $fresh['email'] . ')', 'donations', $id);
         } else {
             flash_set('error','Donation updated, but receipt email failed: ' . e($err));
         }
     } else {
-        flash_set('success','✓ Donation updated.');
+        flash_saved_row('updated', 'Donation', 'donations', $id);
     }
-    redirect(ADMIN_URL . 'donations.php?view=' . $id);
+    redirect(ADMIN_URL . 'donations.php');
 }
 
 // ===== EXPORT CSV =====

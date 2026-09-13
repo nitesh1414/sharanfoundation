@@ -27,12 +27,12 @@ if (($action==='add'||$action==='edit') && $_SERVER['REQUEST_METHOD']==='POST' &
             if ($action==='add') {
                 $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
                 $pdo->prepare("INSERT INTO gallery ($cols) VALUES ($place)")->execute($data);
-                flash_set('success','Image added.');
+                flash_saved_row('added', 'Gallery image', 'gallery', (int)$pdo->lastInsertId());
             } else {
                 $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
                 $data['id']=$id;
                 $pdo->prepare("UPDATE gallery SET $set WHERE id=:id")->execute($data);
-                flash_set('success','Image updated.');
+                flash_saved_row('updated', 'Gallery image', 'gallery', $id);
             }
             redirect(ADMIN_URL.'gallery.php');
         }

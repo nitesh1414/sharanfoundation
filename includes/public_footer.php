@@ -4,9 +4,12 @@
   <div class="container">
     <div class="foot-grid">
       <div class="foot">
-        <div class="logo" style="color:#fff;margin-bottom:1rem">
-          <div class="logo-mark"><img src="<?= $BU ?>images/logo.png" alt=""></div>
-          <div style="color:#fff">Sharan Foundation<small style="color:#8da4a8"><?= e(t('site_tagline')) ?></small></div>
+        <div class="logo">
+          <div class="logo-mark"><img src="<?= $BU ?>images/logo.png" alt="Sharan Foundation logo"></div>
+          <div class="logo-text">
+            <span class="logo-name">Sharan Foundation</span>
+            <small><?= e(t('site_tagline')) ?></small>
+          </div>
         </div>
         <p><?= e(get_setting('about_short')) ?></p>
         <div class="socials">
@@ -39,8 +42,8 @@
       </ul>
       <form action="<?= $BU ?>api/submit_newsletter.php" method="post" style="margin-top:1rem">
         <input type="hidden" name="redirect" value="<?= e($_SERVER['REQUEST_URI']) ?>">
-        <input type="email" name="email" placeholder="<?= e(t('email_address')) ?>" required style="width:100%;padding:.5rem;border-radius:6px;border:none;margin-bottom:.4rem;color:#333;font-size:.85rem">
-        <button class="btn btn-primary" style="width:100%;padding:.5rem;font-size:.85rem"><?= e(t('btn_subscribe')) ?></button>
+        <input type="email" name="email" placeholder="<?= e(t('email_address')) ?>" required style="width:100%;padding:.5rem;border-radius:6px;border:none;margin-bottom:.4rem;color:#333">
+        <button class="btn btn-primary" style="width:100%;padding:.5rem"><?= e(t('btn_subscribe')) ?></button>
       </form>
       </div>
     </div>

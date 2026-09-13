@@ -5,6 +5,24 @@ require_once __DIR__ . '/includes/functions.php';
 $programs = $pdo->query("SELECT * FROM programs WHERE status='active' ORDER BY display_order, id LIMIT 8")->fetchAll();
 $testimonials = $pdo->query("SELECT * FROM testimonials WHERE status='active' ORDER BY display_order, id LIMIT 3")->fetchAll();
 
+// Marquee announcements — ticker shown between the hero and stats.
+// Empty/missing table => section hidden automatically.
+$marquees = [];
+try {
+    $marquees = $pdo->query("SELECT * FROM marquees WHERE status='active' ORDER BY display_order, id")->fetchAll();
+} catch (Throwable $e) { /* table not migrated yet — marquee stays hidden */ }
+
+if ($marquees) {
+    $mq_len = function_exists('mb_strlen') ? 'mb_strlen' : 'strlen';
+    $mq_chars = 0;
+    foreach ($marquees as $m) {
+        $mq_chars += $mq_len((string)($m['icon'] ?? '')) + 1 + $mq_len((string)($m['text'] ?? ''));
+    }
+    $marquee_dur = max(18, min(90, (int)round($mq_chars * 0.3)));
+} else {
+    $marquee_dur = 30;
+}
+
 // Hero slides for the carousel — graceful fallback if table doesn't exist yet
 $slides = [];
 try {
@@ -21,6 +39,7 @@ $carousel_config = [
     'show_counter' => (int)(get_setting('carousel_show_counter', 1) ?? 1),
     'transition'   => get_setting('carousel_transition', 'fade') ?: 'fade',
     'video_audio'  => (int)(get_setting('carousel_video_audio', 0) ?? 0),
+    'show_text'    => (int)(get_setting('carousel_show_text', 1) ?? 1),
 ];
 
 /** Extract a YouTube video ID from any URL form, or pass through if already an ID */
@@ -41,137 +60,7 @@ $total_volunteers = $pdo->query("SELECT COUNT(*) FROM volunteers WHERE status='a
 $page_title = 'Home';
 $page_desc = 'Sharan Foundation — a Christian charity serving India & UK through education, shelter and faith.';
 $current_page = 'home';
-$extra_head = '<style>
-  /* ============ HERO CAROUSEL ============ */
-  .hero-carousel{position:relative;min-height:88vh;overflow:hidden;background:#0d2940}
-  .hero-slides{position:relative;width:100%;height:88vh;min-height:560px}
-  .hero-slide{position:absolute;inset:0;display:flex;align-items:center;color:#fff;opacity:0;visibility:hidden;transition:opacity 1.1s ease,visibility 1.1s ease,transform 1.1s cubic-bezier(.22,1,.36,1)}
-  .hero-slide.active{opacity:1;visibility:visible;z-index:2}
-  .hero-slide .bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.05);transition:transform 8s ease}
-  .hero-slide.active .bg{transform:scale(1)}
-  /* Slide transition variant */
-  .hero-carousel.trans-slide .hero-slide{opacity:1;visibility:visible;transform:translateX(100%)}
-  .hero-carousel.trans-slide .hero-slide.active{transform:translateX(0)}
-  .hero-carousel.trans-slide .hero-slide.exiting{transform:translateX(-100%);z-index:1}
-  /* Zoom transition variant */
-  .hero-carousel.trans-zoom .hero-slide{transform:scale(.94)}
-  .hero-carousel.trans-zoom .hero-slide.active{transform:scale(1)}
-  /* Video background element */
-  .hero-slide .video-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;background:#0d2940}
-  .hero-slide .video-overlay{position:absolute;inset:0;z-index:1;pointer-events:none}
-  .hero-slide.overlay-blue   .video-overlay{background:linear-gradient(120deg,rgba(37,99,235,.78) 0%,rgba(29,78,216,.62) 45%,rgba(13,41,64,.35) 100%)}
-  .hero-slide.overlay-dark   .video-overlay{background:linear-gradient(120deg,rgba(13,41,64,.78) 0%,rgba(13,41,64,.55) 60%,rgba(13,41,64,.28) 100%)}
-  .hero-slide.overlay-amber  .video-overlay{background:linear-gradient(120deg,rgba(37,99,235,.68) 0%,rgba(231,111,81,.58) 100%)}
-  .hero-slide.overlay-minimal .video-overlay{background:linear-gradient(120deg,rgba(13,41,64,.45),rgba(13,41,64,.18))}
-  /* iframe for youtube/vimeo */
-  .hero-slide .iframe-bg{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.78vh;transform:translate(-50%,-50%);border:0;pointer-events:none;z-index:0}
-  /* Video-loading skeleton */
-  .hero-slide .video-loading{position:absolute;inset:0;background:linear-gradient(135deg,#2563eb,#0d2940);z-index:0;animation:pulse 2s ease-in-out infinite}
-  @keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
-  /* Overlay variants */
-  .hero-slide.overlay-blue .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(37,99,235,.85) 0%,rgba(29,78,216,.7) 45%,rgba(13,41,64,.4) 100%)}
-  .hero-slide.overlay-dark .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(13,41,64,.85) 0%,rgba(13,41,64,.6) 60%,rgba(13,41,64,.3) 100%)}
-  .hero-slide.overlay-amber .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(37,99,235,.75) 0%,rgba(231,111,81,.65) 100%)}
-  .hero-slide.overlay-minimal .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(13,41,64,.55),rgba(13,41,64,.25))}
-  /* Subtle decorative blue glow on the right edge */
-  .hero-slide::after{content:"";position:absolute;top:0;right:-15%;bottom:0;width:50%;background:radial-gradient(ellipse at right,rgba(37,99,235,.35),transparent 70%);pointer-events:none;z-index:1}
-
-  .hero-content{position:relative;z-index:3;max-width:780px;padding:4rem 0;animation:slideFade 1.2s ease}
-  .hero-slide.text-center .hero-content{margin:0 auto;text-align:center}
-  .hero-slide.text-right  .hero-content{margin-left:auto;text-align:right}
-  .hero .tag{background:rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);padding:.4rem 1rem;border-radius:50px;font-size:.8rem;letter-spacing:1px;margin-bottom:1rem;display:inline-block;font-weight:600}
-  .hero h1{font-size:clamp(2rem,5vw,3.6rem);font-weight:800;line-height:1.15;margin-bottom:1rem;text-shadow:0 2px 20px rgba(0,0,0,.3)}
-  .hero h1 span{color:var(--accent)}
-  .hero .subtitle{font-size:clamp(1rem,1.8vw,1.3rem);color:var(--accent);font-weight:600;margin-bottom:.8rem;letter-spacing:.5px}
-  .hero p{font-size:clamp(1rem,1.4vw,1.15rem);margin-bottom:2rem;opacity:.95;max-width:620px;line-height:1.7}
-  .hero-slide.text-center p{margin-left:auto;margin-right:auto}
-  .hero-cta{display:flex;gap:1rem;flex-wrap:wrap}
-  .hero-slide.text-center .hero-cta{justify-content:center}
-  .hero-slide.text-right  .hero-cta{justify-content:flex-end}
-
-  /* Nav arrows */
-  .hero-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:1.5rem;cursor:pointer;backdrop-filter:blur(10px);transition:.25s;display:grid;place-items:center}
-  .hero-nav:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-50%) scale(1.1)}
-  .hero-nav.prev{left:1.5rem}
-  .hero-nav.next{right:1.5rem}
-
-  /* Dots */
-  .hero-dots{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:.6rem}
-  .hero-dot{width:38px;height:5px;border-radius:50px;background:rgba(255,255,255,.35);border:none;cursor:pointer;padding:0;transition:.3s;overflow:hidden;position:relative}
-  .hero-dot.active{background:rgba(255,255,255,.25);width:60px}
-  .hero-dot.active::after{content:"";position:absolute;left:0;top:0;height:100%;width:0;background:var(--accent);border-radius:50px;animation:dotProgress 6s linear forwards}
-  .hero-dot:hover{background:rgba(255,255,255,.55)}
-
-  /* Slide counter */
-  .hero-counter{position:absolute;top:6.5rem;right:2rem;z-index:10;color:#fff;font-size:.85rem;background:rgba(0,0,0,.3);padding:.4rem .9rem;border-radius:50px;backdrop-filter:blur(8px);font-weight:600;letter-spacing:1px}
-
-  @keyframes slideFade{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes dotProgress{from{width:0}to{width:100%}}
-  @media(max-width:780px){
-    .hero-carousel,.hero-slides{min-height:70vh}
-    .hero-content{padding:2rem 0}
-    .hero-nav{width:42px;height:42px;font-size:1.2rem}
-    .hero-nav.prev{left:.5rem}.hero-nav.next{right:.5rem}
-    .hero-counter{top:4.5rem;right:1rem;font-size:.75rem}
-    .hero-dot{width:30px}
-    .hero-dot.active{width:42px}
-  }
-  .stats{background:var(--primary-dark);color:#fff;padding:3rem 0}
-  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;text-align:center}
-  .stat h3{font-size:2.5rem;color:var(--accent);font-weight:800}
-  .stat p{font-size:.95rem;opacity:.9;letter-spacing:1px;text-transform:uppercase}
-  .about-img{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);min-height:420px;
-    background:linear-gradient(rgba(37,99,235,.15),rgba(26,46,53,.25)),url(\''.BASE_URL.'images/about.jpg\') center/cover}
-  .about-img::before{content:"";position:absolute;inset:0;border:6px solid rgba(255,255,255,.5);border-radius:16px;margin:14px;pointer-events:none}
-  .about-text h2{font-size:2.2rem;color:var(--dark);margin-bottom:1rem;font-weight:700}
-  .about-text h2 span{color:var(--primary)}
-  .about-text p{color:#555;margin-bottom:1rem}
-  .verse{border-left:4px solid var(--accent);padding:1rem 1.2rem;background:#fffaf0;font-style:italic;color:#5b4a2c;margin:1.5rem 0;border-radius:6px}
-  .programs{background:#fff}
-  .programs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.8rem}
-  .program{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:.3s;border-top:4px solid transparent}
-  .program:hover{transform:translateY(-8px);border-top-color:var(--accent)}
-  .program-img{height:200px;background-size:cover;background-position:center;position:relative;display:grid;place-items:center;color:#fff;font-size:4rem}
-  .program-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.3))}
-  .icon-circle{position:absolute;bottom:-22px;right:20px;width:50px;height:50px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:1.3rem;box-shadow:0 6px 14px rgba(231,111,81,.4);z-index:2}
-  .program-body{padding:2rem 1.5rem 1.5rem}
-  .program h3{color:var(--primary-dark);margin-bottom:.6rem;font-size:1.2rem}
-  .program p{color:var(--gray);font-size:.95rem;margin-bottom:1rem}
-  .program a{color:var(--primary);font-weight:600;font-size:.9rem}
-  .program a:hover{color:var(--accent)}
-  .mv{background:linear-gradient(135deg,#f5f5f0,#fff)}
-  .mv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
-  .mv-card{background:#fff;padding:2.5rem;border-radius:14px;box-shadow:var(--shadow);text-align:center;transition:.3s}
-  .mv-card:hover{transform:translateY(-5px)}
-  .mv-card .ico{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 1.2rem;display:grid;place-items:center;color:#fff;font-size:1.8rem}
-  .mv-card h3{color:var(--dark);margin-bottom:.8rem;font-size:1.3rem}
-  .mv-card p{color:var(--gray)}
-  .locations{background:var(--dark);color:#fff}
-  .locations .section-head h2{color:#fff}
-  .locations .section-head p{color:#bfc8cb}
-  .loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
-  .loc-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:2.5rem;border-radius:14px;transition:.3s}
-  .loc-card:hover{background:rgba(255,255,255,.08);transform:translateY(-5px)}
-  .loc-card .flag{font-size:2.5rem;margin-bottom:1rem}
-  .loc-card h3{color:var(--accent);font-size:1.6rem;margin-bottom:1rem}
-  .loc-card p{opacity:.9;margin-bottom:.7rem}
-  .loc-card ul{margin-top:1rem}
-  .loc-card li{padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.95rem}
-  .loc-card li::before{content:"✦ ";color:var(--accent)}
-  .cta-band{background:linear-gradient(rgba(37,99,235,.88),rgba(29,78,216,.88)),url(\''.BASE_URL.'images/donate-bg.jpg\') center/cover fixed;color:#fff;text-align:center;padding:5rem 1rem}
-  .cta-band h2{font-size:clamp(1.8rem,3.5vw,2.8rem);margin-bottom:1rem;font-weight:700}
-  .cta-band p{font-size:1.1rem;max-width:680px;margin:0 auto 2rem;opacity:.95}
-  .cta-band .btn-primary{padding:1rem 2.2rem;font-size:1.05rem}
-  .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.8rem}
-  .test-card{background:#fff;padding:2rem;border-radius:14px;box-shadow:var(--shadow);position:relative;border-left:4px solid var(--accent)}
-  .test-card .quote{font-size:3rem;color:var(--accent);line-height:1;opacity:.4;position:absolute;top:1rem;right:1.4rem}
-  .test-card p{font-style:italic;color:#555;margin-bottom:1.2rem}
-  .test-author{display:flex;align-items:center;gap:.8rem}
-  .avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;display:grid;place-items:center;font-weight:700}
-  .test-author h4{color:var(--dark);font-size:1rem}
-  .test-author span{color:var(--gray);font-size:.85rem}
-  @media(max-width:880px){.loc-grid{grid-template-columns:1fr}}
-</style>';
+$extra_head = '<link rel="stylesheet" href="' . BASE_URL . 'css/home.css">';
 
 require __DIR__ . '/includes/public_header.php';
 ?>
@@ -185,8 +74,9 @@ require __DIR__ . '/includes/public_header.php';
 <?php if (!$slides): ?>
   <!-- Fallback single hero when no slides configured -->
   <div class="hero-slides">
-    <div class="hero-slide active overlay-blue text-left">
-      <div class="bg" style="background-image:url('<?= BASE_URL ?>images/hero.jpg')"></div>
+    <div class="hero-slide active overlay-blue text-left<?= $carousel_config['show_text'] ? '' : ' text-hidden' ?>">
+      <div class="bg" style="background-image:url('<?= e(site_image_url('home_hero', 'images/hero.jpg')) ?>')"></div>
+      <?php if ($carousel_config['show_text']): ?>
       <div class="container">
         <div class="hero-content">
           <span class="tag"><?= e(t('hero_badge')) ?></span>
@@ -198,6 +88,7 @@ require __DIR__ . '/includes/public_header.php';
           </div>
         </div>
       </div>
+      <?php endif; ?>
     </div>
   </div>
 <?php else: ?>
@@ -206,7 +97,7 @@ require __DIR__ . '/includes/public_header.php';
     <?php foreach ($slides as $i => $sl):
       $media_type = $sl['media_type'] ?? 'image';
       $has_img = !empty($sl['image']) && file_exists(__DIR__ . '/' . $sl['image']);
-      $poster_url = $has_img ? BASE_URL . e($sl['image']) : BASE_URL . 'images/hero.jpg';
+      $poster_url = $has_img ? BASE_URL . e($sl['image']) : site_image_url('home_hero', 'images/hero.jpg');
       $overlay = $sl['overlay_color'] ?: 'blue';
       $pos = $sl['text_position'] ?: 'left';
       $title    = tr_field($sl, 'title');
@@ -215,8 +106,10 @@ require __DIR__ . '/includes/public_header.php';
       $cta1     = tr_field($sl, 'cta_text')   ?: 'Learn More';
       $cta2     = tr_field($sl, 'cta_text_2');
       $audio_attr = $carousel_config['video_audio'] ? '' : 'muted';
+      // Per-slide + global control: hide the text overlay entirely when turned off
+      $text_visible = $carousel_config['show_text'] && (int)($sl['show_text'] ?? 1) === 1;
     ?>
-      <div class="hero-slide overlay-<?= e($overlay) ?> text-<?= e($pos) ?> media-<?= e($media_type) ?> <?= $i===0?'active':'' ?>"
+      <div class="hero-slide overlay-<?= e($overlay) ?> text-<?= e($pos) ?> media-<?= e($media_type) ?> <?= $i===0?'active':'' ?><?= $text_visible ? '' : ' text-hidden' ?>"
            data-index="<?= $i ?>"
            data-media="<?= e($media_type) ?>"
            data-loaded="<?= $media_type==='image' ? '1' : '0' ?>">
@@ -245,6 +138,7 @@ require __DIR__ . '/includes/public_header.php';
           <div class="bg" style="background-image:url('<?= $poster_url ?>')"></div>
         <?php endif; ?>
 
+        <?php if ($text_visible): ?>
         <div class="container">
           <div class="hero-content">
             <?php if ($sl['badge_text']): ?>
@@ -264,7 +158,8 @@ require __DIR__ . '/includes/public_header.php';
               <?php endif; ?>
             </div>
           </div>
-        </div>
+        </div><?php endif; ?>
+
       </div>
     <?php endforeach; ?>
   </div>
@@ -449,6 +344,25 @@ require __DIR__ . '/includes/public_header.php';
 })();
 </script>
 
+<?php if ($marquees): ?>
+<!-- MARQUEE TICKER -->
+<div class="marquee" aria-label="Announcements">
+  <div class="marquee-track" style="--mq-dur: <?= $marquee_dur ?>s">
+    <?php for ($copy = 0; $copy < 2; $copy++): ?>
+    <div class="marquee-content"<?= $copy === 1 ? ' aria-hidden="true"' : '' ?>>
+      <?php foreach ($marquees as $m): ?>
+        <span class="marquee-item">
+          <?php if (!empty($m['icon'])): ?><span class="mq-ico"><?= e($m['icon']) ?></span><?php endif; ?>
+          <span class="mq-text"><?= e(tr_field($m, 'text')) ?></span>
+        </span>
+        <span class="marquee-sep" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+      <?php endforeach; ?>
+    </div>
+    <?php endfor; ?>
+  </div>
+</div>
+<?php endif; ?>
+
 <!-- STATS -->
 <section class="stats">
   <div class="container">
@@ -462,10 +376,10 @@ require __DIR__ . '/includes/public_header.php';
 </section>
 
 <!-- ABOUT -->
-<section id="about">
+<section id="about" class="sec-cream">
   <div class="container">
     <div class="grid-2">
-      <div class="about-img"></div>
+      <div class="about-img" style="<?= e(site_bg_attr('story_img', 'linear-gradient(rgba(37,99,235,.15),rgba(26,46,53,.25))', 'images/about.jpg')) ?>"></div>
       <div class="about-text">
         <span class="tag"><?= e(t('about_badge')) ?></span>
         <h2><?= e(t('about_title')) ?></h2>
@@ -539,7 +453,7 @@ require __DIR__ . '/includes/public_header.php';
 </section>
 
 <!-- DONATE CTA -->
-<section class="cta-band">
+<section class="cta-band" style="<?= e(site_bg_attr('donate_bg', 'linear-gradient(rgba(37,99,235,.88),rgba(29,78,216,.88))', 'images/donate-bg.jpg')) ?>">
   <div class="container">
     <h2><?= e(t('donate_band_title')) ?></h2>
     <p><?= e(t('donate_band_text')) ?></p>

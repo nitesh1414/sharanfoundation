@@ -36,12 +36,12 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
     if ($action==='add') {
         $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
         $pdo->prepare("INSERT INTO milestones ($cols) VALUES ($place)")->execute($data);
-        flash_set('success','✓ Milestone added.');
+        flash_saved_row('added', 'Milestone', 'milestones', (int)$pdo->lastInsertId());
     } else {
         $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
         $data['id']=$id;
         $pdo->prepare("UPDATE milestones SET $set WHERE id=:id")->execute($data);
-        flash_set('success','✓ Milestone updated.');
+        flash_saved_row('updated', 'Milestone', 'milestones', $id);
     }
     redirect(ADMIN_URL.'milestones.php');
 }
@@ -63,7 +63,8 @@ if ($action==='add' || $action==='edit') {
   <div class="card-body">
     <div class="form-row">
       <div class="form-group"><label>Year <span class="req">*</span></label><input type="text" name="year" value="<?= e($row['year']) ?>" required placeholder="2024 or Today"></div>
-      <div class="form-group"><label>Icon (Emoji)</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="🌱"></div>
+      <div class="form-group"><label>Icon (Emoji)</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="🌱">
+      <?= icon_howto_help('icon') ?></div>
     </div>
 
     <div class="lang-tabs">

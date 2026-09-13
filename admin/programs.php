@@ -31,7 +31,7 @@ if (($action === 'add' || $action === 'edit') && $_SERVER['REQUEST_METHOD'] === 
         'status'     => $_POST['status'],
     ];
 
-    $image_path = upload_image('image', 'programs');
+    $image_path = upload_image('image', 'programs', 1200, 800);
     if ($image_path === false) {
         flash_set('error', 'Image upload failed. Use JPG/PNG/WebP under 5 MB.');
     } else {
@@ -41,12 +41,12 @@ if (($action === 'add' || $action === 'edit') && $_SERVER['REQUEST_METHOD'] === 
             $cols = implode(',', array_keys($data));
             $place = ':' . implode(',:', array_keys($data));
             $pdo->prepare("INSERT INTO programs ($cols) VALUES ($place)")->execute($data);
-            flash_set('success', 'Program added.');
+            flash_saved_row('added', 'Program', 'programs', (int)$pdo->lastInsertId());
         } else {
             $set = implode(',', array_map(fn($k) => "$k=:$k", array_keys($data)));
             $data['id'] = $id;
             $pdo->prepare("UPDATE programs SET $set WHERE id=:id")->execute($data);
-            flash_set('success', 'Program updated.');
+            flash_saved_row('updated', 'Program', 'programs', $id);
         }
         redirect(ADMIN_URL . 'programs.php');
     }
@@ -77,6 +77,7 @@ if ($action === 'add' || $action === 'edit') {
           <div class="form-group">
             <label>Icon (Emoji)</label>
             <input type="text" name="icon" value="<?= e($row['icon']) ?>" placeholder="📚">
+            <?= icon_howto_help('icon') ?>
           </div>
         </div>
 
@@ -153,7 +154,8 @@ if ($action === 'add' || $action === 'edit') {
         </div>
         <div class="form-group">
           <label>Image</label>
-          <input type="file" name="image" accept="image/*">
+          <input type="file" name="image" accept="image/*" data-rec-w="1200" data-rec-h="800">
+          <?= image_upload_help(1200, 800) ?>
           <?php if (!empty($row['image'])): ?>
             <div class="current-image"><img src="<?= BASE_URL . e($row['image']) ?>" alt=""><p class="help">Current image — upload to replace.</p></div>
           <?php endif; ?>

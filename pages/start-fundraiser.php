@@ -43,14 +43,14 @@ $extra_head = '<style>
 require __DIR__ . '/../includes/public_header.php';
 ?>
 
-<section class="page-header">
+<section class="page-header" style="<?= e(site_bg_attr('banner_start_fundraiser', 'linear-gradient(rgba(29,78,216,.15),rgba(26,46,53,.15))', 'images/hero.jpg')) ?>">
   <div class="container">
     <h1>🚀 Start a Fundraiser</h1>
     <div class="breadcrumb"><a href="<?= BASE_URL ?>"><?= e(t('home')) ?></a> &nbsp;›&nbsp; <a href="<?= BASE_URL ?>pages/fundraisers.php">Fundraisers</a> &nbsp;›&nbsp; Start New</div>
   </div>
 </section>
 
-<section style="background:#f9f9f5;padding:4rem 0 2rem">
+<section class="sec-peach">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ HOW IT WORKS</span>
@@ -64,7 +64,7 @@ require __DIR__ . '/../includes/public_header.php';
   </div>
 </section>
 
-<section style="background:#fff;padding:4rem 0">
+<section class="sec-sage">
   <div class="container">
     <div class="section-head">
       <span class="tag">✦ CAMPAIGN DETAILS</span>

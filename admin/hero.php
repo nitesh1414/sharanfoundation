@@ -51,6 +51,7 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
         'cta_link_2'     => trim($_POST['cta_link_2'] ?? ''),
         'overlay_color'  => in_array($_POST['overlay_color']??'blue', ['blue','dark','amber','minimal']) ? $_POST['overlay_color'] : 'blue',
         'text_position'  => in_array($_POST['text_position']??'left', ['left','center','right']) ? $_POST['text_position'] : 'left',
+        'show_text'      => isset($_POST['show_text']) ? 1 : 0,
         'badge_text'     => trim($_POST['badge_text'] ?? ''),
         'display_order'  => (int)($_POST['display_order'] ?? 0),
         'status'         => $_POST['status'] ?? 'active',
@@ -59,7 +60,7 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
     ];
 
     // Image upload (used as: still bg OR video poster fallback)
-    $img = upload_image('image', 'hero');
+    $img = upload_image('image', 'hero', 1920, 1080);
     // Video upload (only if media_type=video)
     $vid = upload_video('video_file', 'hero/videos', 50);
 
@@ -81,16 +82,25 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
         if ($error) {
             flash_set('error', $error);
         } else {
-            if ($action === 'add') {
-                $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
-                $pdo->prepare("INSERT INTO hero_slides ($cols) VALUES ($place)")->execute($data);
-                flash_set('success','✓ Hero slide added.');
-            } else {
-                $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
-                $data['id']=$id;
-                $pdo->prepare("UPDATE hero_slides SET $set WHERE id=:id")->execute($data);
-                flash_set('success','✓ Hero slide updated.');
+            try {
+                if ($action === 'add') {
+                    $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
+                    $pdo->prepare("INSERT INTO hero_slides ($cols) VALUES ($place)")->execute($data);
+                    flash_saved_row('added', 'Hero slide', 'hero_slides', (int)$pdo->lastInsertId());
+                } else {
+                    $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
+                    $data['id']=$id;
+                    $pdo->prepare("UPDATE hero_slides SET $set WHERE id=:id")->execute($data);
+                    flash_saved_row('updated', 'Hero slide', 'hero_slides', $id);
+                }
+            } catch (Throwable $ex) {
+                $msg = $ex->getMessage();
+                if (stripos($msg, 'show_text') !== false) {
+                    $msg .= ' → The database is missing the new `show_text` column. Run: ALTER TABLE `hero_slides` ADD COLUMN IF NOT EXISTS `show_text` TINYINT(1) DEFAULT 1; (see sql/acts_foundation.sql)';
+                }
+                flash_set('error', 'Hero slide could not be saved: ' . $msg);
             }
+            // Always return to the list — never a blank page.
             redirect(ADMIN_URL.'hero.php');
         }
     }
@@ -101,7 +111,7 @@ if ($action === 'add' || $action === 'edit') {
     $row = ['id'=>0,'title'=>'','title_hi'=>'','subtitle'=>'','subtitle_hi'=>'','description'=>'','description_hi'=>'',
             'image'=>'','cta_text'=>'Donate Now','cta_text_hi'=>'','cta_link'=>'pages/donate.php',
             'cta_text_2'=>'Learn More','cta_text_2_hi'=>'','cta_link_2'=>'pages/about.php',
-            'overlay_color'=>'blue','text_position'=>'left','badge_text'=>'','display_order'=>0,'status'=>'active',
+            'overlay_color'=>'blue','text_position'=>'left','show_text'=>1,'badge_text'=>'','display_order'=>0,'status'=>'active',
             'media_type'=>'image','video_file'=>'','video_url'=>'','poster_image'=>''];
     if ($action === 'edit' && $id) {
         $stmt = $pdo->prepare("SELECT * FROM hero_slides WHERE id=?"); $stmt->execute([$id]);
@@ -200,6 +210,11 @@ if ($action === 'add' || $action === 'edit') {
         </select>
       </div>
     </div>
+    <label class="checkbox-row" style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;font-weight:600;background:#f9fafb;border:1px solid #eef0f3;border-radius:8px;padding:.75rem .9rem">
+      <input type="checkbox" name="show_text" value="1" <?= (int)($row['show_text'] ?? 1)===1?'checked':'' ?> style="width:18px;height:18px;accent-color:var(--primary)">
+      Show text over this image
+      <span style="font-weight:400;color:#888;font-size:.82rem">(headline + buttons on the photo — uncheck to show only the image)</span>
+    </label>
     <div class="form-row">
       <div class="form-group">
         <label>Display Order</label>
@@ -238,8 +253,8 @@ if ($action === 'add' || $action === 'edit') {
     <div class="media-panel" data-media="image">
       <div class="form-group">
         <label>Image <span style="color:#888;font-weight:400">(also used as fallback poster for videos)</span></label>
-        <input type="file" name="image" accept="image/*">
-        <p class="help">Recommended: 1920×800 px (16:7 ratio). JPG/PNG/WebP, max 5MB.</p>
+        <input type="file" name="image" accept="image/*" data-rec-w="1920" data-rec-h="1080">
+        <?= image_upload_help(1920, 1080) ?>
         <?php if ($row['image']): ?>
           <div class="current-image" style="margin-top:.5rem">
             <img src="<?= BASE_URL.e($row['image']) ?>" style="max-width:400px;border-radius:8px;box-shadow:var(--shadow)">
@@ -384,6 +399,9 @@ $active_count = (int)$pdo->query("SELECT COUNT(*) FROM hero_slides WHERE status=
           <td>
             <strong><?= e($r['title']) ?></strong>
             <?php if ($r['subtitle']): ?><br><small style="color:#888"><?= e($r['subtitle']) ?></small><?php endif; ?>
+            <?php if ((int)($r['show_text'] ?? 1) !== 1): ?>
+              <br><span class="status-badge" style="background:#eef2f7;color:#5a6a80;font-size:.72rem">🚫 No text on slide</span>
+            <?php endif; ?>
           </td>
           <td><?php if ($r['badge_text']): ?><span class="status-badge" style="background:#fef7e0;color:#5b4a2c"><?= e($r['badge_text']) ?></span><?php endif; ?></td>
           <td>

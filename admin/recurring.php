@@ -56,8 +56,8 @@ if ($action === 'update' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_c
         if ($fresh) { try { notify_recurring_cancelled($fresh); } catch (Throwable $e){} }
     }
 
-    flash_set('success','✓ Recurring donation updated.');
-    redirect(ADMIN_URL.'recurring.php?view='.$id);
+    flash_saved_row('updated', 'Recurring donation', 'recurring_donations', $id);
+    redirect(ADMIN_URL.'recurring.php');
 }
 
 // ===== DELETE =====

@@ -1,5 +1,5 @@
 -- ==================================================================
---  ACTS FOUNDATION — CONSOLIDATED DATABASE INSTALL
+--  SHARAN FOUNDATION — CONSOLIDATED DATABASE INSTALL
 --  Single-file install — covers all versions v1 through v9.
 --  Safe to re-run: uses CREATE TABLE IF NOT EXISTS and INSERT IGNORE.
 -- ==================================================================
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `site_title` VARCHAR(150) DEFAULT 'Acts Foundation',
+  `site_title` VARCHAR(150) DEFAULT 'Sharan Foundation',
   `tagline` VARCHAR(200) DEFAULT 'Hope • Care • Transformation',
   `email_in` VARCHAR(150),
   `email_uk` VARCHAR(150),
@@ -78,9 +78,9 @@ ALTER TABLE `settings`
   ADD COLUMN IF NOT EXISTS `smtp_username`         VARCHAR(150) DEFAULT '',
   ADD COLUMN IF NOT EXISTS `smtp_password`         VARCHAR(255) DEFAULT '',
   ADD COLUMN IF NOT EXISTS `smtp_encryption`       ENUM('tls','ssl','none') DEFAULT 'tls',
-  ADD COLUMN IF NOT EXISTS `smtp_from_email`       VARCHAR(150) DEFAULT 'noreply@actsfoundation.org',
-  ADD COLUMN IF NOT EXISTS `smtp_from_name`        VARCHAR(150) DEFAULT 'Acts Foundation',
-  ADD COLUMN IF NOT EXISTS `admin_notify_email`    VARCHAR(150) DEFAULT 'admin@actsfoundation.org',
+  ADD COLUMN IF NOT EXISTS `smtp_from_email`       VARCHAR(150) DEFAULT 'noreply@sharanforall.org',
+  ADD COLUMN IF NOT EXISTS `smtp_from_name`        VARCHAR(150) DEFAULT 'Sharan Foundation',
+  ADD COLUMN IF NOT EXISTS `admin_notify_email`    VARCHAR(150) DEFAULT 'admin@sharanforall.org',
   ADD COLUMN IF NOT EXISTS `default_language`      VARCHAR(5)   DEFAULT 'en';
 
 -- Payment gateway credentials (v6)
@@ -108,7 +108,14 @@ ALTER TABLE `settings`
   ADD COLUMN IF NOT EXISTS `carousel_show_dots`     TINYINT(1) DEFAULT 1,
   ADD COLUMN IF NOT EXISTS `carousel_show_counter`  TINYINT(1) DEFAULT 1,
   ADD COLUMN IF NOT EXISTS `carousel_transition`    ENUM('fade','slide','zoom') DEFAULT 'fade',
-  ADD COLUMN IF NOT EXISTS `carousel_video_audio`   TINYINT(1) DEFAULT 0;
+  ADD COLUMN IF NOT EXISTS `carousel_video_audio`   TINYINT(1) DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS `carousel_show_text`     TINYINT(1) DEFAULT 1;
+
+-- v11: Google-Translate language list (admin-configurable, comma CSV, default en,hi,fi)
+ALTER TABLE `settings`
+  ADD COLUMN IF NOT EXISTS `site_languages` VARCHAR(255) DEFAULT 'en,hi,fi';
+
+UPDATE `settings` SET `site_languages`='en,hi,fi' WHERE `site_languages` IS NULL OR `site_languages`='';
 
 -- Story / Vision / Motto (v9)
 ALTER TABLE `settings`
@@ -124,11 +131,11 @@ ALTER TABLE `settings`
 
 -- Seed settings row (only on first install)
 INSERT INTO `settings` (`id`,`site_title`,`tagline`,`email_in`,`email_uk`,`phone_in`,`phone_uk`,`address_in`,`address_uk`,`about_short`,`mission`,`vision`,`values_text`,`default_language`,`gateway_mode`)
-SELECT 1,'Acts Foundation','Hope • Care • Transformation',
-       'india@actsfoundation.org','uk@actsfoundation.org',
+SELECT 1,'Sharan Foundation','Hope • Care • Transformation',
+       'india@sharanforall.org','uk@sharanforall.org',
        '+91 98765 43210','+44 20 1234 5678',
-       'Acts Foundation Campus, Sangvi, Pune, India',
-       'Acts Foundation UK, London, United Kingdom',
+       'Sharan Foundation Campus, Sangvi, Pune, India',
+       'Sharan Foundation UK, London, United Kingdom',
        'A Christian charitable organization committed to uplifting the underprivileged through education, shelter and faith — serving across India & Nepal.',
        'To transform lives by providing education, shelter, and spiritual nurture to underprivileged children, women, and elderly across India and Nepal.',
        'A world where every child is educated, every woman is empowered, every elder is honored, and no one walks alone.',
@@ -296,7 +303,7 @@ ALTER TABLE `team_members`
   ADD COLUMN IF NOT EXISTS `bio_hi`  TEXT NULL;
 
 INSERT IGNORE INTO `team_members` (`id`,`name`,`role`,`bio`,`display_order`,`name_hi`,`role_hi`) VALUES
-(1,'Rev. John David','Founder & President','Vision-bearer of Acts Foundation, serving full-time since 2012.',1,'रेव. जॉन डेविड','संस्थापक एवं अध्यक्ष'),
+(1,'Rev. John David','Founder & President','Vision-bearer of Sharan Foundation, serving full-time since 2012.',1,'रेव. जॉन डेविड','संस्थापक एवं अध्यक्ष'),
 (2,'Mary John','Co-Founder & Director','Leads women & children programs across India.',2,'मैरी जॉन','सह-संस्थापक एवं निदेशक'),
 (3,'Pastor Samuel Kumar','Principal, Bible College','Heads theological training & discipleship ministry.',3,'पास्टर सैमुअल कुमार','प्राचार्य, बाइबल कॉलेज'),
 (4,'Daniel Abraham','Operations Manager','Oversees campus operations and hostel management.',4,'डेनियल अब्राहम','संचालन प्रबंधक'),
@@ -321,9 +328,9 @@ ALTER TABLE `testimonials`
   ADD COLUMN IF NOT EXISTS `message_hi` TEXT NULL;
 
 INSERT IGNORE INTO `testimonials` (`id`,`name`,`role`,`message`,`message_hi`,`role_hi`) VALUES
-(1,'Priya R.','Beneficiary, India','Acts Foundation gave me the chance to study when my family couldn''t afford it. Today I''m a nurse serving my community.','एक्ट्स फाउंडेशन ने मुझे पढ़ाई का अवसर दिया।','लाभार्थी, भारत'),
+(1,'Priya R.','Beneficiary, India','Sharan Foundation gave me the chance to study when my family couldn''t afford it. Today I''m a nurse serving my community.','शरण फाउंडेशन ने मुझे पढ़ाई का अवसर दिया।','लाभार्थी, भारत'),
 (2,'Sarah M.','Resident, Shelter Home','After losing my husband, I had nowhere to go. The shelter became my home and gave me dignity.','आश्रय मेरा घर बन गया।','निवासी, आश्रय गृह'),
-(3,'James T.','UK Partner & Donor','Partnering with Acts Foundation has been one of the most meaningful journeys of our lives.','यह हमारे जीवन की सबसे सार्थक यात्राओं में से एक रही है।','यूके भागीदार और दानदाता');
+(3,'James T.','UK Partner & Donor','Partnering with Sharan Foundation has been one of the most meaningful journeys of our lives.','यह हमारे जीवन की सबसे सार्थक यात्राओं में से एक रही है।','यूके भागीदार और दानदाता');
 
 -- ============================================================
 -- VOLUNTEERS
@@ -493,7 +500,7 @@ CREATE TABLE IF NOT EXISTS `fundraiser_contributions` (
 
 INSERT IGNORE INTO `fundraisers` (`id`,`organizer_name`,`organizer_email`,`organizer_phone`,`organizer_bio`,`title`,`slug`,`cause`,`story`,`goal_amount`,`currency`,`raised_amount`,`start_date`,`end_date`,`status`,`is_featured`) VALUES
 (1,'Priya Sharma','priya.fundraiser@example.com','+91 98765 11111','Software engineer turning 30 this year.','My 30th Birthday Fundraiser for Girls'' Education','priya-30th-birthday-girls','Girl Child Education','Instead of birthday gifts, I want to fund education for 10 rural girls.',50000,'INR',32500,'2026-05-01','2026-06-30','active',1),
-(2,'Michael Brown','michael.brown@example.co.uk','+44 20 7777 2222','Marathon runner & father of two','London Marathon Run for Acts Foundation','marathon-london-acts','Old Age Home','I''m running the London Marathon to raise funds.',5000,'GBP',1850,'2026-06-01','2026-10-15','active',1),
+(2,'Michael Brown','michael.brown@example.co.uk','+44 20 7777 2222','Marathon runner & father of two','London Marathon Run for Sharan Foundation','marathon-london-acts','Old Age Home','I''m running the London Marathon to raise funds.',5000,'GBP',1850,'2026-06-01','2026-10-15','active',1),
 (3,'John Mathew','john.m@example.com','+91 98765 33333','Pastor and missionary','Help Build New Classroom — Pune','build-new-classroom','Child Education','We need more classrooms for our growing center.',300000,'INR',125000,'2026-05-15','2026-08-31','active',0);
 
 -- ============================================================
@@ -624,6 +631,10 @@ ALTER TABLE `hero_slides`
   ADD COLUMN IF NOT EXISTS `video_url`    VARCHAR(500) NULL,
   ADD COLUMN IF NOT EXISTS `poster_image` VARCHAR(255) NULL;
 
+-- v10: per-slide "show text over image" toggle (admin control)
+ALTER TABLE `hero_slides`
+  ADD COLUMN IF NOT EXISTS `show_text` TINYINT(1) DEFAULT 1;
+
 INSERT IGNORE INTO `hero_slides`
 (`id`,`title`,`title_hi`,`subtitle`,`subtitle_hi`,`description`,`description_hi`,`image`,`cta_text`,`cta_text_hi`,`cta_link`,`cta_text_2`,`cta_text_2_hi`,`cta_link_2`,`overlay_color`,`badge_text`,`display_order`) VALUES
 (1,'Bringing Hope Through Child Education','बाल शिक्षा के माध्यम से आशा लाना','Every Child Deserves a Future','हर बच्चे को एक भविष्य चाहिए','Quality schooling, books, uniforms and meals for underprivileged children across India and Nepal.','भारत और नेपाल में वंचित बच्चों के लिए गुणवत्तापूर्ण शिक्षा।','uploads/hero/slide-child-education.jpg','Sponsor a Child','एक बच्चे को प्रायोजित करें','pages/donate.php','Learn More','और जानें','pages/programs.php#child-education','blue','✦ CHILD EDUCATION',1),
@@ -632,6 +643,60 @@ INSERT IGNORE INTO `hero_slides`
 (4,'Honoring Our Elders With Love','प्रेम से हमारे बुजुर्गों का सम्मान','Old Age Home','वृद्धाश्रम','A loving home, medical care and dignified companionship for the elderly.','बुजुर्गों के लिए प्रेमपूर्ण घर।','uploads/hero/slide-oldage.jpg','Honor an Elder','बुजुर्ग का सम्मान करें','pages/donate.php','Visit Our Home','हमारा घर देखें','pages/programs.php#oldage','dark','✦ OLD AGE HOME',4),
 (5,'A Safe Home Away From Home','घर से दूर एक सुरक्षित घर','Hostels for Boys & Girls','लड़कों और लड़कियों के लिए छात्रावास','Safe accommodation, nutritious meals, mentorship and study support.','सुरक्षित आवास और सहायता।','uploads/hero/slide-hostel.jpg','Fund a Hostel Bed','छात्रावास का बिस्तर प्रायोजित करें','pages/donate.php','Hostels','छात्रावास','pages/programs.php#girls-hostel','blue','✦ HOSTELS',5),
 (6,'Equipping Servants of God','परमेश्वर के सेवकों को तैयार करना','Acts Bible College','एक्ट्स बाइबल कॉलेज','Theological training and discipleship preparing the next generation of ministers.','धार्मिक प्रशिक्षण।','uploads/hero/slide-bible.jpg','Support a Student','एक छात्र का समर्थन करें','pages/donate.php','About the College','कॉलेज के बारे में','pages/programs.php#bible-college','dark','✦ BIBLE COLLEGE',6);
+
+-- ============================================================
+-- MARQUEE ANNOUNCEMENTS (ticker between hero & stats — v11)
+-- Add / edit / delete entries from Admin → Marquee.
+-- The ticker is hidden on the homepage automatically when no
+-- active marquee rows exist.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `marquees` (
+  `id`              INT AUTO_INCREMENT PRIMARY KEY,
+  `text`            VARCHAR(255) NOT NULL,
+  `text_hi`         VARCHAR(255) NULL,
+  `icon`            VARCHAR(20) NULL,
+  `display_order`   INT DEFAULT 0,
+  `status`          ENUM('active','inactive') DEFAULT 'active',
+  `created_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_order (`status`,`display_order`)
+) ENGINE=InnoDB;
+
+INSERT IGNORE INTO `marquees` (`id`,`text`,`text_hi`,`icon`,`display_order`,`status`) VALUES
+(1,'Supporting 2,500+ children with education, shelter and love across India & Nepal',NULL,'💝',1,'active'),
+(2,'Your generosity brings hope — volunteer, partner or donate today',NULL,'🙏',2,'active');
+
+-- ============================================================
+-- SITE MEDIA (v11) — page hero banners & content images that the
+-- admin can replace from Admin → Banners & Images. Each row maps a
+-- fixed usage key (slug) to an uploaded image. path may be reset to
+-- the built-in default by the admin panel.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `site_media` (
+  `slug`          VARCHAR(80) PRIMARY KEY,
+  `label`         VARCHAR(150) NOT NULL,
+  `group_name`    VARCHAR(80)  NOT NULL DEFAULT 'content',
+  `default_path`  VARCHAR(255) NOT NULL,
+  `path`          VARCHAR(255) NOT NULL,
+  `updated_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+INSERT IGNORE INTO `site_media` (`slug`,`label`,`group_name`,`default_path`,`path`) VALUES
+-- Page hero banners
+('banner_about','About page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_blog','Blog page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_contact','Contact page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_gallery','Gallery page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_partner','Partner page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_programs','Programs page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_projects','Projects page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_start_fundraiser','Start Fundraiser page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_volunteer','Volunteer page banner','banner','images/hero.jpg','images/hero.jpg'),
+('banner_donate','Donate page banner','banner','images/donate-bg.jpg','images/donate-bg.jpg'),
+-- Homepage & content images
+('home_hero','Homepage fallback hero / video-cover image','content','images/hero.jpg','images/hero.jpg'),
+('story_img','Homepage & About “Our Story” image','content','images/about.jpg','images/about.jpg'),
+('donate_bg','Donation banner / call-to-action background','content','images/donate-bg.jpg','images/donate-bg.jpg');
 
 -- ============================================================
 -- MILESTONES (v9)

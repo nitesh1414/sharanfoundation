@@ -4,7 +4,7 @@
  * Configure in Stripe dashboard → Developers → Webhooks. Subscribe to:
  *   checkout.session.completed, invoice.payment_succeeded, invoice.payment_failed,
  *   customer.subscription.deleted
- * URL: https://yoursite.com/LIVEpro/acts-foundation/api/payment/stripe_webhook.php
+ * URL: https://sharanforall.org/api/payment/stripe_webhook.php
  */
 
 require_once __DIR__ . '/_helpers.php';

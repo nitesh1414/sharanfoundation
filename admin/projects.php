@@ -24,7 +24,7 @@ if (($action === 'add' || $action === 'edit') && $_SERVER['REQUEST_METHOD'] === 
         'days_left'     => (int)$_POST['days_left'],
         'display_order' => (int)$_POST['display_order'],
     ];
-    $image_path = upload_image('image', 'projects');
+    $image_path = upload_image('image', 'projects', 800, 500);
     if ($image_path === false) {
         flash_set('error', 'Image upload failed.');
     } else {
@@ -32,12 +32,12 @@ if (($action === 'add' || $action === 'edit') && $_SERVER['REQUEST_METHOD'] === 
         if ($action === 'add') {
             $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
             $pdo->prepare("INSERT INTO projects ($cols) VALUES ($place)")->execute($data);
-            flash_set('success','Project added.');
+            flash_saved_row('added', 'Project', 'projects', (int)$pdo->lastInsertId());
         } else {
             $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
             $data['id']=$id;
             $pdo->prepare("UPDATE projects SET $set WHERE id=:id")->execute($data);
-            flash_set('success','Project updated.');
+            flash_saved_row('updated', 'Project', 'projects', $id);
         }
         redirect(ADMIN_URL.'projects.php');
     }
@@ -85,7 +85,8 @@ if ($action === 'add' || $action === 'edit') {
         </div>
         <div class="form-group">
           <label>Image</label>
-          <input type="file" name="image" accept="image/*">
+          <input type="file" name="image" accept="image/*" data-rec-w="800" data-rec-h="500">
+          <?= image_upload_help(800, 500) ?>
           <?php if ($row['image']): ?><div class="current-image"><img src="<?= BASE_URL.e($row['image']) ?>" alt=""></div><?php endif; ?>
         </div>
         <div class="form-actions">

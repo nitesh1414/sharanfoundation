@@ -4,11 +4,11 @@
     "type": "project",
     "license": "MIT",
     "keywords": ["charity", "nonprofit", "donations", "fundraising", "php", "mysql"],
-    "homepage": "https://sharanfoundation.org",
+    "homepage": "https://sharanforall.org",
     "authors": [
         {
             "name": "Sharan Foundation",
-            "email": "tech@sharanfoundation.org"
+            "email": "tech@sharanforall.org"
         }
     ],
     "require": {

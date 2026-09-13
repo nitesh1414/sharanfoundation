@@ -4,7 +4,7 @@
  * Configure in PayPal dashboard → Apps & Credentials → Webhooks.
  * Subscribe to: CHECKOUT.ORDER.APPROVED, PAYMENT.CAPTURE.COMPLETED,
  *               PAYMENT.CAPTURE.DENIED, BILLING.SUBSCRIPTION.* events
- * URL: https://yoursite.com/LIVEpro/acts-foundation/api/payment/paypal_webhook.php
+ * URL: https://sharanforall.org/api/payment/paypal_webhook.php
  */
 
 require_once __DIR__ . '/_helpers.php';

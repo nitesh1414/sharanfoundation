@@ -11,7 +11,8 @@ if ($action==='delete' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_che
 }
 if ($action==='update' && $id && $_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
     $pdo->prepare("UPDATE contacts SET status=? WHERE id=?")->execute([$_POST['status'], $id]);
-    flash_set('success','Updated.'); redirect(ADMIN_URL.'contacts.php?view='.$id);
+    flash_saved_row('updated', 'Contact message', 'contacts', $id);
+    redirect(ADMIN_URL.'contacts.php');
 }
 
 if (isset($_GET['view']) && $id) {

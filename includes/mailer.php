@@ -33,9 +33,9 @@ function mail_config() {
     // Defaults
     $cfg += [
         'smtp_host' => '', 'smtp_port' => 587, 'smtp_username' => '', 'smtp_password' => '',
-        'smtp_encryption' => 'tls', 'smtp_from_email' => 'noreply@sharanfoundation.org',
+        'smtp_encryption' => 'tls', 'smtp_from_email' => 'noreply@sharanforall.org',
         'smtp_from_name' => 'Sharan Foundation',
-        'admin_notify_email' => 'admin@sharanfoundation.org',
+        'admin_notify_email' => 'admin@sharanforall.org',
     ];
     return $cfg;
 }
@@ -99,7 +99,7 @@ function send_mail($to, $subject, $html_body, $reply_to = null, $attachments = [
         $headers[] = "MIME-Version: 1.0";
         $headers[] = "From: " . mb_encode_mimeheader($cfg['smtp_from_name']) . " <{$cfg['smtp_from_email']}>";
         if ($reply_to) $headers[] = "Reply-To: {$reply_to}";
-        $headers[] = "X-Mailer: sharanfoundation-Mailer/2.1";
+        $headers[] = "X-Mailer: sharanforall-Mailer/2.1";
 
         if ($attachments) {
             $headers[] = "Content-Type: multipart/mixed; boundary=\"{$boundary}\"";
@@ -158,11 +158,11 @@ function email_template($title, $body_html, $cta_label = null, $cta_url = null) 
     <table cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.08)">
       <tr><td style="background:linear-gradient(135deg,#2563eb,#1d4ed8);padding:25px 30px;text-align:center;color:#fff">
         <h1 style="margin:0;font-size:22px;font-weight:700">Sharan Foundation</h1>
-        <p style="margin:5px 0 0;font-size:12px;opacity:.9;letter-spacing:2px">HOPE • CARE • TRANSFORM</p>
+        <p style="margin:5px 0 0;font-size:14px;opacity:.9;letter-spacing:2px">HOPE • CARE • TRANSFORM</p>
       </td></tr>
       <tr><td style="padding:30px;color:#0d2940"><h2 style="margin:0 0 15px;color:#2563eb;font-size:20px">' . htmlspecialchars($title) . '</h2>' . $body_html . '</td></tr>
       ' . $cta . '
-      <tr><td style="background:#0a1c2e;color:#8da4a8;padding:20px 30px;text-align:center;font-size:12px">
+      <tr><td style="background:#0a1c2e;color:#8da4a8;padding:20px 30px;text-align:center;font-size:14px">
         <p style="margin:0">© ' . date('Y') . ' Sharan Foundation • Serving in India 🇮🇳 & UK 🇬🇧</p>
         <p style="margin:5px 0 0;opacity:.7">This is an automated notification.</p>
       </td></tr>
@@ -374,7 +374,7 @@ function notify_recurring_started($r) {
     $body  = '<p>Dear ' . htmlspecialchars($r['donor_name']) . ',</p>';
     $body .= '<p>Thank you for setting up a <strong>' . htmlspecialchars($r['frequency']) . '</strong> recurring donation to Sharan Foundation! 💝</p>';
     $body .= '<div style="background:#fffaf0;border:2px solid #f4a261;padding:18px;margin:18px 0;border-radius:10px;text-align:center">';
-    $body .= '<p style="margin:0;font-size:12px;color:#5b4a2c;letter-spacing:2px;text-transform:uppercase">Your Recurring Gift</p>';
+    $body .= '<p style="margin:0;font-size:14px;color:#5b4a2c;letter-spacing:2px;text-transform:uppercase">Your Recurring Gift</p>';
     $body .= '<p style="margin:6px 0;font-size:28px;color:#2563eb;font-weight:800">' . $amount . ' / ' . ucfirst($r['frequency']) . '</p>';
     $body .= '<p style="margin:0;font-size:13px;color:#5b4a2c">Supporting: <strong>' . htmlspecialchars($r['purpose']) . '</strong></p>';
     $body .= '<p style="margin:6px 0 0;font-size:13px;color:#5b4a2c">Next charge: <strong>' . htmlspecialchars($r['next_charge_date']) . '</strong></p>';
@@ -533,7 +533,7 @@ function send_donation_receipt($data) {
     $body  = '<p>Dear ' . htmlspecialchars($data['donor_name']) . ',</p>';
     $body .= '<p>Thank you for your generous gift! 🙏 This email confirms we have received your donation.</p>';
     $body .= '<div style="background:#fffaf0;border:2px solid #f4a261;padding:20px;margin:20px 0;border-radius:10px;text-align:center">';
-    $body .= '<p style="margin:0;font-size:12px;color:#5b4a2c;letter-spacing:2px;text-transform:uppercase">Official Donation Receipt</p>';
+    $body .= '<p style="margin:0;font-size:14px;color:#5b4a2c;letter-spacing:2px;text-transform:uppercase">Official Donation Receipt</p>';
     $body .= '<p style="margin:6px 0;font-size:32px;font-weight:800;color:#2563eb">' . $amount . '</p>';
     $body .= '<p style="margin:0;font-size:13px;color:#5b4a2c">Receipt No: <strong>' . htmlspecialchars($rcpt_no) . '</strong></p>';
     $body .= '<p style="margin:6px 0 0;font-size:13px;color:#5b4a2c">Date: ' . htmlspecialchars($data['payment_date'] ?? date('Y-m-d')) . '</p>';
@@ -542,7 +542,7 @@ function send_donation_receipt($data) {
     if ($pdf_path) {
         $body .= '<div style="background:#e8f5ef;padding:15px;border-radius:8px;text-align:center;margin:15px 0">';
         $body .= '<p style="margin:0;color:#1d4ed8;font-size:14px"><strong>📎 Official PDF Receipt Attached</strong></p>';
-        $body .= '<p style="margin:5px 0 0;font-size:12px;color:#1d4ed8">Please find your official tax-exemption receipt attached to this email. Keep it safe for your tax records.</p>';
+        $body .= '<p style="margin:5px 0 0;font-size:14px;color:#1d4ed8">Please find your official tax-exemption receipt attached to this email. Keep it safe for your tax records.</p>';
         $body .= '</div>';
     }
 
@@ -555,9 +555,9 @@ function send_donation_receipt($data) {
     $body .= '</table>';
 
     if ($data['currency'] === 'INR') {
-        $body .= '<p style="font-size:12px;color:#666;border-top:1px dashed #ddd;padding-top:12px">This donation is eligible for tax exemption under <strong>Section 80G</strong> of the Income Tax Act, 1961.</p>';
+        $body .= '<p style="font-size:14px;color:#666;border-top:1px dashed #ddd;padding-top:12px">This donation is eligible for tax exemption under <strong>Section 80G</strong> of the Income Tax Act, 1961.</p>';
     } else {
-        $body .= '<p style="font-size:12px;color:#666;border-top:1px dashed #ddd;padding-top:12px">Sharan Foundation UK is a registered charity. <strong>Gift Aid</strong> eligible donations welcome.</p>';
+        $body .= '<p style="font-size:14px;color:#666;border-top:1px dashed #ddd;padding-top:12px">Sharan Foundation UK is a registered charity. <strong>Gift Aid</strong> eligible donations welcome.</p>';
     }
     $body .= '<p style="margin-top:20px">May God bless you richly for your generosity!</p>';
     $body .= '<p><strong>The Sharan Foundation Team</strong></p>';

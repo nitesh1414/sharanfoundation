@@ -3,7 +3,7 @@
  * Razorpay webhook receiver.
  * Subscribe to: payment.captured, payment.failed, subscription.charged, subscription.cancelled
  * Set webhook URL in Razorpay dashboard:
- *   https://yoursite.com/LIVEpro/acts-foundation/api/payment/razorpay_webhook.php
+ *   https://sharanforall.org/api/payment/razorpay_webhook.php
  */
 
 require_once __DIR__ . '/_helpers.php';

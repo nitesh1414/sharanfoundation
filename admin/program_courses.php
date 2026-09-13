@@ -26,12 +26,12 @@ if (($action==='add'||$action==='edit') && $_SERVER['REQUEST_METHOD']==='POST' &
     if ($action==='add') {
         $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
         $pdo->prepare("INSERT INTO program_courses ($cols) VALUES ($place)")->execute($data);
-        flash_set('success','✓ Course added.');
+        flash_saved_row('added', 'Course', 'program_courses', (int)$pdo->lastInsertId());
     } else {
         $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
         $data['id']=$id;
         $pdo->prepare("UPDATE program_courses SET $set WHERE id=:id")->execute($data);
-        flash_set('success','✓ Course updated.');
+        flash_saved_row('updated', 'Course', 'program_courses', $id);
     }
     redirect(ADMIN_URL.'program_courses.php');
 }
@@ -60,7 +60,8 @@ if ($action==='add' || $action==='edit') {
       </datalist>
       <p class="help">Type a new category or pick an existing one.</p>
     </div>
-    <div class="form-group"><label>Icon</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="📷"></div>
+    <div class="form-group"><label>Icon</label><input type="text" name="icon" value="<?= e($row['icon']) ?>" maxlength="4" placeholder="📷">
+      <?= icon_howto_help('icon') ?></div>
   </div>
 
   <div class="lang-tabs">

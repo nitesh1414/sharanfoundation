@@ -14,12 +14,12 @@ if (($action==='add'||$action==='edit') && $_SERVER['REQUEST_METHOD']==='POST' &
     if ($action==='add') {
         $cols=implode(',',array_keys($data)); $place=':'.implode(',:',array_keys($data));
         $pdo->prepare("INSERT INTO testimonials ($cols) VALUES ($place)")->execute($data);
-        flash_set('success','Testimonial added.');
+        flash_saved_row('added', 'Testimonial', 'testimonials', (int)$pdo->lastInsertId());
     } else {
         $set=implode(',',array_map(fn($k)=>"$k=:$k",array_keys($data)));
         $data['id']=$id;
         $pdo->prepare("UPDATE testimonials SET $set WHERE id=:id")->execute($data);
-        flash_set('success','Testimonial updated.');
+        flash_saved_row('updated', 'Testimonial', 'testimonials', $id);
     }
     redirect(ADMIN_URL.'testimonials.php');
 }

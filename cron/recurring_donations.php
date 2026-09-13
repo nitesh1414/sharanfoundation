@@ -23,7 +23,7 @@
  * Option B — Web trigger (shared hosting without real cron):
  *   1. Set CRON_SECRET below (or in config/database.php)
  *   2. Use a free pinging service (cron-job.org, EasyCron, etc.) to hit:
- *      https://yoursite.com/LIVEpro/acts-foundation/cron/recurring_donations.php?key=YOUR_SECRET
+ *      https://sharanforall.org/cron/recurring_donations.php?key=YOUR_SECRET
  *      once per day.
  *
  * Option C — Manual / Admin UI:

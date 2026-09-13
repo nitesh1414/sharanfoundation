@@ -12,10 +12,20 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && csrf_check($_POST['csrf'] ?? '')) {
         'carousel_show_counter' => isset($_POST['carousel_show_counter']) ? 1 : 0,
         'carousel_transition'   => in_array($_POST['carousel_transition']??'fade', ['fade','slide','zoom']) ? $_POST['carousel_transition'] : 'fade',
         'carousel_video_audio'  => isset($_POST['carousel_video_audio']) ? 1 : 0,
+        'carousel_show_text'    => isset($_POST['carousel_show_text']) ? 1 : 0,
     ];
     $set = implode(',', array_map(fn($k) => "$k=:$k", array_keys($data)));
-    $pdo->prepare("UPDATE settings SET $set WHERE id=1")->execute($data);
-    flash_set('success', '✓ Carousel settings saved.');
+    try {
+        $pdo->prepare("UPDATE settings SET $set WHERE id=1")->execute($data);
+        flash_saved('updated', 'Carousel settings', $data);
+    } catch (Throwable $ex) {
+        $msg = $ex->getMessage();
+        if (stripos($msg, 'carousel_show_text') !== false) {
+            $msg .= ' → The database is missing the new `carousel_show_text` column. Run: ALTER TABLE `settings` ADD COLUMN IF NOT EXISTS `carousel_show_text` TINYINT(1) DEFAULT 1; (see sql/acts_foundation.sql)';
+        }
+        flash_set('error', 'Carousel settings could not be saved: ' . $msg);
+    }
+    // Always return to the settings page — never a blank page.
     redirect(ADMIN_URL.'carousel_settings.php');
 }
 
@@ -62,6 +72,18 @@ $s = $pdo->query("SELECT * FROM settings LIMIT 1")->fetch();
       <input type="checkbox" name="carousel_pause_hover" value="1" <?= !empty($s['carousel_pause_hover'])?'checked':'' ?> style="width:18px;height:18px;accent-color:var(--primary)">
       Pause autoplay when hovered (desktop)
     </label>
+  </div>
+
+  <div class="card-head"><h3>📝 Slide Text</h3></div>
+  <div class="card-body">
+    <label class="checkbox-row" style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem">
+      <input type="checkbox" name="carousel_show_text" value="1" <?= !empty($s['carousel_show_text']) || !array_key_exists('carousel_show_text', $s) ? 'checked':'' ?> style="width:18px;height:18px;accent-color:var(--primary)">
+      Show text over hero images <span style="font-weight:400;color:#888">(headline + buttons on the photo)</span>
+    </label>
+    <p class="help">
+      When OFF, every hero slide displays its image/video full-bleed with no text on top.
+      You can also override this per slide from <strong>🎞️ Hero Carousel → Edit</strong>.
+    </p>
   </div>
 
   <div class="card-head"><h3>🎛 UI Controls</h3></div>
