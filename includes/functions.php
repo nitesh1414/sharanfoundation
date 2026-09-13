@@ -35,7 +35,7 @@ function slugify($text){
     return preg_replace('~[^-a-z0-9]+~', '', $text) ?: 'item-' . time();
 }
 
-function upload_image($file_input_name, $subfolder = 'misc'){
+function upload_image($file_input_name, $subfolder = 'misc', $max_w = 1920, $max_h = 1080){
     if (empty($_FILES[$file_input_name]['name'])) return null;
     $f = $_FILES[$file_input_name];
     if ($f['error'] !== UPLOAD_ERR_OK) return null;
@@ -51,9 +51,57 @@ function upload_image($file_input_name, $subfolder = 'misc'){
     $name = $subfolder . '_' . time() . '_' . random_int(1000,9999) . '.' . $ext;
     $dest = $dir . $name;
     if (move_uploaded_file($f['tmp_name'], $dest)) {
+        fit_uploaded_image($dest, (int)$max_w, (int)$max_h);
         return 'uploads/' . $subfolder . '/' . $name;
     }
     return false;
+}
+
+/**
+ * Scale an uploaded image down so it fits inside $max_w × $max_h without
+ * cropping. Smaller images are left as-is. GIFs are skipped (keeps animation).
+ */
+function fit_uploaded_image($path, $max_w, $max_h){
+    if ($max_w < 1 || $max_h < 1 || !function_exists('imagecreatetruecolor')) return;
+    $info = @getimagesize($path);
+    if (!$info) return;
+    [$w, $h, $type] = $info;
+    if ($w <= $max_w && $h <= $max_h) return;
+    $scale = min($max_w / max(1, $w), $max_h / max(1, $h));
+    if ($scale >= 1) return;
+    $nw = max(1, (int)round($w * $scale));
+    $nh = max(1, (int)round($h * $scale));
+
+    $src = null; $save = null; $quality = null;
+    if ($type === IMAGETYPE_JPEG) { $src = @imagecreatefromjpeg($path); $save = 'imagejpeg'; $quality = 88; }
+    elseif ($type === IMAGETYPE_PNG) { $src = @imagecreatefrompng($path); $save = 'imagepng'; $quality = 7; }
+    elseif ($type === IMAGETYPE_WEBP && function_exists('imagecreatefromwebp')) { $src = @imagecreatefromwebp($path); $save = 'imagewebp'; $quality = 82; }
+    else return;
+    if (!$src) return;
+
+    $dst = imagecreatetruecolor($nw, $nh);
+    if ($type === IMAGETYPE_PNG || $type === IMAGETYPE_WEBP) {
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+        $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+        imagefilledrectangle($dst, 0, 0, $nw, $nh, $transparent);
+    }
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+    if ($save === 'imagepng') imagepng($dst, $path, $quality);
+    else $save($dst, $path, $quality);
+    imagedestroy($src);
+    imagedestroy($dst);
+}
+
+/**
+ * Admin helper — recommended pixel size shown next to an image file input.
+ * Pair with the live-size script in admin/includes/footer.php.
+ */
+function image_upload_help($width, $height){
+    $w = (int)$width;
+    $h = (int)$height;
+    return '<p class="help">📐 <strong>Recommended size:</strong> <code>' . $w . ' × ' . $h . ' px</code>. JPG / PNG / WebP, max 5 MB. The full photo is shown centred (not cropped) — matching this size avoids empty bars.</p>'
+         . '<p class="help img-size-live" hidden></p>';
 }
 
 /**

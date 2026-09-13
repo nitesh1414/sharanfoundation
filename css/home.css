@@ -11,7 +11,7 @@
   .hero-slides{position:relative;width:100%;height:88vh;min-height:560px}
   .hero-slide{position:absolute;inset:0;display:flex;align-items:center;color:#fff;opacity:0;visibility:hidden;transition:opacity 1.1s ease,visibility 1.1s ease,transform 1.1s cubic-bezier(.22,1,.36,1)}
   .hero-slide.active{opacity:1;visibility:visible;z-index:2}
-  .hero-slide .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;background-color:transparent;transform:scale(1.05);transition:transform 8s ease}
+  .hero-slide .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#111;transform:scale(1.05);transition:transform 8s ease}
   .hero-slide.active .bg{transform:scale(1)}
   /* Slide transition variant */
   .hero-carousel.trans-slide .hero-slide{opacity:1;visibility:visible;transform:translateX(100%)}
@@ -69,6 +69,17 @@
 
   /* ---------- TABLETS / PHONES (<=780px) ---------- */
   @media(max-width:780px){
+    /* 16:9 frame + contain so the whole photo is visible (no crop). */
+    .hero-carousel,.hero-slides{height:auto;min-height:0;aspect-ratio:16/9}
+    .hero-slide .bg{
+      background-size:contain !important;
+      background-repeat:no-repeat !important;
+      background-position:center center !important;
+      background-color:#111;
+      transform:none !important;
+    }
+    .hero-slide.active .bg{transform:none !important}
+    .hero-slide .video-bg{object-fit:contain;object-position:center;background:#111}
     .hero-slide .container{flex:1 1 100%;max-width:100%}
     .hero-slide .hero-content{width:100%;max-width:none}
     .hero-content{padding:1.25rem 0 1rem}
@@ -87,11 +98,8 @@
   }
 
   /* ---------- PHONES IN PORTRAIT ----------
-     Keep the headline/buttons over the photo, but make the hero much
-     flatter (width-driven instead of 88vh) so the landscape slide image
-     is far less zoom-cropped and shows almost as fully as on desktop. */
+     Keep headline/buttons over the photo. Frame is already 16:9 + contain. */
   @media(max-width:780px) and (orientation:portrait){
-    .hero-carousel,.hero-slides{height:clamp(320px,92vw,560px);min-height:0}
     .hero-slide{align-items:flex-end}
     .hero-slide .container{flex:1 1 100%;max-width:100%}
     .hero-slide .hero-content{padding:1.1rem 0 3.4rem;text-align:left}
@@ -106,7 +114,7 @@
 
   /* ---------- VERY SMALL PHONES ---------- */
   @media(max-width:360px){
-    .hero-carousel,.hero-slides{height:clamp(350px,92vw,560px)}
+    .hero-carousel,.hero-slides{height:clamp(260px,56.25vw,480px)}
     .hero .tag{font-size:14px;margin-bottom:.4rem}
     .hero h1{font-size:16px;line-height:1.3;margin-bottom:.4rem}
     .hero p{font-size:14px;line-height:1.5;margin-bottom:.7rem}
@@ -154,7 +162,7 @@
   .programs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.8rem}
   .program{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:.3s;border-top:4px solid transparent}
   .program:hover{transform:translateY(-8px);border-top-color:var(--accent)}
-  .program-img{height:200px;background-size:cover;background-position:center;position:relative;display:grid;place-items:center;color:#fff;font-size:4rem}
+  .program-img{height:200px;background-color:#e8eef3;background-size:contain;background-repeat:no-repeat;background-position:center;position:relative;display:grid;place-items:center;color:#fff;font-size:4rem}
   .program-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.3))}
   .icon-circle{position:absolute;bottom:-22px;right:20px;width:50px;height:50px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:1.3rem;box-shadow:0 6px 14px rgba(231,111,81,.4);z-index:2}
   .program-body{padding:2rem 1.5rem 1.5rem}

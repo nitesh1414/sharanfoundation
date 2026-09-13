@@ -25,7 +25,7 @@ $extra_head = '<style>
   .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2rem}
   .proj{background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden;transition:.3s;display:flex;flex-direction:column}
   .proj:hover{transform:translateY(-8px)}
-  .proj-img{height:220px;background-size:cover;background-position:center;position:relative}
+  .proj-img{height:220px;background-color:#e8eef3;background-size:contain;background-repeat:no-repeat;background-position:center;position:relative}
   .proj-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.5))}
   .proj-cat{position:absolute;top:1rem;left:1rem;background:var(--accent);color:#fff;padding:.3rem .9rem;border-radius:50px;font-size:.78rem;font-weight:600;z-index:2;text-transform:capitalize}
   .proj-status{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.95);color:var(--primary-dark);padding:.3rem .9rem;border-radius:50px;font-size:.78rem;font-weight:600;z-index:2;text-transform:capitalize}

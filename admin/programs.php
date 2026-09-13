@@ -31,7 +31,7 @@ if (($action === 'add' || $action === 'edit') && $_SERVER['REQUEST_METHOD'] === 
         'status'     => $_POST['status'],
     ];
 
-    $image_path = upload_image('image', 'programs');
+    $image_path = upload_image('image', 'programs', 1200, 800);
     if ($image_path === false) {
         flash_set('error', 'Image upload failed. Use JPG/PNG/WebP under 5 MB.');
     } else {
@@ -154,7 +154,8 @@ if ($action === 'add' || $action === 'edit') {
         </div>
         <div class="form-group">
           <label>Image</label>
-          <input type="file" name="image" accept="image/*">
+          <input type="file" name="image" accept="image/*" data-rec-w="1200" data-rec-h="800">
+          <?= image_upload_help(1200, 800) ?>
           <?php if (!empty($row['image'])): ?>
             <div class="current-image"><img src="<?= BASE_URL . e($row['image']) ?>" alt=""><p class="help">Current image — upload to replace.</p></div>
           <?php endif; ?>

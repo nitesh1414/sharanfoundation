@@ -60,7 +60,7 @@ if (($action==='add' || $action==='edit') && $_SERVER['REQUEST_METHOD']==='POST'
     ];
 
     // Image upload (used as: still bg OR video poster fallback)
-    $img = upload_image('image', 'hero');
+    $img = upload_image('image', 'hero', 1920, 1080);
     // Video upload (only if media_type=video)
     $vid = upload_video('video_file', 'hero/videos', 50);
 
@@ -253,8 +253,8 @@ if ($action === 'add' || $action === 'edit') {
     <div class="media-panel" data-media="image">
       <div class="form-group">
         <label>Image <span style="color:#888;font-weight:400">(also used as fallback poster for videos)</span></label>
-        <input type="file" name="image" accept="image/*">
-        <p class="help">Recommended: 1920×800 px (16:7 ratio). JPG/PNG/WebP, max 5MB.</p>
+        <input type="file" name="image" accept="image/*" data-rec-w="1920" data-rec-h="1080">
+        <?= image_upload_help(1920, 1080) ?>
         <?php if ($row['image']): ?>
           <div class="current-image" style="margin-top:.5rem">
             <img src="<?= BASE_URL.e($row['image']) ?>" style="max-width:400px;border-radius:8px;box-shadow:var(--shadow)">

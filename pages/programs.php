@@ -22,7 +22,7 @@ $extra_head = '<style>
   .prog-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
   .prog-grid.reverse{direction:rtl}
   .prog-grid.reverse > *{direction:ltr}
-  .prog-img{border-radius:16px;overflow:hidden;box-shadow:var(--shadow);min-height:380px;background-size:cover;background-position:center;position:relative}
+  .prog-img{border-radius:16px;overflow:hidden;box-shadow:var(--shadow);min-height:380px;background-color:#e8eef3;background-size:contain;background-repeat:no-repeat;background-position:center;position:relative}
   .prog-img .badge{position:absolute;top:1.2rem;left:1.2rem;background:var(--accent);color:#fff;padding:.4rem 1rem;border-radius:50px;font-size:.85rem;font-weight:600}
   .prog-content h2{font-size:16px;color:var(--dark);margin-bottom:.5rem}
   .prog-content h2 span{color:var(--primary)}
@@ -41,6 +41,7 @@ $extra_head = '<style>
   @media(max-width:880px){
     .prog-grid,.prog-grid.reverse{grid-template-columns:1fr;direction:ltr}
     .prog-features{grid-template-columns:1fr}
+    .prog-img,.placeholder-img{min-height:220px}
   }
 </style>';
 
